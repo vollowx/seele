@@ -67,7 +67,7 @@ export class SdToolbar extends LitElement {
 
   override render() {
     return html`
-      <md-toolbar type="floating">
+      <md-toolbar type="floating" color="vibrant">
         <md-icon-button-toggle
           id="action-toggle-theme"
           variant="tonal"

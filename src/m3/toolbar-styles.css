@@ -82,14 +82,15 @@
   width: 100%;
 }
 
-:host(:not([type='floating'])) ::slotted(md-fab) {
-  box-shadow: none;
+::slotted(md-icon-button-toggle) {
+  --md-focus-ring-shape: calc(var(--_h) / 2);
+  border-radius: calc(var(--_h) / 2);
 }
 ::slotted(md-icon-button-toggle[variant='tonal']:not(:state(checked))) {
   --_background-color: transparent;
 }
 
-/* @TODO: Not done yet */
+/* TODO: Not done yet */
 :host([color='vibrant']) {
   --_container-color: var(
     --md-toolbar-container-color,
