@@ -41,7 +41,7 @@ You can import the entire library or individual components to keep your bundle s
 import '@vollowx/see';
 
 // OR Import specific components (Recommended)
-import '@vollowx/see/m3/button.js';
+import '@vollowx/see/m3/button/common-button.js';
 import '@vollowx/see/m3/checkbox.js';
 ```
 
