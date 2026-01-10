@@ -20,7 +20,7 @@ const Base = InternalsAttached(Attachable(LitElement));
  * @csspart menu
  * @csspart items
  *
- * @fires {Event} menu-item-selected
+ * @fires {Event} select - Fired when a menu item has been selected.
  */
 export class Menu extends Base {
   readonly _possibleItemTags: string[] = [];
@@ -53,6 +53,9 @@ export class Menu extends Base {
     durations: {
       open: () => (this.quick ? 0 : this._durations.show),
       close: () => (this.quick ? 0 : this._durations.hide),
+    },
+    onClickOutside: () => {
+      if (!this.keepOpenClickOutside) this.open = false;
     },
   });
 
@@ -181,7 +184,7 @@ export class Menu extends Base {
         if (currentIndex >= 0) {
           this.listController.items[currentIndex].focused = false;
           this.dispatchEvent(
-            new CustomEvent('menu-item-selected', {
+            new CustomEvent('select', {
               detail: {
                 item: this.listController.items[currentIndex],
                 index: currentIndex,
@@ -232,7 +235,7 @@ export class Menu extends Base {
     const index = this.listController.items.indexOf(clickedItem);
     this.listController.items[index].focused = false;
     this.dispatchEvent(
-      new CustomEvent('menu-item-selected', {
+      new CustomEvent('select', {
         detail: {
           item: this.listController.items[index],
           index: index,

@@ -58,6 +58,9 @@ export class Select extends Base {
       open: () => (this.quick ? 0 : this._durations.show),
       close: () => (this.quick ? 0 : this._durations.hide),
     },
+    onClickOutside: () => {
+      this.open = false;
+    },
   });
 
   protected readonly listController = new ListController<Option>(this, {

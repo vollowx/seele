@@ -23,12 +23,31 @@
 
     <h2>standard menus</h2>
 
-    <md-menu style="width: 250px;" open quick keepopenblur keepopenclickitem keepopenclickoutside>
+    <md-menu
+      style="width: 250px"
+      open
+      quick
+      keepopenblur
+      keepopenclickitem
+      keepopenclickoutside
+    >
       <md-menu-item>Menu Item 1</md-menu-item>
       <md-menu-item>Menu Item 2</md-menu-item>
       <md-menu-item selected>Menu Item 3</md-menu-item>
       <md-menu-item disabled>Menu Item 4</md-menu-item>
     </md-menu>
+
+    <span style="position: relative; display: inline-block">
+      <md-button id="menu2-btn" onclick="menu2.open = !menu2.open"
+        >Menu with keepOpenBlur and keepOpenClickOutside</md-button
+      >
+      <md-menu keepopenblur keepopenclickoutside id="menu2" for="menu2-btn">
+        <md-menu-item>Menu Item 1</md-menu-item>
+        <md-menu-item>Menu Item 2</md-menu-item>
+        <md-menu-item selected>Menu Item 3</md-menu-item>
+        <md-menu-item disabled>Menu Item 4</md-menu-item>
+      </md-menu>
+    </span>
 
     <span style="position: relative; display: inline-block">
       <md-button id="menu-with-item-ids-btn"
@@ -100,12 +119,7 @@
       style="position: fixed; pointer-events: none"
     ></div>
     <!-- You definitely can position the menu without using anchor element, but you will need to deal with other cases like flipping -->
-    <md-menu
-      id="context-menu"
-      for="context-menu-anchor"
-      alignstrategy="fixed"
-      quick
-    >
+    <md-menu id="context-menu" for="context-menu-anchor" alignstrategy="fixed">
       <md-menu-item>Edit</md-menu-item>
       <md-menu-item>Copy</md-menu-item>
       <md-menu-item>Cut</md-menu-item>
@@ -136,8 +150,8 @@
         menu.open = !menu.open;
       });
 
-      menu.addEventListener('menu-item-selected', (e) => {
-        menuOutput.value = `menu-item-selected: { index: ${e.detail.index}, item: #${e.detail.item.id}\n}`;
+      menu.addEventListener('select', (e) => {
+        menuOutput.value = `select: { index: ${e.detail.index}, item: #${e.detail.item.id}\n}`;
       });
 
       // Context Menu
