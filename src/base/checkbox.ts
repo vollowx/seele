@@ -18,7 +18,6 @@ export class Checkbox extends Base {
 
   @property({ type: Boolean }) checked = false;
   @property({ type: Boolean }) indeterminate = false;
-  @property({ type: Boolean, reflect: true }) disabled = false;
 
   constructor() {
     super();
@@ -26,7 +25,7 @@ export class Checkbox extends Base {
 
     this.checked = this.hasAttribute('checked');
     this.indeterminate = this.hasAttribute('indeterminate');
-    this.updateInternals();
+    this.updateState();
   }
 
   override connectedCallback() {
@@ -49,11 +48,11 @@ export class Checkbox extends Base {
       changed.has('disabled') ||
       changed.has('indeterminate')
     ) {
-      this.updateInternals();
+      this.updateState();
     }
   }
 
-  private updateInternals() {
+  protected updateState() {
     const prevAriaChecked = this[internals]
       .ariaChecked as keyof typeof PROPERTY_FROM_ARIA_CHECKED;
 

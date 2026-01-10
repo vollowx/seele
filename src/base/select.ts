@@ -34,7 +34,6 @@ export class Select extends Base {
   @state() protected displayValue = '';
   @property({ type: String }) placeholder = '';
   @property({ type: Boolean, reflect: true }) open = false;
-  @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: Boolean, reflect: true }) required = false;
   @property({ type: Boolean, reflect: true }) quick = false;
   @property({ reflect: true }) align: import('@floating-ui/dom').Placement =

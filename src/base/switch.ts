@@ -17,7 +17,6 @@ export class Switch extends Base {
   static override styles = [hiddenStyles];
 
   @property({ type: Boolean }) checked = false;
-  @property({ type: Boolean, reflect: true }) disabled = false;
 
   constructor() {
     super();

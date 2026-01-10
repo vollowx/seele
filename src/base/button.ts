@@ -11,12 +11,11 @@ export class Button extends Base {
   static override styles = [hiddenStyles];
 
   @property({ reflect: true }) type: 'button' | 'submit' | 'reset' = 'button';
-  @property({ type: Boolean, reflect: true }) disabled = false;
 
   constructor() {
     super();
     this[internals].role = 'button';
-    this.#updateInternals();
+    this.updateState();
   }
 
   override connectedCallback() {
@@ -34,10 +33,10 @@ export class Button extends Base {
   }
 
   protected override updated(changed: Map<string, any>) {
-    if (changed.has('disabled')) this.#updateInternals();
+    if (changed.has('disabled')) this.updateState();
   }
 
-  #updateInternals() {
+  protected updateState() {
     this.tabIndex = this.disabled ? -1 : 0;
     this[internals].ariaDisabled = String(this.disabled);
   }

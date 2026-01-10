@@ -10,7 +10,6 @@ import { hiddenStyles } from './hidden-styles.css.js';
 export class ListItem extends FormAssociated(InternalsAttached(LitElement)) {
   static override styles = [hiddenStyles];
 
-  @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: Boolean, reflect: true }) selected = false;
   @property({ type: Boolean, reflect: true }) focused = false;
 
