@@ -16,91 +16,94 @@
     />
     <link rel="stylesheet" href="./shared.css" />
     <script type="module" src="./shared.ts"></script>
+    <script type="module" src="../src/m3/filled-text-field.ts"></script>
+    <script type="module" src="../src/m3/outlined-text-field.ts"></script>
+    <style>
+      .example-row {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+      }
+    </style>
   </head>
   <body>
     <sd-toolbar></sd-toolbar>
-    <h1>well</h1>
-
-    <md-text-field placeholder="Type something..."></md-text-field>
-
+    <h1>Text Fields</h1>
+    <h2>Filled</h2>
+    <div class="example-row">
+      <md-filled-text-field
+        label="Label"
+        placeholder="Placeholder"
+      ></md-filled-text-field>
+      <md-filled-text-field
+        label="Populated"
+        value="Value"
+      ></md-filled-text-field>
+      <md-filled-text-field label="Required" required></md-filled-text-field>
+      <md-filled-text-field
+        label="Disabled"
+        disabled
+        value="Disabled content"
+      ></md-filled-text-field>
+      <md-filled-text-field
+        label="Textarea"
+        type="textarea"
+        rows="3"
+      ></md-filled-text-field>
+    </div>
+    <h2>Outlined</h2>
+    <div class="example-row">
+      <md-outlined-text-field
+        label="Label"
+        placeholder="Placeholder"
+      ></md-outlined-text-field>
+      <md-outlined-text-field
+        label="Populated"
+        value="Value"
+      ></md-outlined-text-field>
+      <md-outlined-text-field
+        label="Required"
+        required
+      ></md-outlined-text-field>
+      <md-outlined-text-field
+        label="Disabled"
+        disabled
+        value="Disabled content"
+      ></md-outlined-text-field>
+      <md-outlined-text-field
+        label="Textarea"
+        type="textarea"
+        rows="3"
+      ></md-outlined-text-field>
+    </div>
     <h2>Form validation</h2>
     <form id="test-form">
-      <label>
-        Agree to terms
-        <md-checkbox name="agree" required></md-checkbox>
-      </label>
-
-      <label>
-        Agree to terms
-        <input name="agree-native" type="checkbox" required />
-      </label>
-
-      <label>
-        Agree to terms
-        <input name="agree-native2" type="checkbox" />
-      </label>
-
-      <label>
-        Required field:
-        <md-text-field
-          name="req"
-          required
-          placeholder="Required"
-        ></md-text-field>
-      </label>
-
-      <label>
-        Number (min 5, max 10):
-        <md-text-field
-          type="number"
-          name="num"
-          min="5"
-          max="10"
-          required
-        ></md-text-field>
-      </label>
-
-      <label>
-        Email:
-        <md-text-field
-          type="email"
+      <div class="example-row">
+        <md-outlined-text-field
           name="email"
+          type="email"
+          label="Email"
+          supportingtext="*required"
           required
-          placeholder="Enter email"
-        ></md-text-field>
-      </label>
-
-      <label>
-        Textarea:
-        <md-text-field
-          type="textarea"
-          name="desc"
-          placeholder="Description"
-        ></md-text-field>
-      </label>
-
-      <label>
-        Readonly:
-        <md-text-field value="Cannot change me" readonly></md-text-field>
-      </label>
-
-      <label>
-        Disabled:
-        <md-text-field value="I am disabled" disabled></md-text-field>
-      </label>
-
-      <div>
-        <button type="submit">Submit</button>
-        <button type="reset">Reset</button>
+        >
+        </md-outlined-text-field>
+        <md-filled-text-field
+          name="password"
+          type="password"
+          label="Password"
+          required
+          minlength="8"
+        >
+        </md-filled-text-field>
+        <button>Submit</button>
       </div>
     </form>
-
     <div id="output"></div>
-
     <script>
       const form = document.getElementById('test-form');
       const output = document.getElementById('output');
-
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         const formData = new FormData(form);

@@ -1,0 +1,92 @@
+:host {
+  display: inline-flex;
+  position: relative;
+  vertical-align: top;
+  flex-direction: column;
+}
+
+.container {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  position: relative;
+  box-sizing: border-box;
+  min-height: 56px;
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  cursor: text;
+}
+
+:host([disabled]) {
+  pointer-events: none;
+  opacity: 0.38;
+}
+
+.start,
+.end {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.start[hidden],
+.end[hidden] {
+  display: none;
+}
+
+.middle {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+.label {
+  font: var(--md-sys-typography-body-large);
+  pointer-events: none;
+  transform-origin: top left;
+  transition:
+    margin-top var(--md-sys-motion-duration-short3)
+      var(--md-sys-motion-easing-emphasized),
+    font-size var(--md-sys-motion-duration-short3)
+      var(--md-sys-motion-easing-emphasized);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 24px);
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+:host([haslabel]:not([focused]):not([populated]))
+  ::slotted(input)::placeholder,
+:host([haslabel]:not([focused]):not([populated]))
+  ::slotted(textarea)::placeholder {
+  opacity: 0;
+}
+
+::slotted(*) {
+  caret-color: var(--md-sys-color-primary);
+}
+
+.supporting-text {
+  font: var(--md-sys-typography-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+  padding-top: 4px;
+  padding-inline-start: 16px;
+  padding-inline-end: 16px;
+}
+
+:host([error]) ::slotted(*) {
+  caret-color: var(--md-sys-color-error);
+}
+:host([error]) .supporting-text {
+  color: var(--md-sys-color-error);
+}

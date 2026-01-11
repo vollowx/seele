@@ -37,6 +37,8 @@ export class Input extends Base {
 
   @property({ reflect: true }) autocomplete = '';
 
+  @property({ type: Boolean, reflect: true }) focused = false;
+
   @query('[part~=input]') inputOrTextarea!:
     | HTMLInputElement
     | HTMLTextAreaElement;
@@ -61,6 +63,8 @@ export class Input extends Base {
           autocomplete=${(this.autocomplete || nothing) as any}
           @input=${this.handleInput}
           @change=${this.handleChange}
+          @focus=${this.handleFocus}
+          @blur=${this.handleBlur}
         ></textarea>
       `;
     }
@@ -84,6 +88,8 @@ export class Input extends Base {
         autocomplete=${(this.autocomplete || nothing) as any}
         @input=${this.handleInput}
         @change=${this.handleChange}
+        @focus=${this.handleFocus}
+        @blur=${this.handleBlur}
       />
     `;
   }
@@ -104,6 +110,14 @@ export class Input extends Base {
 
   private handleChange(event: Event) {
     this.redispatchEvent(event);
+  }
+
+  private handleFocus() {
+    this.focused = true;
+  }
+
+  private handleBlur() {
+    this.focused = false;
   }
 
   private redispatchEvent(event: Event) {

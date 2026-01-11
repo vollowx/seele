@@ -1,0 +1,63 @@
+.container {
+  background-color: var(--md-sys-color-surface-container-highest);
+  border-radius: var(--md-sys-shape-corner-extra-small, 4px)
+    var(--md-sys-shape-corner-extra-small, 4px) 0 0;
+  /* Active indicator as box shadow */
+  box-shadow: inset 0 -1px 0 0 var(--md-sys-color-on-surface-variant);
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Filled Field Label Positioning */
+.label {
+  position: absolute;
+  top: 16px;
+  left: 0;
+}
+
+:host([focused]) .label {
+  color: var(--md-sys-color-primary);
+}
+
+:host([error]) .label {
+  color: var(--md-sys-color-error);
+}
+
+:host([populated]) .label,
+:host([focused]) .label {
+  transform: translateY(-8px) scale(0.75);
+}
+
+.input-wrapper {
+  padding: 16px 0;
+}
+
+/* TODO: Separate color and height */
+:host([focused]) .container {
+  box-shadow: inset 0 -3px 0 0 var(--md-sys-color-primary);
+}
+
+:host([error]) .container {
+  box-shadow: inset 0 -1px 0 0 var(--md-sys-color-error);
+}
+
+:host([error][focused]) .container {
+  box-shadow: inset 0 -3px 0 0 var(--md-sys-color-error);
+}
+
+:host(:hover:not([disabled])) .container {
+  background-color: var(--md-sys-color-surface-container-high);
+  /* Hover active indicator */
+  box-shadow: inset 0 -1px 0 0 var(--md-sys-color-on-surface);
+}
+
+:host([focused]:hover:not([disabled])) .container {
+  box-shadow: inset 0 -3px 0 0 var(--md-sys-color-primary);
+}
+
+:host([error]:hover:not([disabled])) .container {
+  box-shadow: inset 0 -1px 0 0 var(--md-sys-color-on-error-container); /* Check spec for error hover color */
+}
+
+:host([error][focused]:hover:not([disabled])) .container {
+  box-shadow: inset 0 -3px 0 0 var(--md-sys-color-error);
+}
