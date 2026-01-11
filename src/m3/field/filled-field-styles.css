@@ -1,17 +1,27 @@
 .container {
+  --_indicator-height: 1px;
+  --_indicator-color: var(--md-sys-color-on-surface-variant);
+
   background-color: var(--md-sys-color-surface-container-highest);
-  border-radius: var(--md-sys-shape-corner-extra-small, 4px)
-    var(--md-sys-shape-corner-extra-small, 4px) 0 0;
-  /* Active indicator as box shadow */
-  box-shadow: inset 0 -1px 0 0 var(--md-sys-color-on-surface-variant);
-  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 4px 4px 0 0;
+  box-shadow: inset 0 calc(var(--_indicator-height) * -1) 0 0
+    var(--_indicator-color);
+  transition: box-shadow var(--md-sys-motion-duration-short3)
+    var(--md-sys-motion-easing-emphasized);
+  padding: 0 16px;
 }
 
-/* Filled Field Label Positioning */
+.input-wrapper {
+  padding-top: 24px;
+  padding-bottom: 8px;
+}
+
 .label {
   position: absolute;
-  top: 16px;
+  top: 0;
   left: 0;
+  margin-top: 15px;
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 :host([focused]) .label {
@@ -24,40 +34,19 @@
 
 :host([populated]) .label,
 :host([focused]) .label {
-  transform: translateY(-8px) scale(0.75);
+  font-size: 0.75rem;
+  margin-top: 4px;
 }
 
-.input-wrapper {
-  padding: 16px 0;
-}
-
-/* TODO: Separate color and height */
 :host([focused]) .container {
-  box-shadow: inset 0 -3px 0 0 var(--md-sys-color-primary);
+  --_indicator-height: 3px;
+  --_indicator-color: var(--md-sys-color-primary);
 }
 
 :host([error]) .container {
-  box-shadow: inset 0 -1px 0 0 var(--md-sys-color-error);
+  --_indicator-color: var(--md-sys-color-error);
 }
 
 :host([error][focused]) .container {
-  box-shadow: inset 0 -3px 0 0 var(--md-sys-color-error);
-}
-
-:host(:hover:not([disabled])) .container {
-  background-color: var(--md-sys-color-surface-container-high);
-  /* Hover active indicator */
-  box-shadow: inset 0 -1px 0 0 var(--md-sys-color-on-surface);
-}
-
-:host([focused]:hover:not([disabled])) .container {
-  box-shadow: inset 0 -3px 0 0 var(--md-sys-color-primary);
-}
-
-:host([error]:hover:not([disabled])) .container {
-  box-shadow: inset 0 -1px 0 0 var(--md-sys-color-on-error-container); /* Check spec for error hover color */
-}
-
-:host([error][focused]:hover:not([disabled])) .container {
-  box-shadow: inset 0 -3px 0 0 var(--md-sys-color-error);
+  --_indicator-color: var(--md-sys-color-error);
 }

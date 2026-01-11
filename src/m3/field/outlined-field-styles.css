@@ -3,7 +3,7 @@
 }
 
 .container {
-  border-radius: var(--md-sys-shape-corner-extra-small, 4px);
+  border-radius: 4px;
   padding: 0 16px;
 }
 
@@ -96,4 +96,8 @@
 
 :host([disabled]) .outline {
   color: var(--md-sys-color-outline-variant);
+}
+
+:host([disabled]) .label {
+  color: var(--md-sys-color-on-surface-variant);
 }

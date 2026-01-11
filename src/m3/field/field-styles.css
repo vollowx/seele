@@ -12,7 +12,6 @@
   position: relative;
   box-sizing: border-box;
   min-height: 56px;
-  border-radius: var(--md-sys-shape-corner-extra-small);
   cursor: text;
 }
 

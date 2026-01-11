@@ -1,6 +1,8 @@
 import { html } from 'lit';
 import { customElement } from 'lit/decorators.js';
+
 import { M3Field } from './field.js';
+
 import { fieldStyles } from './field-styles.css.js';
 import { outlinedFieldStyles } from './outlined-field-styles.css.js';
 
@@ -10,8 +12,7 @@ export class M3OutlinedField extends M3Field {
 
   protected override renderContainerContent() {
     return html`
-      ${this.renderOutline()}
-      ${this.renderStart()}
+      ${this.renderOutline()} ${this.renderStart()}
       <div class="middle">
         <div class="input-wrapper">
           <slot></slot>

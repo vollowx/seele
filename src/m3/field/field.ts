@@ -1,4 +1,4 @@
-import { html, PropertyValues } from 'lit';
+import { html, PropertyValues, TemplateResult } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { Field } from '../../base/field.js';
 // The styles will be imported in concrete classes or here if shared.
@@ -35,25 +35,17 @@ export abstract class M3Field extends Field {
     `;
   }
 
+  /**
+   * Should be implemented by subclasses.
+   */
+  protected abstract renderContainerContent(): TemplateResult;
+
   protected renderSupportingText() {
     if (!this.supportingText) {
       return '';
     }
 
     return html`<div class="supporting-text">${this.supportingText}</div>`;
-  }
-
-  protected renderContainerContent() {
-    return html`
-      ${this.renderStart()}
-      <div class="middle">
-        <span class="label">${this.label}</span>
-        <div class="input-wrapper">
-          <slot></slot>
-        </div>
-      </div>
-      ${this.renderEnd()}
-    `;
   }
 
   protected renderStart() {
