@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-md-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>textfields - see development tests</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link rel="stylesheet" href="./shared.css" />
+    <script type="module" src="./shared.ts"></script>
+  </head>
+  <body>
+    <sd-toolbar></sd-toolbar>
+    <h1>well</h1>
+
+    <md-text-field placeholder="Type something..."></md-text-field>
+
+    <h2>Form validation</h2>
+    <form id="test-form">
+      <label>
+        Agree to terms
+        <md-checkbox name="agree" required></md-checkbox>
+      </label>
+
+      <label>
+        Agree to terms
+        <input name="agree-native" type="checkbox" required />
+      </label>
+
+      <label>
+        Agree to terms
+        <input name="agree-native2" type="checkbox" />
+      </label>
+
+      <label>
+        Required field:
+        <md-text-field
+          name="req"
+          required
+          placeholder="Required"
+        ></md-text-field>
+      </label>
+
+      <label>
+        Number (min 5, max 10):
+        <md-text-field
+          type="number"
+          name="num"
+          min="5"
+          max="10"
+          required
+        ></md-text-field>
+      </label>
+
+      <label>
+        Email:
+        <md-text-field
+          type="email"
+          name="email"
+          required
+          placeholder="Enter email"
+        ></md-text-field>
+      </label>
+
+      <label>
+        Textarea:
+        <md-text-field
+          type="textarea"
+          name="desc"
+          placeholder="Description"
+        ></md-text-field>
+      </label>
+
+      <label>
+        Readonly:
+        <md-text-field value="Cannot change me" readonly></md-text-field>
+      </label>
+
+      <label>
+        Disabled:
+        <md-text-field value="I am disabled" disabled></md-text-field>
+      </label>
+
+      <div>
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
+      </div>
+    </form>
+
+    <div id="output"></div>
+
+    <script>
+      const form = document.getElementById('test-form');
+      const output = document.getElementById('output');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        output.innerText = 'Submitted Data: ' + JSON.stringify(data, null, 2);
+      });
+    </script>
+  </body>
+</html>

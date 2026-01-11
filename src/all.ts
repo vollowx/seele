@@ -13,5 +13,6 @@ export { M3Option } from './m3/option.js';
 export { M3Ripple } from './m3/ripple.js';
 export { M3Select } from './m3/select.js';
 export { M3Switch } from './m3/switch.js';
+export { M3TextField } from './m3/text-field.js';
 export { M3Tooltip } from './m3/tooltip.js';
 export { M3Toolbar } from './m3/toolbar.js';
