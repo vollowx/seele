@@ -150,7 +150,7 @@ export class PopoverController implements ReactiveController {
     if (!this._open) return;
     this._open = false;
 
-    window.removeEventListener('click', this.#handleClickOutside);
+    window.removeEventListener('pointerup', this.#handleClickOutside);
     clearTimeout(this.#openTimer);
     clearTimeout(this.#closeTimer);
 

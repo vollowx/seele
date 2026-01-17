@@ -43,6 +43,9 @@ export class Tooltip extends Base {
       open: () => this._durations.show,
       close: () => this._durations.hide,
     },
+    onClickOutside: () => {
+      this.visible = false;
+    },
   });
 
   constructor() {
@@ -59,6 +62,7 @@ export class Tooltip extends Base {
     next: HTMLElement | null = null
   ) {
     const eventHandlers = {
+      click: this.#handleClick,
       focusin: this.#handleFocusIn,
       focusout: this.#handleFocusOut,
       pointerenter: this.#handlePointerEnter,
@@ -112,17 +116,14 @@ export class Tooltip extends Base {
 
   #handleTouchStart = () => {
     this.#show(this._delays.touch.show);
-    addEventListener('click', this.#handleOutsideClick);
   };
 
   #handleTouchEnd = () => {
     this.#hide(this._delays.touch.hide);
   };
 
-  #handleOutsideClick = (e: MouseEvent) => {
-    if (e.composedPath().includes(this.$control)) return;
-    this.visible = false;
-    removeEventListener('click', this.#handleOutsideClick);
+  #handleClick = () => {
+    this.#hide(0);
   };
 
   #show(delay: number) {
