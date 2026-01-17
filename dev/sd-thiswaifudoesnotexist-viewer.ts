@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-import '../src/m3/icon-button.js';
+import '../src/m3/button/icon-button.js';
 import '../src/m3/toolbar.js';
 import '../src/m3/tooltip.js';
 

@@ -62,7 +62,6 @@ export class Tooltip extends Base {
     next: HTMLElement | null = null
   ) {
     const eventHandlers = {
-      click: this.#handleClick,
       focusin: this.#handleFocusIn,
       focusout: this.#handleFocusOut,
       pointerenter: this.#handlePointerEnter,
@@ -120,10 +119,6 @@ export class Tooltip extends Base {
 
   #handleTouchEnd = () => {
     this.#hide(this._delays.touch.hide);
-  };
-
-  #handleClick = () => {
-    this.#hide(0);
   };
 
   #show(delay: number) {
