@@ -13,8 +13,8 @@
     "strict": true,
     "strictNullChecks": false,
     "target": "ESNext",
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
   },
   "include": ["src/**/*.ts"],
-  "exclude": []
+  "exclude": [],
 }
