@@ -1,12 +1,16 @@
+import { isServer } from 'lit';
+
 export let focusVisible = false;
 
 export function setFocusVisible(value: boolean) {
   focusVisible = value;
 }
 
-window.addEventListener('keydown', () => (focusVisible = true), {
-  capture: true,
-});
-window.addEventListener('mousedown', () => (focusVisible = false), {
-  capture: true,
-});
+if (!isServer) {
+  window.addEventListener('keydown', () => (focusVisible = true), {
+    capture: true,
+  });
+  window.addEventListener('mousedown', () => (focusVisible = false), {
+    capture: true,
+  });
+}
