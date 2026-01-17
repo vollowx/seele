@@ -138,7 +138,9 @@ export class Tooltip extends Base {
   }
 
   #hide(delay: number) {
-    lastHidingTime = Date.now();
+    if (this.popoverController.open) {
+      lastHidingTime = Date.now();
+    }
     clearTimeout(this.#openTimer);
     this.#closeTimer = setTimeout(() => {
       this.visible = false;
