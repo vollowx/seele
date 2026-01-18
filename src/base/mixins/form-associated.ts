@@ -57,6 +57,17 @@ export const FormAssociated = <T extends Constructor<LitElement>>(
       // in `attributeChangedCallback()`.
     }
 
+    override attributeChangedCallback(
+      name: string,
+      old: string | null,
+      value: string | null
+    ) {
+      if (name === 'disabled') {
+        this.requestUpdate('disabled', old !== null);
+      }
+      super.attributeChangedCallback(name, old, value);
+    }
+
     get validity() {
       return this[internals].validity;
     }
