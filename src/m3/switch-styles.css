@@ -29,8 +29,10 @@
   -webkit-tap-highlight-color: transparent;
   touch-action: none;
   transition:
-    background-color 67ms linear,
-    border-color 67ms linear;
+    background-color var(--md-sys-motion-exp-effects-fast-duration)
+      var(--md-sys-motion-exp-effects-fast),
+    border-color var(--md-sys-motion-exp-effects-fast-duration)
+      var(--md-sys-motion-exp-effects-fast);
   -webkit-user-select: none;
   user-select: none;
   vertical-align: top;
@@ -95,7 +97,6 @@
   border-radius: 50%;
   display: grid;
   height: var(--_thumb-diameter);
-  /* FIXME: lightningcss compiles this to stuffs with :lang */
   margin-inline-start: calc(
     var(--_thumb-diff-pointer, 0px) - var(--_thumb-diff-default)
   );
@@ -103,10 +104,14 @@
   place-items: center;
   position: absolute;
   transition:
-    background-color 67ms linear,
-    width 250ms var(--md-sys-motion-easing-standard),
-    height 250ms var(--md-sys-motion-easing-standard),
-    margin 300ms var(--md-sys-motion-overshoot);
+    background-color var(--md-sys-motion-exp-effects-fast-duration)
+      var(--md-sys-motion-exp-effects-fast),
+    width var(--md-sys-motion-exp-spatial-fast-duration)
+      var(--md-sys-motion-exp-spatial-fast),
+    height var(--md-sys-motion-exp-spatial-fast-duration)
+      var(--md-sys-motion-exp-spatial-fast),
+    margin var(--md-sys-motion-exp-spatial-fast-duration)
+      var(--md-sys-motion-exp-spatial-fast);
   width: var(--_thumb-diameter);
   z-index: 1;
 }

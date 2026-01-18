@@ -3,7 +3,7 @@
   animation-duration:
     calc(var(--md-focus-ring-duration, 600ms) * 0.25),
     calc(var(--md-focus-ring-duration, 600ms) * 0.75);
-  animation-timing-function: var(--md-sys-motion-easing-emphasized);
+  animation-timing-function: var(--md-sys-motion-exp-spatial-slow);
   box-sizing: border-box;
   color: var(--md-focus-ring-color, var(--md-sys-color-secondary));
   display: none;

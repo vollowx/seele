@@ -3,7 +3,7 @@
   background-color: var(--md-sys-color-inverse-surface);
   border-radius: 4px;
   box-sizing: border-box;
-  color: var(--md-sys-color-inverse-on-surface);
+  color: transparent;
   display: flex;
   font: var(--md-sys-typography-body-small);
   left: 0;
@@ -14,22 +14,44 @@
   pointer-events: none;
   position: absolute;
   top: 0;
+  transform: scaleY(0.4);
   width: max-content;
   z-index: 9999;
 }
 :host(:state(closed)) {
   display: none;
 }
+/*
+ * TODO: Use calculated height instead of scaling transform.
+ * Should be added as a CSS variable in popoverController.
+ * Should also update M3Menu and M3Select accordingly.
+ */
 :host(:state(opening)) {
+  color: var(--md-sys-color-inverse-on-surface);
   opacity: 1;
   pointer-events: auto;
-  transition: opacity var(--md-sys-motion-duration-short1) linear;
+  transform: scaleY(1);
+  transition:
+    color linear 67ms 67ms,
+    opacity var(--md-sys-motion-exp-effects-fast-duration)
+      var(--md-sys-motion-exp-effects-fast),
+    transform var(--md-sys-motion-exp-effects-fast-duration)
+      var(--md-sys-motion-exp-effects-fast);
 }
 :host(:state(opened)) {
+  color: var(--md-sys-color-inverse-on-surface);
   opacity: 1;
+  transform: scaleY(1);
   pointer-events: auto;
 }
 :host(:state(closing)) {
+  color: transparent;
   opacity: 0;
-  transition: opacity var(--md-sys-motion-duration-short1) linear;
+  transform: scaleY(0.4);
+  transition:
+    color linear 67ms,
+    opacity var(--md-sys-motion-exp-effects-fast-duration)
+      var(--md-sys-motion-exp-effects-fast),
+    transform var(--md-sys-motion-exp-effects-fast-duration)
+      var(--md-sys-motion-exp-effects-fast);
 }

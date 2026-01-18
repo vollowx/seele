@@ -116,36 +116,35 @@
   --md-sys-typography-body-small: 400 0.75rem / 1rem
     var(--md-sys-typography-family);
 
-  --md-sys-motion-duration-short1: 50ms;
-  --md-sys-motion-duration-short2: 100ms;
-  --md-sys-motion-duration-short3: 150ms;
-  --md-sys-motion-duration-short4: 200ms;
-  --md-sys-motion-duration-medium1: 250ms;
-  --md-sys-motion-duration-medium2: 300ms;
-  --md-sys-motion-duration-medium3: 350ms;
-  --md-sys-motion-duration-medium4: 400ms;
-  --md-sys-motion-duration-long1: 450ms;
-  --md-sys-motion-duration-long2: 500ms;
-  --md-sys-motion-duration-long3: 550ms;
-  --md-sys-motion-duration-long4: 600ms;
-  --md-sys-motion-duration-extra-long1: 700ms;
-  --md-sys-motion-duration-extra-long2: 800ms;
-  --md-sys-motion-duration-extra-long3: 900ms;
-  --md-sys-motion-duration-extra-long4: 1000ms;
+  /* std: standard, exp: expressive, mot: motion */
 
-  --md-sys-motion-easing-linear: cubic-bezier(0, 0, 1, 1);
-  --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
-  --md-sys-motion-easing-standard-accelerate: cubic-bezier(0.3, 0, 1, 1);
-  --md-sys-motion-easing-standard-decelerate: cubic-bezier(0, 0, 0, 1);
-  --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
-  --md-sys-motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
-  --md-sys-motion-easing-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
-  --md-sys-motion-easing-legacy: cubic-bezier(0.4, 0, 0.2, 1);
-  --md-sys-motion-easing-legacy-decelerate: cubic-bezier(0, 0, 0.2, 1);
-  --md-sys-motion-easing-legacy-accelerate: cubic-bezier(0.4, 0, 1, 1);
-  --md-sys-motion-overshoot: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --md-sys-motion-exp-spatial-fast: cubic-bezier(0.42, 1.67, 0.21, 0.9);
+  --md-sys-motion-exp-spatial-fast-duration: 350ms;
+  --md-sys-motion-exp-spatial-default: cubic-bezier(0.38, 1.21, 0.22, 1);
+  --md-sys-motion-exp-spatial-default-duration: 500ms;
+  --md-sys-motion-exp-spatial-slow: cubic-bezier(0.39, 1.29, 0.35, 0.98);
+  --md-sys-motion-exp-spatial-slow-duration: 650ms;
 
-  --md-sys-motion-path: linear;
+  --md-sys-motion-exp-effects-fast: cubic-bezier(0.31, 0.94, 0.34, 1);
+  --md-sys-motion-exp-effects-fast-duration: 150ms;
+  --md-sys-motion-exp-effects-default: cubic-bezier(0.34, 0.8, 0.34, 1);
+  --md-sys-motion-exp-effects-default-duration: 200ms;
+  --md-sys-motion-exp-effects-slow: cubic-bezier(0.34, 0.88, 0.34, 1);
+  --md-sys-motion-exp-effects-slow-duration: 300ms;
+
+  --md-sys-motion-std-spatial-fast: cubic-bezier(0.27, 1.06, 0.18, 1);
+  --md-sys-motion-std-spatial-fast-duration: 350ms;
+  --md-sys-motion-std-spatial-default: cubic-bezier(0.27, 1.06, 0.18, 1);
+  --md-sys-motion-std-spatial-default-duration: 500ms;
+  --md-sys-motion-std-spatial-slow: cubic-bezier(0.27, 1.06, 0.18, 1);
+  --md-sys-motion-std-spatial-slow-duration: 750ms;
+
+  --md-sys-motion-std-effects-fast: cubic-bezier(0.31, 0.94, 0.34, 1);
+  --md-sys-motion-std-effects-fast-duration: 150ms;
+  --md-sys-motion-std-effects-default: cubic-bezier(0.34, 0.8, 0.34, 1);
+  --md-sys-motion-std-effects-default-duration: 200ms;
+  --md-sys-motion-std-effects-slow: cubic-bezier(0.34, 0.88, 0.34, 1);
+  --md-sys-motion-std-effects-slow-duration: 300ms;
 
   --md-sys-elevation-level-0: 0;
   --md-sys-elevation-level-1: 1;

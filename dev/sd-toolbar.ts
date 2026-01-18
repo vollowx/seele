@@ -79,7 +79,7 @@ export class SdToolbar extends LitElement {
             light_mode
           </md-icon>
         </md-icon-button-toggle>
-        <md-tooltip for="action-toggle-theme">
+        <md-tooltip offset="12" for="action-toggle-theme">
           ${this._getTooltipText('dark', this.darkMode)}
         </md-tooltip>
 
@@ -96,7 +96,7 @@ export class SdToolbar extends LitElement {
             format_textdirection_l_to_r
           </md-icon>
         </md-icon-button-toggle>
-        <md-tooltip for="action-toggle-direction">
+        <md-tooltip offset="12" for="action-toggle-direction">
           ${this._getTooltipText('rtl', this.rtl)}
         </md-tooltip>
 

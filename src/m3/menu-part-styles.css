@@ -26,9 +26,9 @@
   opacity: 1;
   transform: scaleY(1);
   transition:
-    opacity var(--md-sys-motion-duration-short1),
-    transform var(--md-sys-motion-duration-medium2)
-      var(--md-sys-motion-easing-emphasized-decelerate);
+    opacity 67ms,
+    transform var(--md-sys-motion-exp-effects-slow-duration)
+      var(--md-sys-motion-exp-effects-slow);
 }
 :host(:state(opened)) [part='menu'] {
   display: block;
@@ -39,9 +39,9 @@
   opacity: 0;
   transform: scaleY(0.4);
   transition:
-    opacity var(--md-sys-motion-duration-short3),
-    transform var(--md-sys-motion-duration-short4)
-      var(--md-sys-motion-easing-emphasized-accelerate);
+    opacity var(--md-sys-motion-exp-effects-default-duration),
+    transform var(--md-sys-motion-exp-effects-default-duration)
+      var(--md-sys-motion-exp-effects-default);
 }
 
 [part='items'] {
@@ -53,8 +53,7 @@
 
 :host(:state(opening)) [part='items'] {
   opacity: 1;
-  transition: opacity var(--md-sys-motion-duration-short1) linear
-    var(--md-sys-motion-duration-short1);
+  transition: opacity 67ms linear 67ms;
 }
 
 :host(:state(opened)) [part='items'] {
@@ -63,5 +62,5 @@
 
 :host(:state(closing)) [part='items'] {
   opacity: 0;
-  transition: opacity var(--md-sys-motion-duration-short1);
+  transition: opacity 67ms;
 }

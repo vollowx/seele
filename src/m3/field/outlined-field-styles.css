@@ -22,10 +22,10 @@
   border: var(--_outline-width) solid currentColor;
   box-sizing: border-box;
   transition:
-    border-width var(--md-sys-motion-duration-short3)
-      var(--md-sys-motion-easing-emphasized),
-    border-top-color var(--md-sys-motion-duration-short3)
-      var(--md-sys-motion-easing-emphasized);
+    border-width var(--md-sys-motion-exp-effects-default-duration)
+      var(--md-sys-motion-exp-effects-default),
+    border-top-color var(--md-sys-motion-exp-effects-default-duration)
+      var(--md-sys-motion-exp-effects-default);
 }
 
 .outline-start {

@@ -7,8 +7,8 @@
   box-shadow: inset 0 calc(var(--_indicator-height) * -1) 0 0
     var(--_indicator-color);
   padding: 0 16px;
-  transition: box-shadow var(--md-sys-motion-duration-short3)
-    var(--md-sys-motion-easing-emphasized);
+  transition: box-shadow var(--md-sys-motion-exp-effects-default-duration)
+    var(--md-sys-motion-exp-effects-default);
 }
 
 :host([haslabel]) .input-wrapper {

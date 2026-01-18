@@ -20,7 +20,7 @@ export class M3Menu extends Menu {
     'md-menu-item-checkbox',
     'md-menu-item-radio',
   ];
-  override readonly _durations = { show: 167, hide: 83 };
+  override readonly _durations = { show: 300, hide: 200 };
   override readonly _scrollPadding = 4;
 
   static override styles = [menuPartStyles, menuStyles];

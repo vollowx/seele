@@ -12,8 +12,8 @@
     transparent
   );
   height: var(--_h);
-  transition: border-radius var(--md-sys-motion-duration-medium2)
-    var(--md-sys-motion-easing-emphasized);
+  transition: border-radius var(--md-sys-motion-std-effects-slow-duration)
+    var(--md-sys-motion-std-effects-slow);
   width: var(--_h);
 }
 

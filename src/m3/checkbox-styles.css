@@ -30,8 +30,10 @@
   position: relative;
   -webkit-tap-highlight-color: transparent;
   transition:
-    background-color 50ms linear,
-    border-color 50ms linear;
+    background-color var(--md-sys-motion-exp-effects-fast-duration)
+      var(--md-sys-motion-exp-effects-fast),
+    border-color var(--md-sys-motion-exp-effects-fast-duration)
+      var(--md-sys-motion-exp-effects-fast);
   -webkit-user-select: none;
   user-select: none;
   vertical-align: top;
@@ -96,20 +98,22 @@
   height: 18px;
   inset: -2px;
   position: absolute;
-  transition: fill 50ms linear;
+  transition: fill var(--md-sys-motion-exp-effects-fast-duration)
+    var(--md-sys-motion-exp-effects-fast);
   width: 18px;
 }
 [part~='mark'] {
   transform: scaleY(-1) translate(7px, -14px) rotate(45deg);
-  transition-duration: 150ms;
-  transition-timing-function: var(--md-sys-motion-easing-emphasized-decelerate);
+  transition-duration: var(--md-sys-motion-exp-effects-fast-duration);
+  transition-timing-function: var(--md-sys-motion-exp-effects-fast);
 }
 :host(:state(indeterminate)) [part~='mark'] {
   transform: scaleY(-1) translate(4px, -10px) rotate(0deg);
 }
 :host(:state(checked)) [part~='mark'],
 :host(:state(indeterminate)) [part~='mark'] {
-  transition-duration: 350ms;
+  transition-duration: var(--md-sys-motion-exp-effects-slow-duration);
+  transition-timing-function: var(--md-sys-motion-exp-effects-slow);
 }
 [part~='mark-short'] {
   height: 0px;
@@ -125,7 +129,7 @@
   [part~='mark'],
 :host(:not(:state(checked)):not(:state(indeterminate)):state(was-indeterminate))
   [part~='mark'] {
-  transition-delay: 150ms;
+  transition-delay: var(--md-sys-motion-exp-effects-fast-duration);
 }
 :host(:state(checked)) [part~='mark-short'] {
   height: 5.6568542495px;
