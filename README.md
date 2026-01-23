@@ -1,8 +1,8 @@
-# SEE (Standard Extensible Elements)
+# Standard Extensible Elements
 
-**SEE** is a modern, lightweight [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) library. It provides a set of highly customizable UI components that follow the [Material Design 3](https://m3.material.io/) guidelines out of the box, while being designed for easy extension and restyling.
+**SEELE** is a modern, lightweight [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) library. It provides a set of highly customizable UI components that follow the [Material Design 3](https://m3.material.io/) guidelines out of the box, while being designed for easy extension and restyling.
 
-Visit the [official website](https://see.v9.nz/) for documentation and demos.
+Visit the [website of SEELE](https://seele.v9.nz/) for documentation and demos.
 
 ## Features
 
@@ -14,20 +14,20 @@ Visit the [official website](https://see.v9.nz/) for documentation and demos.
 
 ## Installation
 
-Install SEE using your preferred package manager:
+Install SEELE using your preferred package manager:
 
 ```bash
 # npm
-npm install @vollowx/see
+npm install @vollowx/seele
 
 # pnpm
-pnpm add @vollowx/see
+pnpm add @vollowx/seele
 
 # yarn
-yarn add @vollowx/see
+yarn add @vollowx/seele
 
 # bun
-bun add @vollowx/see
+bun add @vollowx/seele
 ```
 
 ## Usage
@@ -38,11 +38,11 @@ You can import the entire library or individual components to keep your bundle s
 
 ```javascript
 // Import all components
-import '@vollowx/see';
+import '@vollowx/seele';
 
 // OR Import specific components (Recommended)
-import '@vollowx/see/m3/button/common-button.js';
-import '@vollowx/see/m3/checkbox.js';
+import '@vollowx/seele/m3/button/common-button.js';
+import '@vollowx/seele/m3/checkbox.js';
 ```
 
 ### Using Components
@@ -61,13 +61,13 @@ Once imported, use the components just like standard HTML tags.
 
 ### Theming
 
-SEE components use CSS variables for styling. Currently, the global Material Design 3 token variables are not included in the JavaScript bundle.
+SEELE components use CSS variables for styling. Currently, the global Material Design 3 token variables are not included in the JavaScript bundle.
 
 To style the components correctly, you need to define the necessary CSS variables in your project. You can find reference implementations in [vollowx/see-website](https://github.com/vollowx/see-website/) or the `dev` folder of this repository.
 
 ## Browser Support
 
-SEE relies on modern web standards like `ElementInternals`.
+SEELE relies on modern web standards like `ElementInternals`.
 
 - **Chromium**: `>= 125.0`
 - **Firefox**: `>= 126.0`
