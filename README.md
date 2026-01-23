@@ -8,7 +8,7 @@ Visit the [website of SEELE](https://seele.v9.nz/) for documentation and demos.
 
 - **Material Design 3**: Ready-to-use components following the latest Material guidelines.
 - **Web Components**: Framework-agnostic. Works with vanilla HTML or any framework.
-- **Extensible**: Built to be extended. Create your own design system on top of SEE's logic.
+- **Extensible**: Built to be extended. Create your own design system on top of SEELE's logic.
 - **Lightweight**: Built on [Lit](https://lit.dev/) and [floating-ui](https://floating-ui.com/) only, ensuring fast performance and small bundle sizes.
 - **Accessible**: Designed with accessibility in mind (using `ElementInternals` and standard ARIA patterns).
 
@@ -63,9 +63,9 @@ Once imported, use the components just like standard HTML tags.
 
 SEELE components use CSS variables for styling. Currently, the global Material Design 3 token variables are not included in the JavaScript bundle.
 
-To style the components correctly, you need to define the necessary CSS variables in your project. You can find reference implementations in [vollowx/see-website](https://github.com/vollowx/see-website/) or the `dev` folder of this repository.
+To style the components correctly, you need to define the necessary CSS variables in your project. You can find reference implementations in [vollowx/seele-docs](https://github.com/vollowx/seele-docs/) or the `dev` folder of this repository.
 
-## Browser Support
+## Browser Supporty
 
 SEELE relies on modern web standards like `ElementInternals`.
 
