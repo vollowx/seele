@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 
 import { Item } from '../base/item.js';
 
@@ -35,7 +35,7 @@ export class M3Item extends Item {
       <slot name="start"></slot>
       <div class="text">
         <slot name="overline"></slot>
-        <slot></slot>
+        <slot class="default-slot"></slot>
         <slot name="headline"></slot>
         <slot name="supporting-text"></slot>
       </div>
@@ -43,6 +43,8 @@ export class M3Item extends Item {
       <slot name="end"></slot>
     `;
   }
+
+  @property({ type: Boolean, reflect: true }) multiline = false;
 }
 
 declare global {

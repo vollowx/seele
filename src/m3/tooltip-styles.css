@@ -41,8 +41,8 @@
 :host(:state(opened)) {
   color: var(--md-sys-color-inverse-on-surface);
   opacity: 1;
-  transform: scaleY(1);
   pointer-events: auto;
+  transform: scaleY(1);
 }
 :host(:state(closing)) {
   color: transparent;

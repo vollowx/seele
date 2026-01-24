@@ -138,7 +138,7 @@ export class Menu extends Base {
         }
 
         this.popoverController.animateOpen().then(() => {
-          this.focus({ preventScroll: true });
+          this.focus();
           this.listController.focusFirstItem();
         });
       } else {
@@ -150,7 +150,7 @@ export class Menu extends Base {
 
         this.popoverController.animateClose().then(() => {
           if (this.$lastFocused) {
-            this.$lastFocused.focus({ preventScroll: true });
+            this.$lastFocused.focus();
             this.$lastFocused = null;
           }
         });

@@ -5,21 +5,43 @@
   display: flex;
   flex: 1;
   font: var(--md-sys-typography-body-large);
-  gap: 8px;
+  gap: 16px;
   min-height: 48px;
-  padding: 0 12px;
+  overflow: hidden;
+  padding: 12px;
   position: relative;
+  text-overflow: ellipsis;
   -webkit-user-select: none;
   user-select: none;
+}
+
+:host([multiline]) {
+  min-height: 72px;
 }
 
 [name='container'] {
   border-radius: inherit;
 }
 
+/* A slot for background container elements, such as ripples and focus rings. */
 [name='container']::slotted(*) {
   inset: 0;
   position: absolute;
 }
 
-/* TODO: every other part */
+.default-slot {
+  display: inline;
+}
+
+.default-slot,
+.text ::slotted(*) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+}
