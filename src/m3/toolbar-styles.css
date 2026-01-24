@@ -21,7 +21,7 @@
 }
 
 :host([type='floating']) {
-  --_padding: 8px;
+  --_padding: 12px;
   --_gap: 4px;
   --_container-color: var(--md-sys-color-surface-container-high);
   background: transparent;
@@ -33,7 +33,7 @@
   align-items: stretch;
   flex-direction: column;
   min-height: auto;
-  width: 56px;
+  width: 64px;
 }
 
 [part='container'] {
@@ -42,7 +42,7 @@
   display: flex;
   flex: 1 1 auto;
   gap: var(--_gap);
-  height: 56px;
+  height: 64px;
   justify-content: space-between;
   padding: 0 var(--_padding);
   width: 100%;
@@ -53,7 +53,7 @@
     var(--_container-color) var(--_container-opacity, 100%),
     transparent
   );
-  border-radius: var(--md-toolbar-shape, 28px);
+  border-radius: 32px;
   box-shadow: var(--md-toolbar-shadow, var(--md-sys-elevation-shadow-3));
   width: fit-content;
 }
@@ -76,10 +76,10 @@
   width: 100%;
 }
 
-::slotted(md-button),
-::slotted(md-button-toggle),
-::slotted(md-icon-button),
-::slotted(md-icon-button-toggle) {
+:host([type='floating']) ::slotted(md-button),
+:host([type='floating']) ::slotted(md-button-toggle),
+:host([type='floating']) ::slotted(md-icon-button),
+:host([type='floating']) ::slotted(md-icon-button-toggle) {
   --md-focus-ring-shape: calc(var(--_h) / 2);
   border-radius: calc(var(--_h) / 2);
 }
