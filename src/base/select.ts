@@ -1,4 +1,4 @@
-import { LitElement, html, PropertyValues } from 'lit';
+import { LitElement, isServer, html, PropertyValues } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 
 import { FormAssociated } from './mixins/form-associated.js';
@@ -125,6 +125,7 @@ export class Select extends Base {
 
   override connectedCallback() {
     super.connectedCallback();
+    if (isServer) return;
     this.addEventListener('click', this.#handleOptionClick);
     this.addEventListener('focusout', this.#handleFocusOut);
   }
@@ -246,6 +247,7 @@ export class Select extends Base {
   }
 
   #updateDisplayValue() {
+    if (isServer) return '';
     // We need to wait for items to be available.
     // Using a microtask or just checking if items exist.
     // Since this is called in updated(), items might be available if children are slotted.
