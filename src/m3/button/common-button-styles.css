@@ -36,8 +36,7 @@
   padding-inline: calc(var(--_pad) - 1px);
 }
 :host([variant='text']) {
-  --_background-color: transparent !important;
-  padding-inline: 12px; /* FIXME: No guideline to change with `[size]` */
+  padding-inline: calc(var(--_pad) / 2); /* FIXME: No guideline to change with `[size]` */
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -50,20 +49,19 @@
   }
 }
 
-:host(:disabled) {
+:host(:disabled),
+:host([variant='outlined']:state(checked):disabled) {
   --_background-color: var(--md-sys-color-on-surface);
   --_background-opacity: 10%;
   --_text-color: var(--md-sys-color-on-surface);
   --_text-opacity: 38%;
+  --_outline-color: var(--md-sys-color-on-surface);
+  --_outline-opacity: 10%;
   box-shadow: none;
-  cursor: default;
   pointer-events: none;
 }
-:host([variant='outlined']:disabled) {
-  --_background-color: var(--md-sys-color-outline) !important;
-}
 
-[part~='icon'] {
+[part='icon'] {
   block-size: 1em;
   fill: currentcolor;
   font-size: var(--_icon-size);

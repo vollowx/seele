@@ -95,8 +95,11 @@
   border-width: 1px;
   box-shadow: none;
 }
+:host([variant='outlined']:disabled) {
+  --_background-color: var(--md-sys-color-outline);
+}
 :host([variant='text']) {
-  --_background-color: transparent;
+  --_background-color: transparent !important;
   --_text-color: var(--_color);
 }
 
@@ -104,19 +107,8 @@
   --md-focus-ring-shape: var(--_rad-sq);
   border-radius: var(--_rad-sq);
 }
-:host(:state(checked)) {
-  --md-focus-ring-shape: var(--_rad-sq);
-  border-radius: var(--_rad-sq);
-}
 /* TODO: Space key pressed should also trigger active state */
 :host(:active) {
   --md-focus-ring-shape: var(--_rad-pr);
   border-radius: var(--_rad-pr);
-}
-
-:host(:state(checked)) [part~='unchecked'] {
-  display: none;
-}
-:host(:not(:state(checked))) [part~='checked'] {
-  display: none;
 }

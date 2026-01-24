@@ -14,6 +14,11 @@ export class SdToolbar extends LitElement {
       display: flex;
       justify-content: center;
       z-index: 100;
+      pointer-events: none;
+    }
+    md-menu,
+    md-toolbar {
+      pointer-events: auto;
     }
     md-icon {
       display: inline-block;

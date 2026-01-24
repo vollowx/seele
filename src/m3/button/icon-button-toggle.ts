@@ -9,8 +9,8 @@ import '../ripple.js';
 
 import { targetStyles } from '../target-styles.css.js';
 import { sharedButtonStyles } from './shared-button-styles.css.js';
+import { sharedButtonToggleStyles } from './shared-button-toggle-styles.css.js';
 import { iconButtonStyles } from './icon-button-styles.css.js';
-import { iconButtonToggleStyles } from './icon-button-toggle-styles.css.js';
 
 /**
  * @tag md-icon-button-toggle
@@ -27,7 +27,7 @@ export class M3IconButtonToggle extends Switch {
     targetStyles,
     sharedButtonStyles,
     iconButtonStyles,
-    iconButtonToggleStyles,
+    sharedButtonToggleStyles,
   ];
   constructor() {
     super();
