@@ -106,11 +106,8 @@ export class Menu extends Base {
   override connectedCallback() {
     super.connectedCallback();
     if (this.$control) {
+      // TODO: Manage $control ARIA attributes
       // TODO: Handle $control change
-      this.$control.ariaHasPopup = 'true';
-      this.$control.ariaExpanded = 'false';
-      this.$control.ariaControlsElements = [this.$menu];
-      this[internals].ariaLabelledByElements = [this.$control];
       this.$control.addEventListener(
         'focusout',
         this.#handleFocusOut.bind(this)
