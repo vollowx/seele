@@ -1,0 +1,1339 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/checkbox.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Checkbox",
+          "cssParts": [
+            {
+              "name": "icon"
+            },
+            {
+              "name": "mark"
+            },
+            {
+              "name": "mark-short"
+            },
+            {
+              "name": "mark-long"
+            }
+          ],
+          "members": [
+            {
+              "kind": "method",
+              "name": "renderIcon"
+            },
+            {
+              "kind": "field",
+              "name": "error",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "error",
+              "reflects": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "error",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "error"
+            }
+          ],
+          "superclass": {
+            "name": "Checkbox",
+            "module": "/src/base/checkbox.js"
+          },
+          "tagName": "md-checkbox",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Checkbox",
+          "declaration": {
+            "name": "M3Checkbox",
+            "module": "src/m3/checkbox.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-checkbox",
+          "declaration": {
+            "name": "M3Checkbox",
+            "module": "src/m3/checkbox.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/fab.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3FAB",
+          "cssParts": [
+            {
+              "name": "icon"
+            },
+            {
+              "name": "label"
+            }
+          ],
+          "slots": [
+            {
+              "description": "icon",
+              "name": ""
+            },
+            {
+              "description": "label",
+              "name": "label"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "attribute": "size",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "| 'surface'\r\n    | 'primary'\r\n    | 'secondary'\r\n    | 'tertiary'"
+              },
+              "default": "'surface'",
+              "attribute": "color",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "lowered",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "lowered",
+              "reflects": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "size",
+              "type": {
+                "text": "'small' | 'medium' | 'large'"
+              },
+              "default": "'medium'",
+              "fieldName": "size"
+            },
+            {
+              "name": "color",
+              "type": {
+                "text": "| 'surface'\r\n    | 'primary'\r\n    | 'secondary'\r\n    | 'tertiary'"
+              },
+              "default": "'surface'",
+              "fieldName": "color"
+            },
+            {
+              "name": "lowered",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "lowered"
+            }
+          ],
+          "superclass": {
+            "name": "Button",
+            "module": "/src/base/button.js"
+          },
+          "tagName": "md-fab",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3FAB",
+          "declaration": {
+            "name": "M3FAB",
+            "module": "src/m3/fab.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-fab",
+          "declaration": {
+            "name": "M3FAB",
+            "module": "src/m3/fab.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/focus-ring.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3FocusRing",
+          "cssProperties": [
+            {
+              "name": "--md-focus-ring-active-width"
+            },
+            {
+              "name": "--md-focus-ring-color"
+            },
+            {
+              "name": "--md-focus-ring-duration"
+            },
+            {
+              "name": "--md-focus-ring-inward-offset"
+            },
+            {
+              "name": "--md-focus-ring-outward-offset"
+            },
+            {
+              "name": "--md-focus-ring-shape"
+            },
+            {
+              "name": "--md-focus-ring-shape-end-end"
+            },
+            {
+              "name": "--md-focus-ring-shape-end-start"
+            },
+            {
+              "name": "--md-focus-ring-shape-start-end"
+            },
+            {
+              "name": "--md-focus-ring-shape-start-start"
+            },
+            {
+              "name": "--md-focus-ring-width"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "inward",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "inward",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "#boundFocusIn",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#boundFocusOut",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#boundPointerDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#handleFocusIn",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#handleFocusOut",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#handlePointerDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "visualFocus"
+            },
+            {
+              "kind": "method",
+              "name": "visualBlur"
+            },
+            {
+              "kind": "method",
+              "name": "handleControlChange",
+              "parameters": [
+                {
+                  "name": "prev",
+                  "default": "null",
+                  "type": {
+                    "text": "HTMLElement | null"
+                  }
+                },
+                {
+                  "name": "next",
+                  "default": "null",
+                  "type": {
+                    "text": "HTMLElement | null"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "ariaHidden",
+              "type": {
+                "text": "string"
+              },
+              "default": "'true'"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "inward",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "inward"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "Attachable",
+              "module": "/src/base/mixins/attachable.js"
+            },
+            {
+              "name": "InternalsAttached",
+              "module": "/src/base/mixins/internals-attached.js"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "md-focus-ring",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3FocusRing",
+          "declaration": {
+            "name": "M3FocusRing",
+            "module": "src/m3/focus-ring.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-focus-ring",
+          "declaration": {
+            "name": "M3FocusRing",
+            "module": "src/m3/focus-ring.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/item.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Item",
+          "cssParts": [
+            {
+              "name": "container"
+            },
+            {
+              "name": "start"
+            },
+            {
+              "name": "text"
+            },
+            {
+              "name": "overline"
+            },
+            {
+              "name": "headline"
+            },
+            {
+              "name": "supporting-text"
+            },
+            {
+              "name": "trailing-supporting-text"
+            },
+            {
+              "name": "end"
+            }
+          ],
+          "slots": [
+            {
+              "description": "container element",
+              "name": "container"
+            },
+            {
+              "description": "start content",
+              "name": "start"
+            },
+            {
+              "description": "overline text",
+              "name": "overline"
+            },
+            {
+              "description": "headline text",
+              "name": "headline"
+            },
+            {
+              "description": "supporting text",
+              "name": "supporting-text"
+            },
+            {
+              "description": "trailing supporting text",
+              "name": "trailing-supporting-text"
+            },
+            {
+              "description": "end content",
+              "name": "end"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "multiline",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "multiline",
+              "reflects": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "multiline",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "multiline"
+            }
+          ],
+          "superclass": {
+            "name": "Item",
+            "module": "/src/base/item.js"
+          },
+          "tagName": "md-item",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Item",
+          "declaration": {
+            "name": "M3Item",
+            "module": "src/m3/item.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-item",
+          "declaration": {
+            "name": "M3Item",
+            "module": "src/m3/item.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/list-item.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3ListItem",
+          "slots": [
+            {
+              "description": "contents in md-item",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "ripple",
+              "type": {
+                "text": "M3Ripple"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "focusRing",
+              "type": {
+                "text": "M3FocusRing"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "ListItem",
+            "module": "/src/base/list-item.js"
+          },
+          "tagName": "md-list-item",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3ListItem",
+          "declaration": {
+            "name": "M3ListItem",
+            "module": "src/m3/list-item.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-list-item",
+          "declaration": {
+            "name": "M3ListItem",
+            "module": "src/m3/list-item.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/list.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3List",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "md-list",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3List",
+          "declaration": {
+            "name": "M3List",
+            "module": "src/m3/list.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-list",
+          "declaration": {
+            "name": "M3List",
+            "module": "src/m3/list.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/menu-item.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3MenuItem",
+          "slots": [
+            {
+              "description": "contents in md-item",
+              "name": "",
+              "inheritedFrom": {
+                "name": "M3ListItem",
+                "module": "src/m3/list-item.ts"
+              }
+            }
+          ],
+          "mixins": [
+            {
+              "name": "MenuItemMixin",
+              "module": "/src/base/menu-item.js"
+            }
+          ],
+          "superclass": {
+            "name": "M3ListItem",
+            "module": "/src/m3/list-item.js"
+          },
+          "tagName": "md-menu-item",
+          "customElement": true,
+          "members": [
+            {
+              "kind": "field",
+              "name": "ripple",
+              "type": {
+                "text": "M3Ripple"
+              },
+              "inheritedFrom": {
+                "name": "M3ListItem",
+                "module": "src/m3/list-item.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "focusRing",
+              "type": {
+                "text": "M3FocusRing"
+              },
+              "inheritedFrom": {
+                "name": "M3ListItem",
+                "module": "src/m3/list-item.ts"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3MenuItem",
+          "declaration": {
+            "name": "M3MenuItem",
+            "module": "src/m3/menu-item.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-menu-item",
+          "declaration": {
+            "name": "M3MenuItem",
+            "module": "src/m3/menu-item.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/menu.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Menu",
+          "cssParts": [
+            {
+              "name": "menu-surface"
+            },
+            {
+              "name": "list"
+            }
+          ],
+          "slots": [
+            {
+              "description": "menu items",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "_possibleItemTags",
+              "type": {
+                "text": "array"
+              },
+              "readonly": true,
+              "default": "[ 'md-menu-item', 'md-menu-item-checkbox', 'md-menu-item-radio', ]"
+            },
+            {
+              "kind": "field",
+              "name": "_durations",
+              "type": {
+                "text": "object"
+              },
+              "readonly": true,
+              "default": "{ show: 300, hide: 200 }"
+            },
+            {
+              "kind": "field",
+              "name": "_scrollPadding",
+              "type": {
+                "text": "number"
+              },
+              "readonly": true,
+              "default": "4"
+            }
+          ],
+          "superclass": {
+            "name": "Menu",
+            "module": "/src/base/menu.js"
+          },
+          "tagName": "md-menu",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Menu",
+          "declaration": {
+            "name": "M3Menu",
+            "module": "src/m3/menu.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-menu",
+          "declaration": {
+            "name": "M3Menu",
+            "module": "src/m3/menu.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/option.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Option",
+          "slots": [
+            {
+              "description": "contents in md-menu-item",
+              "name": "",
+              "inheritedFrom": {
+                "name": "M3ListItem",
+                "module": "src/m3/list-item.ts"
+              }
+            }
+          ],
+          "mixins": [
+            {
+              "name": "OptionMixin",
+              "module": "/src/base/option.js"
+            }
+          ],
+          "superclass": {
+            "name": "M3ListItem",
+            "module": "/src/m3/list-item.js"
+          },
+          "tagName": "md-option",
+          "customElement": true,
+          "members": [
+            {
+              "kind": "field",
+              "name": "ripple",
+              "type": {
+                "text": "M3Ripple"
+              },
+              "inheritedFrom": {
+                "name": "M3ListItem",
+                "module": "src/m3/list-item.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "focusRing",
+              "type": {
+                "text": "M3FocusRing"
+              },
+              "inheritedFrom": {
+                "name": "M3ListItem",
+                "module": "src/m3/list-item.ts"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Option",
+          "declaration": {
+            "name": "M3Option",
+            "module": "src/m3/option.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-option",
+          "declaration": {
+            "name": "M3Option",
+            "module": "src/m3/option.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/ripple.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Ripple",
+          "cssProperties": [
+            {
+              "name": "--md-ripple-color"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "clickBehavior",
+              "type": {
+                "text": "'always' | 'none'"
+              },
+              "default": "'always'",
+              "attribute": "clickBehavior"
+            },
+            {
+              "kind": "field",
+              "name": "enterBehavior",
+              "type": {
+                "text": "'always' | 'none'"
+              },
+              "default": "'always'",
+              "attribute": "enterBehavior"
+            },
+            {
+              "kind": "field",
+              "name": "spaceBehavior",
+              "type": {
+                "text": "'always' | 'once' | 'none'"
+              },
+              "default": "'once'",
+              "attribute": "spaceBehavior"
+            },
+            {
+              "kind": "field",
+              "name": "$ripples",
+              "type": {
+                "text": "HTMLSpanElement[]"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "#spaceKeyDown",
+              "privacy": "private",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "#pointerDown",
+              "privacy": "private",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "#lastTime",
+              "privacy": "private",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "#handleKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#handleKeyUp",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#handlePointerEnter",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#handlePointerLeave",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#handlePointerDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#handlePointerUp",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleControlChange",
+              "parameters": [
+                {
+                  "name": "prev",
+                  "default": "null",
+                  "type": {
+                    "text": "HTMLElement | null"
+                  }
+                },
+                {
+                  "name": "next",
+                  "default": "null",
+                  "type": {
+                    "text": "HTMLElement | HTMLInputElement | null"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "#calculateRipple",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "default": "null",
+                  "type": {
+                    "text": "MouseEvent | null"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addRipple",
+              "parameters": [
+                {
+                  "name": "e",
+                  "default": "null",
+                  "type": {
+                    "text": "MouseEvent | null"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeRipple",
+              "parameters": [
+                {
+                  "name": "ripple",
+                  "type": {
+                    "text": "HTMLSpanElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeRippleAll"
+            },
+            {
+              "kind": "field",
+              "name": "ariaHidden",
+              "type": {
+                "text": "string"
+              },
+              "default": "'true'"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "clickBehavior",
+              "type": {
+                "text": "'always' | 'none'"
+              },
+              "default": "'always'",
+              "fieldName": "clickBehavior"
+            },
+            {
+              "name": "enterBehavior",
+              "type": {
+                "text": "'always' | 'none'"
+              },
+              "default": "'always'",
+              "fieldName": "enterBehavior"
+            },
+            {
+              "name": "spaceBehavior",
+              "type": {
+                "text": "'always' | 'once' | 'none'"
+              },
+              "default": "'once'",
+              "fieldName": "spaceBehavior"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "Attachable",
+              "module": "/src/base/mixins/attachable.js"
+            },
+            {
+              "name": "InternalsAttached",
+              "module": "/src/base/mixins/internals-attached.js"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "md-ripple",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Ripple",
+          "declaration": {
+            "name": "M3Ripple",
+            "module": "src/m3/ripple.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-ripple",
+          "declaration": {
+            "name": "M3Ripple",
+            "module": "src/m3/ripple.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/switch.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Switch",
+          "cssParts": [
+            {
+              "name": "thumb"
+            },
+            {
+              "name": "label"
+            }
+          ],
+          "members": [
+            {
+              "kind": "method",
+              "name": "renderOnIcon"
+            },
+            {
+              "kind": "method",
+              "name": "renderOffIcon"
+            },
+            {
+              "kind": "field",
+              "name": "$ripple",
+              "type": {
+                "text": "M3Ripple"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "$thumb",
+              "type": {
+                "text": "HTMLSpanElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "icons",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "icons",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "checkedIconOnly",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "checkedIconOnly",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "#pointerDownX",
+              "privacy": "private",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "#handlePointerDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#handlePointerMove",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#handlePointerUp",
+              "privacy": "private"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "icons",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "icons"
+            },
+            {
+              "name": "checkedIconOnly",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "checkedIconOnly"
+            }
+          ],
+          "superclass": {
+            "name": "Switch",
+            "module": "/src/base/switch.js"
+          },
+          "tagName": "md-switch",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Switch",
+          "declaration": {
+            "name": "M3Switch",
+            "module": "src/m3/switch.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-switch",
+          "declaration": {
+            "name": "M3Switch",
+            "module": "src/m3/switch.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/toolbar.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Toolbar",
+          "cssParts": [
+            {
+              "name": "container"
+            },
+            {
+              "name": "fab-slot"
+            }
+          ],
+          "slots": [
+            {
+              "description": "toolbar contents",
+              "name": ""
+            },
+            {
+              "description": "FAB element",
+              "name": "fab"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "'docked' | 'floating'"
+              },
+              "default": "'docked'",
+              "attribute": "type",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "'standard' | 'vibrant'"
+              },
+              "default": "'standard'",
+              "attribute": "color",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "orientation",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              },
+              "default": "'horizontal'",
+              "attribute": "orientation",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "role",
+              "type": {
+                "text": "string"
+              },
+              "default": "'toolbar'"
+            },
+            {
+              "kind": "field",
+              "name": "ariaOrientation"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "type",
+              "type": {
+                "text": "'docked' | 'floating'"
+              },
+              "default": "'docked'",
+              "fieldName": "type"
+            },
+            {
+              "name": "color",
+              "type": {
+                "text": "'standard' | 'vibrant'"
+              },
+              "default": "'standard'",
+              "fieldName": "color"
+            },
+            {
+              "name": "orientation",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              },
+              "default": "'horizontal'",
+              "fieldName": "orientation"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "InternalsAttached",
+              "module": "/src/base/mixins/internals-attached.js"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "md-toolbar",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Toolbar",
+          "declaration": {
+            "name": "M3Toolbar",
+            "module": "src/m3/toolbar.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-toolbar",
+          "declaration": {
+            "name": "M3Toolbar",
+            "module": "src/m3/toolbar.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/tooltip.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Tooltip",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_durations",
+              "type": {
+                "text": "object"
+              },
+              "readonly": true,
+              "default": "{ show: 150, hide: 150 }"
+            }
+          ],
+          "superclass": {
+            "name": "Tooltip",
+            "module": "/src/base/tooltip.js"
+          },
+          "tagName": "md-tooltip",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Tooltip",
+          "declaration": {
+            "name": "M3Tooltip",
+            "module": "src/m3/tooltip.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-tooltip",
+          "declaration": {
+            "name": "M3Tooltip",
+            "module": "src/m3/tooltip.ts"
+          }
+        }
+      ]
+    }
+  ]
+}
