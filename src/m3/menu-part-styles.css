@@ -21,6 +21,8 @@
   z-index: 1000;
 }
 
+/* For SSR when `closed` state is not set */
+:host(:not(:state(opening)):not(:state(opened))):not(:state(closing)) [part='menu'],
 :host(:state(closed)) [part='menu'] {
   display: none;
 }
