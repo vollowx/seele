@@ -1,5 +1,5 @@
 import { LitElement, isServer, html, PropertyValues } from 'lit';
-import { property, query, state } from 'lit/decorators.js';
+import { property, query, queryAssignedElements } from 'lit/decorators.js';
 
 import { FormAssociated } from './mixins/form-associated.js';
 import { InternalsAttached } from './mixins/internals-attached.js';
@@ -12,6 +12,7 @@ import {
   getUpdatedIndex,
   scrollItemIntoView,
 } from './menu-utils.js';
+import { ListItem } from './list-item.js';
 
 const VALUE = Symbol('value');
 
@@ -89,6 +90,9 @@ export class Select extends Base {
 
   @query('[part="field"]') $field!: HTMLElement;
   @query('[part="menu"]') $menu!: HTMLElement;
+  @queryAssignedElements({ flatten: true }) slotItems!: Array<
+    ListItem | HTMLElement
+  >;
 
   private lastUserSetValue: string | null = null;
   private lastUserSetSelectedIndex: number | null = null;
@@ -117,12 +121,7 @@ export class Select extends Base {
     isItem: (item: HTMLElement): item is Option =>
       this._possibleItemTags.includes(item.tagName.toLowerCase()) &&
       !item.hasAttribute('disabled'),
-    getPossibleItems: () =>
-      Array.from(this.children).filter(
-        (child): child is Option =>
-          this._possibleItemTags.includes(child.tagName.toLowerCase()) &&
-          !child.hasAttribute('disabled')
-      ),
+    getPossibleItems: () => this.slotItems,
     blurItem: (item: Option) => {
       item.focused = false;
     },
@@ -149,18 +148,21 @@ export class Select extends Base {
   }
 
   protected override async firstUpdated(changed: PropertyValues<Select>) {
-    // Wait for slotted children to be ready
-    await this.updateComplete;
-    if (!this.listController.items.length) {
-      setTimeout(() => {
-        if (!this.lastSelectedOptionRecords.length) {
-          this.updateValueAndDisplayText();
-        }
-      }, 0);
-    }
-
+    // If this has been handled on update already due to SSR, try again.
     if (!this.lastSelectedOptionRecords.length) {
       this.initUserSelection();
+    }
+
+    // Case for when the DOM is streaming, there are no children, and a child
+    // has [selected] set on it, we need to wait for DOM to render something.
+    if (
+      !this.lastSelectedOptionRecords.length &&
+      !isServer &&
+      !this.options.length
+    ) {
+      setTimeout(() => {
+        this.updateValueAndDisplayText();
+      }, 0);
     }
 
     super.firstUpdated(changed);
