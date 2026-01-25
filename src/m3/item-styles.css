@@ -7,7 +7,6 @@
   font: var(--md-sys-typography-body-large);
   gap: 16px;
   min-height: 48px;
-  overflow: hidden;
   padding: 12px;
   position: relative;
   text-overflow: ellipsis;
