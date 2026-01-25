@@ -1,5 +1,5 @@
 import { LitElement, html } from 'lit';
-import { property, query } from 'lit/decorators.js';
+import { property, query, queryAssignedElements } from 'lit/decorators.js';
 
 import { setFocusVisible } from '../core/focus-visible.js';
 import { Attachable } from './mixins/attachable.js';
@@ -46,6 +46,9 @@ export class Menu extends Base {
   @property({ type: Boolean }) keepOpenClickOutside: boolean = false;
 
   @query('[part="menu"]') $menu!: HTMLElement;
+  @queryAssignedElements({ flatten: true }) slotItems!: Array<
+    MenuItem | HTMLElement
+  >;
   private $lastFocused: HTMLElement | null = null;
 
   private readonly popoverController = new PopoverController(this, {
@@ -70,12 +73,7 @@ export class Menu extends Base {
     isItem: (item: HTMLElement): item is MenuItem =>
       this._possibleItemTags.includes(item.tagName.toLowerCase()) &&
       !item.hasAttribute('disabled'),
-    getPossibleItems: () =>
-      Array.from(this.children).filter(
-        (child): child is MenuItem =>
-          this._possibleItemTags.includes(child.tagName.toLowerCase()) &&
-          !child.hasAttribute('disabled')
-      ),
+    getPossibleItems: () => this.slotItems,
     blurItem: (item: MenuItem) => {
       item.focused = false;
     },
@@ -113,9 +111,14 @@ export class Menu extends Base {
         this.#handleFocusOut.bind(this)
       );
     }
-    this.listController.items.forEach((item) => {
-      item.addEventListener('mouseover', this.#handleItemMouseOver.bind(this));
-      item.addEventListener('click', this.#handleItemClick.bind(this));
+    this.updateComplete.then(() => {
+      this.listController.items.forEach((item) => {
+        item.addEventListener(
+          'mouseover',
+          this.#handleItemMouseOver.bind(this)
+        );
+        item.addEventListener('click', this.#handleItemClick.bind(this));
+      });
     });
   }
 
@@ -241,11 +244,12 @@ export class Menu extends Base {
   #handleItemClick(event: Event) {
     const clickedItem = event.currentTarget as MenuItem;
     const index = this.listController.items.indexOf(clickedItem);
+
     this.listController.items[index].focused = false;
     this.dispatchEvent(
       new CustomEvent('select', {
         detail: {
-          item: this.listController.items[index],
+          item: clickedItem,
           index: index,
         },
         bubbles: true,
