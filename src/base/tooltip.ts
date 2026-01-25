@@ -10,6 +10,9 @@ let lastHidingTime = 0;
 
 const Base = Attachable(InternalsAttached(LitElement));
 
+/**
+ * TODO: Check if $control controls a menu/popover and keep hidden when it is open.
+ */
 export class Tooltip extends Base {
   readonly _delays = {
     mouse: { show: 500, hide: 0 },
@@ -22,6 +25,7 @@ export class Tooltip extends Base {
   @property({ reflect: true }) align: import('@floating-ui/dom').Placement =
     'top';
   @property({ type: Number, reflect: true }) offset = 4;
+  @property({ type: Boolean, reflect: true }) forceInvisible = false;
 
   @query('slot') $slot: HTMLSlotElement;
 

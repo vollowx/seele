@@ -36,6 +36,7 @@ export class SdToolbar extends LitElement {
   @property({ type: String }) githubUrl = 'https://github.com/vollowx/seele';
   @property({ type: Boolean }) rtl = false;
 
+  @state() private menuOpen = false;
   @state() private themeMode: 'light' | 'dark' | 'auto' = 'auto';
   @state() private tooltipTexts = {
     rtl: ['Set direction to right-to-left', 'Set direction to left-to-right'],
@@ -146,6 +147,8 @@ export class SdToolbar extends LitElement {
         align="top"
         alignStrategy="fixed"
         @select=${this._handleThemeSelect}
+        @open=${() => (this.menuOpen = true)}
+        @close=${() => (this.menuOpen = false)}
       >
         <md-menu-item
           data-theme="light"
@@ -233,7 +236,12 @@ export class SdToolbar extends LitElement {
             />
           </svg>
         </md-icon-button>
-        <md-tooltip for="action-toggle-theme"> Change theme </md-tooltip>
+        <md-tooltip
+          for="action-toggle-theme"
+          ?forceinvisible=${this.menuOpen}
+          >
+          Change theme
+        </md-tooltip>
 
         <md-fab
           slot="fab"

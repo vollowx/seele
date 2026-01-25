@@ -16,7 +16,7 @@
   top: 0;
   transform: scaleY(0.4);
   width: max-content;
-  z-index: 9999;
+  z-index: 800;
 }
 :host(:state(closed)) {
   display: none;
@@ -26,7 +26,7 @@
  * Should be added as a CSS variable in popoverController.
  * Should also update M3Menu and M3Select accordingly.
  */
-:host(:state(opening)) {
+:host(:state(opening):not([forceinvisible])) {
   color: var(--md-sys-color-inverse-on-surface);
   opacity: 1;
   pointer-events: auto;
@@ -38,13 +38,13 @@
     transform var(--md-sys-motion-exp-effects-fast-duration)
       var(--md-sys-motion-exp-effects-fast);
 }
-:host(:state(opened)) {
+:host(:state(opened):not([forceinvisible])) {
   color: var(--md-sys-color-inverse-on-surface);
   opacity: 1;
   pointer-events: auto;
   transform: scaleY(1);
 }
-:host(:state(closing)) {
+:host(:state(closing):not([forceinvisible])) {
   color: transparent;
   opacity: 0;
   transform: scaleY(0.4);

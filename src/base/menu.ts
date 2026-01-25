@@ -21,6 +21,8 @@ const Base = InternalsAttached(Attachable(LitElement));
  * @csspart items
  *
  * @fires {Event} select - Fired when a menu item has been selected.
+ * @fires {Event} open - Fired when the menu is opened.
+ * @fires {Event} close - Fired when the menu is closed.
  */
 export class Menu extends Base {
   readonly _possibleItemTags: string[] = [];
@@ -132,6 +134,10 @@ export class Menu extends Base {
   protected override updated(changed: Map<string, any>) {
     if (changed.has('open')) {
       if (this.open) {
+        this.dispatchEvent(
+          new Event('open', { bubbles: true, composed: true })
+        );
+
         this.$lastFocused = document.activeElement as HTMLElement;
         if (this.$control) {
           this.$control.ariaExpanded = 'true';
@@ -142,6 +148,10 @@ export class Menu extends Base {
           this.listController.focusFirstItem();
         });
       } else {
+        this.dispatchEvent(
+          new Event('close', { bubbles: true, composed: true })
+        );
+
         this.listController.clearSearch();
 
         if (this.$control) {
