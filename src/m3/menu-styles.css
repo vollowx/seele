@@ -2,7 +2,3 @@
   display: contents;
   min-width: 112px;
 }
-
-:host([alignstrategy='fixed']) {
-  position: fixed;
-}

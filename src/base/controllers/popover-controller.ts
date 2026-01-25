@@ -201,11 +201,10 @@ export class PopoverController implements ReactiveController {
         }),
         arrow({ element: this._dummyArrow }),
       ],
-    }).then(({ x, y, strategy, placement, middlewareData }) => {
+    }).then(({ x, y, placement, middlewareData }) => {
       Object.assign(popover.style, {
         left: `${x}px`,
         top: `${y}px`,
-        position: strategy,
         transformOrigin: transformOriginFromArrow(
           placement,
           middlewareData.arrow

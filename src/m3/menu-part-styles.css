@@ -1,5 +1,4 @@
 [part='menu'] {
-  /* `position` set by PopoverController */
   /* TODO: Set a generic standard for `z-index` */
   background: var(--md-sys-color-surface-container);
   border-radius: 16px;
@@ -15,14 +14,17 @@
   outline: 0;
   overflow-y: auto;
   padding: 4px;
+  position: absolute;
   transform: scaleY(0.4);
   -webkit-user-select: none;
   user-select: none;
   z-index: 1000;
 }
 
-/* For SSR when `closed` state is not set */
-:host(:not(:state(opening)):not(:state(opened))):not(:state(closing)) [part='menu'],
+:host([alignstrategy='fixed']) [part='menu'] {
+  position: fixed;
+}
+
 :host(:state(closed)) [part='menu'] {
   display: none;
 }
