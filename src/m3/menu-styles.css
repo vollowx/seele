@@ -1,7 +1,6 @@
 :host {
   display: contents;
   min-width: 112px;
-  outline: 0;
 }
 
 :host([alignstrategy='fixed']) {

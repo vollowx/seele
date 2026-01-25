@@ -14,7 +14,6 @@ export abstract class M3Select extends Select {
 
   @property({ type: String }) label = '';
   @property({ type: String }) supportingText = '';
-  @property({ type: Boolean, reflect: true }) error = false;
 
   @state() protected fieldFocused = false;
 

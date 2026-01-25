@@ -40,7 +40,6 @@ export class Select extends Base {
   @property({ type: Boolean }) quick = false;
   @property({ type: Boolean, reflect: true }) required = false;
   @property({ type: Boolean, reflect: true }) error = false;
-
   @property({ reflect: true }) align: import('@floating-ui/dom').Placement =
     'bottom-start';
   @property({ type: String, reflect: true })

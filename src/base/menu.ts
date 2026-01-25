@@ -25,6 +25,11 @@ const Base = InternalsAttached(Attachable(LitElement));
  * @fires {Event} close - Fired when the menu is closed.
  */
 export class Menu extends Base {
+  static override shadowRootOptions: ShadowRootInit = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
   readonly _possibleItemTags: string[] = [];
   readonly _durations = { show: 0, hide: 0 };
   readonly _scrollPadding: number = 0;
@@ -76,22 +81,22 @@ export class Menu extends Base {
     },
     focusItem: (item: MenuItem) => {
       item.focused = true;
-      // this[internals].ariaActiveDescendantElement = item;
-      // Somehow setting ariaActiveDescendantElement doesn't actually update it
-      this.setAttribute('aria-activedescendant', item.id);
+      this.$menu.setAttribute('aria-activedescendant', item.id);
       scrollItemIntoView(this.$menu, item, this._scrollPadding);
     },
     wrapNavigation: () => false,
   });
 
-  constructor() {
-    super();
-    this[internals].role = 'menu';
-    this.tabIndex = -1;
-  }
-
   override render() {
-    return html`<div part="menu">${this.renderItemSlot()}</div>`;
+    return html`<div
+      part="menu"
+      role="menu"
+      tabindex="0"
+      @keydown=${this.#handleKeyDown.bind(this)}
+      @focusout=${this.#handleFocusOut.bind(this)}
+    >
+      ${this.renderItemSlot()}
+    </div>`;
   }
 
   renderItemSlot() {
@@ -100,13 +105,11 @@ export class Menu extends Base {
 
   override connectedCallback() {
     super.connectedCallback();
-    this.addEventListener('keydown', this.#handleKeyDown.bind(this));
-    this.addEventListener('focusout', this.#handleFocusOut.bind(this));
     if (this.$control) {
       // TODO: Handle $control change
       this.$control.ariaHasPopup = 'true';
       this.$control.ariaExpanded = 'false';
-      this.$control.ariaControlsElements = [this];
+      this.$control.ariaControlsElements = [this.$menu];
       this[internals].ariaLabelledByElements = [this.$control];
       this.$control.addEventListener(
         'focusout',
@@ -121,8 +124,6 @@ export class Menu extends Base {
 
   override disconnectedCallback() {
     super.disconnectedCallback();
-    this.removeEventListener('keydown', this.#handleKeyDown.bind(this));
-    this.removeEventListener('focusout', this.#handleFocusOut.bind(this));
     if (this.$control) {
       this.$control.removeEventListener(
         'focusout',
@@ -144,7 +145,7 @@ export class Menu extends Base {
         }
 
         this.popoverController.animateOpen().then(() => {
-          this.focus();
+          this.$menu.focus();
           this.listController.focusFirstItem();
         });
       } else {
