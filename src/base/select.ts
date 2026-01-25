@@ -13,6 +13,8 @@ import {
   scrollItemIntoView,
 } from './menu-utils.js';
 
+const VALUE = Symbol('value');
+
 const Base = FormAssociated(InternalsAttached(LitElement));
 
 /**
@@ -26,24 +28,73 @@ const Base = FormAssociated(InternalsAttached(LitElement));
  * TODO: Consider handle mouseover to focus items.
  */
 export class Select extends Base {
+  static override shadowRootOptions: ShadowRootInit = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
   readonly _possibleItemTags: string[] = [];
   readonly _durations = { show: 0, hide: 0 };
   readonly _scrollPadding: number = 0;
 
-  @property({ reflect: true }) value = '';
-  @state() protected displayValue = '';
-  @property({ type: String }) placeholder = '';
-  @property({ type: Boolean, reflect: true }) open = false;
+  @property({ type: Boolean }) quick = false;
   @property({ type: Boolean, reflect: true }) required = false;
-  @property({ type: Boolean, reflect: true }) quick = false;
+  @property({ type: Boolean, reflect: true }) error = false;
+
   @property({ reflect: true }) align: import('@floating-ui/dom').Placement =
     'bottom-start';
   @property({ type: String, reflect: true })
   alignStrategy: import('@floating-ui/dom').Strategy = 'absolute';
   @property({ type: Number, reflect: true }) offset = 0;
 
+  /**
+   * Text to display in the field. Only set for SSR.
+   */
+  @property({ attribute: 'display-text' }) displayText = '';
+
+  @property()
+  get value(): string {
+    return this[VALUE];
+  }
+  set value(value: string) {
+    if (isServer) return;
+    this.lastUserSetValue = value;
+    this.select(value);
+  }
+
+  [VALUE] = '';
+
+  get options() {
+    return this.listController.items;
+  }
+
+  @property({ type: Number, attribute: 'selected-index' })
+  get selectedIndex(): number {
+    const selectedOptions = this.getSelectedOptions() ?? [];
+    if (selectedOptions.length > 0) {
+      return selectedOptions[0][1];
+    }
+    return -1;
+  }
+
+  set selectedIndex(index: number) {
+    this.lastUserSetSelectedIndex = index;
+    this.selectIndex(index);
+  }
+
+  get selectedOptions() {
+    return (this.getSelectedOptions() ?? []).map(([option]) => option);
+  }
+
+  @property({ type: Boolean, reflect: true }) open = false;
+
   @query('[part="field"]') $field!: HTMLElement;
   @query('[part="menu"]') $menu!: HTMLElement;
+
+  private lastUserSetValue: string | null = null;
+  private lastUserSetSelectedIndex: number | null = null;
+  private lastSelectedOption: Option | null = null;
+  private lastSelectedOptionRecords: [Option, number][] = [];
 
   private readonly popoverController = new PopoverController(this, {
     popover: () => this.$menu,
@@ -86,6 +137,61 @@ export class Select extends Base {
     wrapNavigation: () => false,
   });
 
+  override connectedCallback() {
+    super.connectedCallback();
+    this.addEventListener('focusout', this.#handleFocusOut);
+    this.addEventListener('click', this.#handleOptionClick);
+  }
+
+  override disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('focusout', this.#handleFocusOut);
+    this.removeEventListener('click', this.#handleOptionClick);
+  }
+
+  protected override async firstUpdated(changed: PropertyValues<Select>) {
+    // If this has been handled on update already due to SSR, try again.
+    if (!this.lastSelectedOptionRecords.length) {
+      this.initUserSelection();
+    }
+
+    // Case for when the DOM is streaming, there are no children, and a child
+    // has [selected] set on it, we need to wait for DOM to render something.
+    if (
+      !this.lastSelectedOptionRecords.length &&
+      !isServer &&
+      !this.options.length
+    ) {
+      setTimeout(() => {
+        this.updateValueAndDisplayText();
+      });
+    }
+
+    super.firstUpdated(changed);
+  }
+
+  protected override update(changed: PropertyValues<Select>) {
+    if (!this.hasUpdated) {
+      this.initUserSelection();
+    }
+
+    super.update(changed);
+  }
+
+  protected override updated(changed: PropertyValues) {
+    super.updated(changed);
+
+    if (changed.has('open')) {
+      if (this.open) {
+        this.popoverController.animateOpen();
+        this.#focusSelectedItemOrFirst();
+      } else {
+        this.popoverController.animateClose();
+        this.listController.clearSearch();
+      }
+    }
+  }
+
   override render() {
     return html`${this.renderField()} ${this.renderMenu()}`;
   }
@@ -118,53 +224,7 @@ export class Select extends Base {
   }
 
   protected renderFieldContent() {
-    return html`<span part="value"
-      >${this.displayValue || this.placeholder}</span
-    >`;
-  }
-
-  override connectedCallback() {
-    super.connectedCallback();
-    if (isServer) return;
-    this.addEventListener('click', this.#handleOptionClick);
-    this.addEventListener('focusout', this.#handleFocusOut);
-  }
-
-  override disconnectedCallback() {
-    super.disconnectedCallback();
-    this.removeEventListener('click', this.#handleOptionClick);
-    this.removeEventListener('focusout', this.#handleFocusOut);
-  }
-
-  protected override updated(changed: PropertyValues) {
-    super.updated(changed);
-    if (changed.has('value')) {
-      this.#updateDisplayValue();
-      this.#updateSelection();
-    }
-
-    if (changed.has('open')) {
-      if (this.open) {
-        this.popoverController.animateOpen();
-        // Focus current item when opening
-        const index = this.listController.items.findIndex(
-          (item) => (item.value || item.innerText) === this.value
-        );
-        if (index >= 0) {
-          this.listController._focusItem(this.listController.items[index]);
-        } else {
-          this.listController.focusFirstItem();
-        }
-      } else {
-        this.popoverController.animateClose();
-        this.listController.clearSearch();
-      }
-    }
-  }
-
-  toggle() {
-    if (this.disabled) return;
-    this.open = !this.open;
+    return html`<span part="value">${this.displayText || html`&nbsp;`}</span>`;
   }
 
   protected handleFieldKeydown(event: KeyboardEvent) {
@@ -186,11 +246,13 @@ export class Select extends Base {
       case MenuActions.PageDown:
         event.preventDefault();
         const nextIndex = getUpdatedIndex(currentIndex, maxIndex, action!);
-        this.#onOptionChange(nextIndex);
+        this.listController._focusItem(items[nextIndex]);
         return;
       case MenuActions.CloseSelect:
         event.preventDefault();
-        this.#selectOption(currentIndex);
+        if (this.selectItem(items[currentIndex])) {
+          this.#dispatchChangeEvent();
+        }
       // intentional fallthrough
       case MenuActions.Close:
         event.preventDefault();
@@ -207,87 +269,134 @@ export class Select extends Base {
     }
   }
 
-  #onOptionChange(index: number) {
-    const items = this.listController.items;
-    if (index >= 0 && index < items.length) {
-      this.listController._focusItem(items[index]);
-    }
-  }
-
-  #selectOption(index: number) {
-    const items = this.listController.items;
-    if (index >= 0 && index < items.length) {
-      const item = items[index];
-      const newValue = item.value || item.innerText;
-      if (this.value !== newValue) {
-        this.value = newValue;
-        // According to https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/change_event#event_type
-        // the change and input events are just Event and should not include detail.
-        this.dispatchEvent(new Event('input', { bubbles: true }));
-        this.dispatchEvent(new Event('change', { bubbles: true }));
+  private selectItem(item: Option) {
+    const selectedOptions = this.getSelectedOptions() ?? [];
+    selectedOptions.forEach(([option]) => {
+      if (item !== option) {
+        option.selected = false;
       }
-      this.open = false;
+    });
+    item.selected = true;
+
+    return this.updateValueAndDisplayText();
+  }
+
+  private initUserSelection() {
+    if (this.lastUserSetValue && !this.lastSelectedOptionRecords.length) {
+      this.select(this.lastUserSetValue);
+    } else if (
+      this.lastUserSetSelectedIndex !== null &&
+      !this.lastSelectedOptionRecords.length
+    ) {
+      this.selectIndex(this.lastUserSetSelectedIndex);
+    } else {
+      this.updateValueAndDisplayText();
     }
   }
 
-  #handleOptionClick(event: Event) {
+  private updateValueAndDisplayText() {
+    const selectedOptions = this.getSelectedOptions() ?? [];
+    let changed = false;
+
+    if (selectedOptions.length) {
+      const [firstSelectedOption] = selectedOptions[0];
+      changed = this.lastSelectedOption !== firstSelectedOption;
+      this.lastSelectedOption = firstSelectedOption;
+      this[VALUE] = firstSelectedOption.value;
+      this.displayText = firstSelectedOption.innerText;
+    } else {
+      changed = this.lastSelectedOption !== null;
+      this.lastSelectedOption = null;
+      this[VALUE] = '';
+      this.displayText = '';
+    }
+
+    return changed;
+  }
+
+  private getSelectedOptions(): [Option, number][] | null {
+    const items = this.listController.items;
+    const records: [Option, number][] = [];
+    items.forEach((item, index) => {
+      if (item.selected) {
+        records.push([item, index]);
+      }
+    });
+    this.lastSelectedOptionRecords = records;
+    return records.length ? records : null;
+  }
+
+  #dispatchChangeEvent = () => {
+    this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+    this.dispatchEvent(new Event('change', { bubbles: true }));
+  };
+
+  #handleOptionClick = (event: Event) => {
     const target = event.target as HTMLElement;
     const item = target.closest(this._possibleItemTags.join(',')) as Option;
     if (item && this.listController.items.includes(item)) {
-      const index = this.listController.items.indexOf(item);
-      this.#selectOption(index);
+      if (this.selectItem(item)) {
+        this.#dispatchChangeEvent();
+      }
+      this.open = false;
     }
-  }
+  };
 
-  #handleFocusOut(event: FocusEvent) {
+  #handleFocusOut = (event: FocusEvent) => {
     const relatedTarget = event.relatedTarget as Node;
     if (!this.contains(relatedTarget) && !this.$menu.contains(relatedTarget)) {
       this.open = false;
     }
-  }
+  };
 
-  #updateDisplayValue() {
-    if (isServer) return;
-
-    // We need to wait for items to be available.
-    // Using a microtask or just checking if items exist.
-    // Since this is called in updated(), items might be available if children are slotted.
-    const items = this.listController.items;
-    const selectedItem = items.find(
-      (item) => (item.value || item.innerText) === this.value
-    );
-
-    if (selectedItem) {
-      this.displayValue = selectedItem.innerText;
-    } else if (!this.value) {
-      this.displayValue = '';
+  #focusSelectedItemOrFirst() {
+    const selectedOptions = this.getSelectedOptions();
+    if (selectedOptions && selectedOptions.length > 0) {
+      const [item] = selectedOptions[0];
+      this.listController._focusItem(item);
+    } else {
+      this.listController.focusFirstItem();
     }
   }
 
-  // TODO: Store previously selected item to avoid looping through all items
-  #updateSelection() {
-    const items = this.listController.items;
-    items.forEach((item) => {
-      const itemValue = item.value || item.innerText;
-      item.selected = itemValue === this.value;
-    });
-  }
-
-  // TODO: Handle multiple selected items
   protected handleSlotChange() {
-    const items = this.listController.items;
-
-    if (!this.value && items.length > 0) {
-      const selectedItem = items.find((item) => item.hasAttribute('selected'));
-      if (selectedItem) {
-        this.value = selectedItem.value || selectedItem.innerText;
-      } else {
-        const firstItem = items[0];
-        this.value = firstItem.value || firstItem.innerText;
-      }
+    // When slots change, check for initially selected items if value is not set
+    if (!this.value) {
+      this.updateValueAndDisplayText();
     }
+  }
 
-    this.#updateDisplayValue();
-    this.#updateSelection();
+  formResetCallback() {
+    this.reset();
+  }
+
+  formStateRestoreCallback(state: string) {
+    this.value = state;
+  }
+
+  select(value: string) {
+    const item = this.options.find((option) => option.value === value);
+    if (item) {
+      this.selectItem(item);
+    }
+  }
+
+  selectIndex(index: number) {
+    const item = this.options[index];
+    if (item) {
+      this.selectItem(item);
+    }
+  }
+
+  reset() {
+    for (const option of this.options) {
+      option.selected = option.hasAttribute('selected');
+    }
+    this.updateValueAndDisplayText();
+  }
+
+  toggle() {
+    if (this.disabled) return;
+    this.open = !this.open;
   }
 }
