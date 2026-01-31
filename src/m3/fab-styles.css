@@ -1,4 +1,5 @@
 :host {
+  --md-focus-ring-shape: var(--_border-radius);
   --_text-color: var(--md-sys-color-primary);
   --_background-color: var(--md-sys-color-surface-container-high);
   --_size: 56px;
@@ -41,9 +42,10 @@
   box-shadow: var(--md-sys-elevation-shadow-1);
 }
 
-:host([size='small']) {
-  --_size: 40px;
-  --_border-radius: 12px;
+:host([size='medium']) {
+  --_size: 80px;
+  --_border-radius: 20px;
+  --_icon-size: 28px;
 }
 :host([size='large']) {
   --_size: 96px;
@@ -51,6 +53,18 @@
   --_icon-size: 36px;
 }
 
+:host([color='primary-container']) {
+  --_text-color: var(--md-sys-color-on-primary-container);
+  --_background-color: var(--md-sys-color-primary-container);
+}
+:host([color='secondary-container']) {
+  --_text-color: var(--md-sys-color-on-secondary-container);
+  --_background-color: var(--md-sys-color-secondary-container);
+}
+:host([color='tertiary-container']) {
+  --_text-color: var(--md-sys-color-on-tertiary-container);
+  --_background-color: var(--md-sys-color-tertiary-container);
+}
 :host([color='primary']) {
   --_text-color: var(--md-sys-color-on-primary);
   --_background-color: var(--md-sys-color-primary);
@@ -77,13 +91,6 @@
   :host(:hover:not(:active)) {
     box-shadow: var(--md-sys-elevation-shadow-4);
   }
-  :host([lowered]:hover:not(:active)) {
-    box-shadow: var(--md-sys-elevation-shadow-2);
-  }
-}
-
-md-focus-ring {
-  --md-focus-ring-shape: var(--_border-radius);
 }
 
 ::slotted(:not([slot='label'])) {

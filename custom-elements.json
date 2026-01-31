@@ -108,9 +108,9 @@
               "kind": "field",
               "name": "size",
               "type": {
-                "text": "'small' | 'medium' | 'large'"
+                "text": "'default' | 'medium' | 'large'"
               },
-              "default": "'medium'",
+              "default": "'default'",
               "attribute": "size",
               "reflects": true
             },
@@ -118,20 +118,10 @@
               "kind": "field",
               "name": "color",
               "type": {
-                "text": "| 'surface'\r\n    | 'primary'\r\n    | 'secondary'\r\n    | 'tertiary'"
+                "text": "| 'surface'\r\n    | 'primary-container'\r\n    | 'secondary-container'\r\n    | 'tertiary-container'\r\n    | 'primary'\r\n    | 'secondary'\r\n    | 'tertiary'"
               },
               "default": "'surface'",
               "attribute": "color",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "lowered",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "attribute": "lowered",
               "reflects": true
             }
           ],
@@ -139,26 +129,18 @@
             {
               "name": "size",
               "type": {
-                "text": "'small' | 'medium' | 'large'"
+                "text": "'default' | 'medium' | 'large'"
               },
-              "default": "'medium'",
+              "default": "'default'",
               "fieldName": "size"
             },
             {
               "name": "color",
               "type": {
-                "text": "| 'surface'\r\n    | 'primary'\r\n    | 'secondary'\r\n    | 'tertiary'"
+                "text": "| 'surface'\r\n    | 'primary-container'\r\n    | 'secondary-container'\r\n    | 'tertiary-container'\r\n    | 'primary'\r\n    | 'secondary'\r\n    | 'tertiary'"
               },
               "default": "'surface'",
               "fieldName": "color"
-            },
-            {
-              "name": "lowered",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "fieldName": "lowered"
             }
           ],
           "superclass": {

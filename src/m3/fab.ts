@@ -30,13 +30,15 @@ export class M3FAB extends Button {
       <slot part="label" name="label"></slot>
     `;
   }
-  @property({ reflect: true }) size: 'small' | 'medium' | 'large' = 'medium';
+  @property({ reflect: true }) size: 'default' | 'medium' | 'large' = 'default';
   @property({ reflect: true }) color:
     | 'surface'
+    | 'primary-container'
+    | 'secondary-container'
+    | 'tertiary-container'
     | 'primary'
     | 'secondary'
     | 'tertiary' = 'surface';
-  @property({ type: Boolean, reflect: true }) lowered = false;
 }
 
 declare global {
