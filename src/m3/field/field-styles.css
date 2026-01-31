@@ -70,10 +70,10 @@
   padding-block: var(--_padding-top) var(--_padding-bottom);
 }
 
-/* FIXME: Safari doesn't support ::placeholder */
-:host([haslabel]:not([focused]):not([populated])) ::slotted(input)::placeholder,
 :host([haslabel]:not([focused]):not([populated]))
-  ::slotted(textarea)::placeholder {
+  ::slotted(input:placeholder-shown),
+:host([haslabel]:not([focused]):not([populated]))
+  ::slotted(textarea:placeholder-shown) {
   opacity: 0;
 }
 
