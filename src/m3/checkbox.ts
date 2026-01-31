@@ -1,10 +1,10 @@
 import { html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, query } from 'lit/decorators.js';
 
 import { Checkbox } from '../base/checkbox.js';
 
 import './focus-ring.js';
-import './ripple.js';
+import { M3Ripple } from './ripple.js';
 
 import { checkboxStyles } from './checkbox-styles.css.js';
 import { targetStyles } from './target-styles.css.js';
@@ -37,6 +37,15 @@ export class M3Checkbox extends Checkbox {
     `;
   }
   @property({ type: Boolean, reflect: true }) error = false;
+  @query('md-ripple') $ripple!: M3Ripple;
+
+  override connectedCallback() {
+    super.connectedCallback();
+    // SSR'd <md-checkbox> components don't have their labels set up on time
+    this.updateComplete.then(() => {
+      this.$ripple.attach(this);
+    });
+  }
 }
 
 declare global {
