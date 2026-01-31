@@ -120,7 +120,7 @@
               "type": {
                 "text": "| 'surface'\r\n    | 'primary-container'\r\n    | 'secondary-container'\r\n    | 'tertiary-container'\r\n    | 'primary'\r\n    | 'secondary'\r\n    | 'tertiary'"
               },
-              "default": "'surface'",
+              "default": "'primary'",
               "attribute": "color",
               "reflects": true
             }
@@ -139,7 +139,7 @@
               "type": {
                 "text": "| 'surface'\r\n    | 'primary-container'\r\n    | 'secondary-container'\r\n    | 'tertiary-container'\r\n    | 'primary'\r\n    | 'secondary'\r\n    | 'tertiary'"
               },
-              "default": "'surface'",
+              "default": "'primary'",
               "fieldName": "color"
             }
           ],

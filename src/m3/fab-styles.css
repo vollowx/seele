@@ -1,7 +1,7 @@
 :host {
   --md-focus-ring-shape: var(--_border-radius);
-  --_text-color: var(--md-sys-color-primary);
-  --_background-color: var(--md-sys-color-surface-container-high);
+  --_text-color: var(--md-sys-color-on-primary);
+  --_background-color: var(--md-sys-color-primary);
   --_size: 56px;
   --_border-radius: 16px;
   --_icon-size: 24px;
@@ -65,10 +65,6 @@
   --_text-color: var(--md-sys-color-on-tertiary-container);
   --_background-color: var(--md-sys-color-tertiary-container);
 }
-:host([color='primary']) {
-  --_text-color: var(--md-sys-color-on-primary);
-  --_background-color: var(--md-sys-color-primary);
-}
 :host([color='secondary']) {
   --_text-color: var(--md-sys-color-on-secondary);
   --_background-color: var(--md-sys-color-secondary);
@@ -76,6 +72,10 @@
 :host([color='tertiary']) {
   --_text-color: var(--md-sys-color-on-tertiary);
   --_background-color: var(--md-sys-color-tertiary);
+}
+:host([color='surface']) {
+  --_text-color: var(--md-sys-color-primary);
+  --_background-color: var(--md-sys-color-surface-container-high);
 }
 
 :host(:disabled) {

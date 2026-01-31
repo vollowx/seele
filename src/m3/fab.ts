@@ -38,7 +38,7 @@ export class M3FAB extends Button {
     | 'tertiary-container'
     | 'primary'
     | 'secondary'
-    | 'tertiary' = 'surface';
+    | 'tertiary' = 'primary';
 }
 
 declare global {
