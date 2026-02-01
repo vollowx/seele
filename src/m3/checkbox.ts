@@ -42,8 +42,8 @@ export class M3Checkbox extends Checkbox {
   override connectedCallback() {
     super.connectedCallback();
     // SSR'd <md-checkbox> components don't have their labels set up on time
-    setTimeout(() => {
-      this.$ripple.attach(this);
+    this.updateComplete.then(() => {
+      this.$ripple.attach(this, true);
     });
   }
 }

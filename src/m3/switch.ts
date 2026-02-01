@@ -56,7 +56,7 @@ export class M3Switch extends Switch {
 
   override connectedCallback() {
     super.connectedCallback();
-    setTimeout(() => {
+    this.updateComplete.then(() => {
       this.$ripple.attach(this);
     });
     this.addEventListener('pointerdown', this.#handlePointerDown);

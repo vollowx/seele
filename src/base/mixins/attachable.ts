@@ -4,7 +4,7 @@ import { property } from 'lit/decorators.js';
 export declare class AttachableInterface {
   $control: HTMLElement;
   htmlFor: string | null;
-  attach(control: HTMLElement): void;
+  attach(control: HTMLElement, force?: boolean): void;
   detach(): void;
   handleControlChange(prev: HTMLElement | null, next: HTMLElement | null): void;
 }
@@ -62,14 +62,14 @@ export const Attachable = <T extends Constructor<LitElement>>(
       }
     }
 
-    private setCurrentControl(control: HTMLElement | null) {
-      if (control === this.currentControl) return;
+    private setCurrentControl(control: HTMLElement | null, force = false) {
+      if (control === this.currentControl && !force) return;
       this.handleControlChange(this.currentControl, control);
       this.currentControl = control;
     }
 
-    attach(control: HTMLElement) {
-      this.setCurrentControl(control);
+    attach(control: HTMLElement, force = false) {
+      this.setCurrentControl(control, force);
       this.removeAttribute('for');
     }
     detach() {
