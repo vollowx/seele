@@ -38,6 +38,13 @@
               "default": "false",
               "attribute": "error",
               "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "$ripple",
+              "type": {
+                "text": "M3Ripple"
+              }
             }
           ],
           "attributes": [
@@ -850,33 +857,27 @@
             },
             {
               "kind": "field",
-              "name": "#handleKeyDown",
-              "privacy": "private"
+              "name": "handleKeyDown"
             },
             {
               "kind": "field",
-              "name": "#handleKeyUp",
-              "privacy": "private"
+              "name": "handleKeyUp"
             },
             {
               "kind": "field",
-              "name": "#handlePointerEnter",
-              "privacy": "private"
+              "name": "handlePointerEnter"
             },
             {
               "kind": "field",
-              "name": "#handlePointerLeave",
-              "privacy": "private"
+              "name": "handlePointerLeave"
             },
             {
               "kind": "field",
-              "name": "#handlePointerDown",
-              "privacy": "private"
+              "name": "handlePointerDown"
             },
             {
               "kind": "field",
-              "name": "#handlePointerUp",
-              "privacy": "private"
+              "name": "handlePointerUp"
             },
             {
               "kind": "method",
@@ -900,8 +901,7 @@
             },
             {
               "kind": "method",
-              "name": "#calculateRipple",
-              "privacy": "private",
+              "name": "calculateRipple",
               "parameters": [
                 {
                   "name": "e",
@@ -1009,6 +1009,74 @@
           "declaration": {
             "name": "M3Ripple",
             "module": "src/m3/ripple.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/slider.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Slider",
+          "members": [
+            {
+              "kind": "method",
+              "name": "renderTrack",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderLabel",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderHandle",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "{ start, label }",
+                  "type": {
+                    "text": "{ start: boolean; label: string }"
+                  }
+                }
+              ]
+            }
+          ],
+          "superclass": {
+            "name": "Slider",
+            "module": "/src/base/slider.js"
+          },
+          "tagName": "md-slider",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Slider",
+          "declaration": {
+            "name": "M3Slider",
+            "module": "src/m3/slider.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-slider",
+          "declaration": {
+            "name": "M3Slider",
+            "module": "src/m3/slider.ts"
           }
         }
       ]
