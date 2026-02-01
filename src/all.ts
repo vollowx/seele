@@ -17,6 +17,7 @@ export { M3Menu } from './m3/menu.js';
 export { M3MenuItem } from './m3/menu-item.js';
 export { M3Option } from './m3/option.js';
 export { M3Ripple } from './m3/ripple.js';
+export { M3Slider } from './m3/slider.js';
 export { M3Switch } from './m3/switch.js';
 export { M3Tooltip } from './m3/tooltip.js';
 export { M3Toolbar } from './m3/toolbar.js';

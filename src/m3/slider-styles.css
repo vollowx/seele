@@ -1,0 +1,307 @@
+:host {
+  --_target-size: 48px;
+  --_half-target: calc(var(--_target-size) / 2);
+  --_handle-width-start: var(--md-slider-handle-width, 4px);
+  --_handle-width-end: var(--md-slider-handle-width, 4px);
+  --_handle-height: var(--md-slider-handle-height, 44px);
+  --_handle-shape: var(--md-slider-handle-shape, 20px);
+  --_handle-margin: 6px;
+
+  --_tick-size: var(--md-slider-tick-size, 2px);
+
+  --_track-shape: 8px;
+  --_track-height: var(--md-slider-track-height, 16px);
+
+  display: inline-flex;
+  vertical-align: middle;
+  min-inline-size: 200px;
+}
+
+md-focus-ring {
+  height: 56px;
+  width: 16px;
+  inset: unset;
+}
+
+:host([disabled]) {
+  opacity: 0.38;
+}
+:host([disabled]) input {
+  cursor: default;
+  pointer-events: none;
+}
+
+.container {
+  --_start-px: calc(100% * var(--_start));
+  --_end-px: calc(100% * var(--_end));
+  --_inv-start-px: calc(100% * (1 - var(--_start)));
+  --_inv-end-px: calc(100% * (1 - var(--_end)));
+  --_mask-offset-start: calc(
+    var(--_handle-width-start) / 2 + var(--_handle-margin)
+  );
+  --_mask-offset-end: calc(
+    var(--_handle-width-end) / 2 + var(--_handle-margin)
+  );
+  --_cut-start: calc(var(--_start-px) + var(--_mask-offset-start));
+  --_cut-end: calc(var(--_inv-end-px) + var(--_mask-offset-end));
+  --_cut-inv-start: calc(var(--_inv-start-px) + var(--_mask-offset-start));
+  --_cut-inv-end: calc(var(--_end-px) + var(--_mask-offset-end));
+  flex: 1;
+  display: flex;
+  align-items: center;
+  position: relative;
+  block-size: var(--_target-size);
+  pointer-events: none;
+  touch-action: none;
+  user-select: none;
+}
+
+/* Track & tickmarks */
+.track,
+.tickmarks {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  inset-inline: 0;
+  block-size: var(--_track-height);
+}
+
+.track div,
+.tickmarks div {
+  position: absolute;
+  inset: 0;
+}
+
+.track div {
+  border-radius: var(--_track-shape);
+  /* FIXME: Dragging should not use transition */
+  /*transition: clip-path var(--md-sys-motion-std-effects-fast-duration)
+    var(--md-sys-motion-std-effects-fast);*/
+}
+
+.track .inactive-before,
+.track .inactive-after {
+  background: var(--md-sys-color-secondary-container);
+}
+.track .active {
+  background: var(--md-sys-color-primary);
+}
+
+:host([disabled]) .track .inactive-before,
+:host([disabled]) .track .inactive-after {
+  background: var(--md-sys-color-on-surface);
+  opacity: calc(0.12 / 0.38);
+}
+:host([disabled]) .track .active {
+  background: var(--md-sys-color-on-surface);
+}
+
+/* Tickmarks */
+.tickmarks div {
+  --_tick-color: var(--md-sys-color-on-secondary-container);
+  /* TODO: Properly add padding while keeping the input, tick and handle at the same position */
+  /*margin-inline: 6px;*/
+  background-size: calc((100% - var(--_tick-size) * 2) / var(--_ticks))
+    100%;
+  background-image: radial-gradient(
+    circle at var(--_tick-size) center,
+    var(--_tick-color) 0,
+    var(--_tick-color) calc(var(--_tick-size) / 2),
+    transparent calc(var(--_tick-size) / 2)
+  );
+}
+.tickmarks .active {
+  --_tick-color: var(--md-sys-color-on-primary);
+}
+:host([disabled]) .tickmarks div {
+  --_tick-color: var(--md-sys-color-on-surface);
+}
+:host([disabled]) .tickmarks .active {
+  --_tick-color: var(--md-sys-color-inverse-on-surface);
+}
+
+/* Track and tickmarks clipping */
+.inactive-before {
+  clip-path: inset(0 var(--_cut-inv-start) 0 0);
+}
+
+.inactive-after {
+  clip-path: inset(0 0 0 var(--_cut-inv-end));
+}
+
+.active {
+  clip-path: inset(0 var(--_cut-end) 0 0);
+}
+.ranged .active {
+  clip-path: inset(0 var(--_cut-end) 0 var(--_cut-start));
+}
+
+:host(:dir(rtl)) .inactive-before {
+  clip-path: inset(0 0 0 var(--_cut-inv-start));
+}
+:host(:dir(rtl)) .inactive-after {
+  clip-path: inset(0 var(--_cut-inv-end) 0 0);
+}
+:host(:dir(rtl)) .active {
+  clip-path: inset(0 0 0 var(--_cut-end));
+}
+:host(:dir(rtl)) .ranged .active {
+  clip-path: inset(0 var(--_cut-start) 0 var(--_cut-end));
+}
+
+/* Handle */
+.handles {
+  position: relative;
+  block-size: 100%;
+  inline-size: 100%;
+  inset-block: 0;
+  inset-inline-start: var(--_start-px);
+  inline-size: calc(var(--_end-px) - var(--_start-px));
+}
+
+.handle {
+  --md-ripple-color: var(--md-sys-color-primary);
+  position: absolute;
+  block-size: var(--_target-size);
+  inline-size: var(--_target-size);
+  border-radius: var(--_handle-shape);
+  display: flex;
+  place-content: center;
+  place-items: center;
+}
+
+.handle.start {
+  inset-inline-start: calc(0px - var(--_half-target));
+}
+.handle.end {
+  inset-inline-end: calc(0px - var(--_half-target));
+}
+
+.nub {
+  position: absolute;
+  height: var(--_handle-height);
+  width: var(--_handle-width-end);
+  border-radius: var(--_handle-shape);
+  background: var(--md-sys-color-primary);
+  transition: width var(--md-sys-motion-std-effects-fast-duration)
+    var(--md-sys-motion-std-effects-fast);
+}
+
+.start .nub {
+  width: var(--_handle-width-start);
+}
+
+:host([disabled]) .nub {
+  background: var(--md-sys-color-on-surface);
+}
+
+/* Overlap Logic */
+.onTop.isOverlapping .nub {
+  border: 1px solid var(--md-sys-color-surface);
+}
+
+/* Label */
+.label {
+  position: absolute;
+  box-sizing: border-box;
+  display: flex;
+  padding: 0 16px;
+  place-content: center;
+  place-items: center;
+  border-radius: 9999px;
+  color: var(--md-sys-color-inverse-on-surface);
+  background: var(--md-sys-color-inverse-surface);
+  font: var(--md-sys-typography-label-large);
+
+  inset-block-end: 100%;
+  min-inline-size: 48px;
+  min-block-size: 44px;
+  transition: opacity 67ms linear;
+  transform: translateY(-2px); /* 4px to the handle actually */
+  opacity: 0;
+}
+
+:host(:not(:disabled):hover) .label,
+:host(:not(:disabled)) :where(:has(input:active)) .label,
+:host(:not(:disabled)) :where(:has(input:focus-visible)) .label {
+  opacity: 1;
+}
+
+/* Range input */
+input[type='range'] {
+  opacity: 0;
+  -webkit-tap-highlight-color: transparent;
+  position: absolute;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  appearance: none;
+}
+input[type='range']:focus {
+  outline: none;
+}
+
+:host(:not([disabled])) :has(input.start:active) {
+  --_handle-width-start: 2px;
+}
+:host(:not([disabled])) :has(input.end:active) {
+  --_handle-width-end: 2px;
+}
+
+::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  block-size: var(--_handle-height);
+  inline-size: var(--_handle-width-end);
+  opacity: 0;
+  z-index: 2;
+}
+::-moz-range-thumb {
+  appearance: none;
+  block-size: var(--_handle-height);
+  inline-size: var(--_handle-width-end);
+  opacity: 0;
+  z-index: 2;
+  transform: scaleX(0);
+}
+
+/* Safari */
+input.start::-webkit-slider-thumb {
+  --_pad: calc((var(--_target-size) - var(--_handle-width-start)) / 2);
+  transform: translateX(calc(var(--_pad) - 2 * var(--_start) * var(--_pad)));
+}
+input.end::-webkit-slider-thumb {
+  --_pad: calc((var(--_target-size) - var(--_handle-width-end)) / 2);
+  transform: translateX(calc(var(--_pad) - 2 * var(--_end) * var(--_pad)));
+}
+input:dir(rtl)::-webkit-slider-thumb {
+  transform: translateX(
+    calc(-1 * (var(--_pad) - 2 * var(--frac) * var(--_pad)))
+  );
+}
+
+.ranged input {
+  --track-len: calc(100% - var(--_target-size));
+  --mid-frac: calc(var(--_start) + ((var(--_end) - var(--_start)) / 2));
+  --clip-px: calc(var(--_half-target) + var(--track-len) * var(--mid-frac));
+}
+
+.ranged input.start {
+  clip-path: inset(0 calc(100% - var(--clip-px)) 0 0);
+}
+.ranged input.end {
+  clip-path: inset(0 0 0 var(--clip-px));
+}
+.ranged input.start:dir(rtl) {
+  clip-path: inset(0 0 0 calc(100% - var(--clip-px)));
+}
+.ranged input.end:dir(rtl) {
+  clip-path: inset(0 var(--clip-px) 0 0);
+}
+
+.onTop {
+  z-index: 1;
+}

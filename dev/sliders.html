@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-md-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>slider - see development tests</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link rel="stylesheet" href="./shared.css" />
+    <script type="module" src="./shared.ts"></script>
+  </head>
+  <body>
+    <sd-toolbar></sd-toolbar>
+    <h1>slider</h1>
+
+    <label>
+      Hi Slider
+      <md-slider data-aria-label="slider"></md-slider>
+    </label>
+    <md-slider range></md-slider>
+    <md-slider labeled ticks step="10"></md-slider>
+    <md-slider labeled ticks step="10" disabled></md-slider>
+  </body>
+</html>

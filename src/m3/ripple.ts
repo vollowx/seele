@@ -45,7 +45,7 @@ export class M3Ripple extends Attachable(InternalsAttached(LitElement)) {
   #pointerDown = false;
   #lastTime = 0;
 
-  #handleKeyDown = (e: KeyboardEvent) => {
+  handleKeyDown = (e: KeyboardEvent) => {
     if (
       (e.key === 'Enter' && this.enterBehavior === 'always') ||
       (e.key === ' ' && this.spaceBehavior === 'always')
@@ -58,42 +58,42 @@ export class M3Ripple extends Attachable(InternalsAttached(LitElement)) {
     }
   };
 
-  #handleKeyUp = (e: KeyboardEvent) => {
+  handleKeyUp = (e: KeyboardEvent) => {
     if (e.key === ' ' && this.spaceBehavior === 'once') {
       this.#spaceKeyDown = false;
       this.removeRippleAll();
     }
   };
 
-  #handlePointerEnter = (e: PointerEvent) => {
+  handlePointerEnter = (e: PointerEvent) => {
     if (e.pointerType === 'touch') return;
     this[internals].states.add('hover');
     if (this.#pointerDown && this.clickBehavior === 'always') this.addRipple(e);
   };
 
-  #handlePointerLeave = () => {
+  handlePointerLeave = () => {
     this[internals].states.delete('hover');
     if (this.#pointerDown && this.clickBehavior === 'always')
       this.removeRippleAll();
   };
 
-  #handlePointerDown = (e: PointerEvent) => {
+  handlePointerDown = (e: PointerEvent) => {
     if (e.pointerType === 'mouse') this.#pointerDown = true;
-    document.addEventListener('pointerup', this.#handlePointerUp);
-    document.addEventListener('touchcancel', this.#handlePointerUp);
-    document.addEventListener('touchend', this.#handlePointerUp);
-    document.addEventListener('touchmove', this.#handlePointerUp);
+    document.addEventListener('pointerup', this.handlePointerUp);
+    document.addEventListener('touchcancel', this.handlePointerUp);
+    document.addEventListener('touchend', this.handlePointerUp);
+    document.addEventListener('touchmove', this.handlePointerUp);
 
     if (e.button === 2) return;
     if (this.clickBehavior === 'always') this.addRipple(e);
   };
 
-  #handlePointerUp = () => {
+  handlePointerUp = () => {
     this.#pointerDown = false;
-    document.removeEventListener('pointerup', this.#handlePointerUp);
-    document.removeEventListener('touchcancel', this.#handlePointerUp);
-    document.removeEventListener('touchend', this.#handlePointerUp);
-    document.removeEventListener('touchmove', this.#handlePointerUp);
+    document.removeEventListener('pointerup', this.handlePointerUp);
+    document.removeEventListener('touchcancel', this.handlePointerUp);
+    document.removeEventListener('touchend', this.handlePointerUp);
+    document.removeEventListener('touchmove', this.handlePointerUp);
 
     this.removeRippleAll();
   };
@@ -103,11 +103,11 @@ export class M3Ripple extends Attachable(InternalsAttached(LitElement)) {
     next: HTMLElement | HTMLInputElement | null = null
   ) {
     const eventHandlers = {
-      keydown: this.#handleKeyDown,
-      keyup: this.#handleKeyUp,
-      pointerenter: this.#handlePointerEnter,
-      pointerleave: this.#handlePointerLeave,
-      pointerdown: this.#handlePointerDown,
+      keydown: this.handleKeyDown,
+      keyup: this.handleKeyUp,
+      pointerenter: this.handlePointerEnter,
+      pointerleave: this.handlePointerLeave,
+      pointerdown: this.handlePointerDown,
     };
 
     Object.keys(eventHandlers).forEach((eventName) => {
@@ -134,7 +134,7 @@ export class M3Ripple extends Attachable(InternalsAttached(LitElement)) {
       }
     });
   }
-  #calculateRipple(e: MouseEvent | null = null) {
+  calculateRipple(e: MouseEvent | null = null) {
     const containerRect = this.getBoundingClientRect();
     const containerMiddle = {
       x: containerRect.width / 2,
@@ -160,7 +160,7 @@ export class M3Ripple extends Attachable(InternalsAttached(LitElement)) {
     return { startCenter, endCenter, radius };
   }
   addRipple(e: MouseEvent | null = null) {
-    const { startCenter, endCenter, radius } = this.#calculateRipple(e);
+    const { startCenter, endCenter, radius } = this.calculateRipple(e);
 
     const diameter = radius * 2 + 'px';
     const translateStart = `${startCenter.x - radius}px ${
