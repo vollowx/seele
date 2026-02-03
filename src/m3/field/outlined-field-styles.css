@@ -29,18 +29,18 @@
 }
 
 .outline-start {
-  border-end-end-radius: 0;
   border-inline-end: none;
   border-radius: inherit;
   border-start-end-radius: 0;
+  border-end-end-radius: 0;
   width: 12px;
 }
 
 .outline-end {
-  border-end-start-radius: 0;
   border-inline-start: none;
   border-radius: inherit;
   border-start-start-radius: 0;
+  border-end-start-radius: 0;
   flex: 1;
 }
 
