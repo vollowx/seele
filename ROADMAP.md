@@ -1,6 +1,6 @@
 # Roadmap
 
-This roadmap outlines the current and future goals for SEE
+This roadmap outlines the current and future goals for SEELE
 
 ## Implementations
 
@@ -16,18 +16,20 @@ This roadmap outlines the current and future goals for SEE
 | ---------- | :-----------: |
 | Button     |      ✅       |
 | Checkbox   |      ✅       |
+| Input      |      ✅       |
 | List       |      🟡       |
 | List item  |      🟡       |
 | Menu       |      🟡       |
 | Menu item  |      🟡       |
 | Option     |      🟡       |
 | Select     |      🟡       |
+| Slider     |      🟡       |
 | Switch     |      ✅       |
 | Tooltip    |      🟡       |
 
 ---
 
-## Material You (m3)
+## Material Design 3 (m3)
 
 | Components                    | Functionality | Style |
 | ----------------------------- | :-----------: | :---: |
@@ -62,12 +64,12 @@ This roadmap outlines the current and future goals for SEE
 | Radio                         |      ❌       |  ❌   |
 | Ripple                        |      ✅       |  🟡   |
 | Search                        |      ❌       |  ❌   |
-| Select                        |      🟡       |  🟡   |
-| Slider                        |      ❌       |  ❌   |
+| Select                        |      ✅       |  🟡   |
+| Slider                        |      ✅       |  🟡   |
 | Snackbar                      |      ❌       |  ❌   |
 | Switch                        |      ✅       |  ✅   |
 | Top app bar                   |      ❌       |  ❌   |
 | Tabs                          |      ❌       |  ❌   |
-| Text field                    |      ❌       |  ❌   |
+| Text field                    |      ✅       |  ✅   |
 | Time picker                   |      ❌       |  ❌   |
 | Tooltip                       |      🟡       |  🟡   |
