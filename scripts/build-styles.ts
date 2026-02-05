@@ -30,7 +30,6 @@ async function convertCSS(
       filename: filepath,
       code: Buffer.from(csscontent),
       minify: true,
-      targets: { safari: 15 << 16 },
     });
     content = code.toString();
   }
