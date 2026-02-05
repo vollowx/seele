@@ -13,8 +13,8 @@ interface TargetConfig {
 }
 
 const registry: Record<string, TargetConfig> = {
-  compiled: {
-    name: 'tsc compiled files',
+  compile: {
+    name: 'compiled files',
     globs: ['**/*.js'],
     condition: async (filePath) => {
       if (filePath.endsWith('.css.js')) return true;

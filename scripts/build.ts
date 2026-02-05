@@ -8,7 +8,7 @@ async function buildLibrary() {
   const globScanner = new Bun.Glob('**/*.ts');
   const files = Array.from(globScanner.scanSync(srcDir));
 
-  console.log(`transpiling ${files.length} files...`);
+  console.log(`transforming ${files.length} files...`);
 
   for (const filePath of files) {
     if (filePath.endsWith('.d.ts')) continue;
@@ -28,7 +28,7 @@ async function buildLibrary() {
           target: 'esnext',
           transform: {
             legacyDecorator: true,
-            decoratorMetadata: false,
+            useDefineForClassFields: false,
           },
         },
         module: {
