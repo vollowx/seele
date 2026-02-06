@@ -236,10 +236,7 @@ export class SdToolbar extends LitElement {
             />
           </svg>
         </md-icon-button>
-        <md-tooltip
-          for="action-toggle-theme"
-          ?forceinvisible=${this.menuOpen}
-          >
+        <md-tooltip for="action-toggle-theme" ?forceinvisible=${this.menuOpen}>
           Change theme
         </md-tooltip>
 

@@ -13,19 +13,19 @@ This roadmap outlines the current and future goals for SEELE
 ## Base (base)
 
 | Components    | Functionality |
-| ----------    | :-----------: |
-| Button        | ✅            |
-| Checkbox      | ✅            |
-| Input         | ✅            |
-| List          | 🟡            |
-| List item     | 🟡            |
-| Menu          | 🟡            |
-| Menu item     | 🟡            |
-| Option        | 🟡            |
-| Select        | 🟡            |
-| Slider        | 🟡            |
-| Toggle button | ✅            |
-| Tooltip       | 🟡            |
+| ------------- | :-----------: |
+| Button        |      ✅       |
+| Checkbox      |      ✅       |
+| Input         |      ✅       |
+| List          |      🟡       |
+| List item     |      🟡       |
+| Menu          |      🟡       |
+| Menu item     |      🟡       |
+| Option        |      🟡       |
+| Select        |      🟡       |
+| Slider        |      🟡       |
+| Toggle button |      ✅       |
+| Tooltip       |      🟡       |
 
 ---
 

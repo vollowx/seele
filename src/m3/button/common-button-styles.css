@@ -36,7 +36,9 @@
   padding-inline: calc(var(--_pad) - 1px);
 }
 :host([variant='text']) {
-  padding-inline: calc(var(--_pad) / 4 * 3); /* FIXME: No guideline to change with `[size]` */
+  padding-inline: calc(
+    var(--_pad) / 4 * 3
+  ); /* FIXME: No guideline to change with `[size]` */
 }
 
 @media (hover: hover) and (pointer: fine) {
