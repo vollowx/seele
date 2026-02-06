@@ -125,7 +125,7 @@
               "kind": "field",
               "name": "color",
               "type": {
-                "text": "| 'surface'\r\n    | 'primary-container'\r\n    | 'secondary-container'\r\n    | 'tertiary-container'\r\n    | 'primary'\r\n    | 'secondary'\r\n    | 'tertiary'"
+                "text": "| 'surface'\n    | 'primary-container'\n    | 'secondary-container'\n    | 'tertiary-container'\n    | 'primary'\n    | 'secondary'\n    | 'tertiary'"
               },
               "default": "'primary'",
               "attribute": "color",
@@ -144,7 +144,7 @@
             {
               "name": "color",
               "type": {
-                "text": "| 'surface'\r\n    | 'primary-container'\r\n    | 'secondary-container'\r\n    | 'tertiary-container'\r\n    | 'primary'\r\n    | 'secondary'\r\n    | 'tertiary'"
+                "text": "| 'surface'\n    | 'primary-container'\n    | 'secondary-container'\n    | 'tertiary-container'\n    | 'primary'\n    | 'secondary'\n    | 'tertiary'"
               },
               "default": "'primary'",
               "fieldName": "color"
@@ -656,7 +656,7 @@
                 "text": "array"
               },
               "readonly": true,
-              "default": "[ 'md-menu-item', 'md-menu-item-checkbox', 'md-menu-item-radio', ]"
+              "default": "[ 'md-menu-item', 'md-menu-item-checkbox', 'md-menu-item-radio', 'md-option', ]"
             },
             {
               "kind": "field",
@@ -666,15 +666,6 @@
               },
               "readonly": true,
               "default": "{ show: 300, hide: 200 }"
-            },
-            {
-              "kind": "field",
-              "name": "_scrollPadding",
-              "type": {
-                "text": "number"
-              },
-              "readonly": true,
-              "default": "4"
             }
           ],
           "superclass": {
@@ -1184,8 +1175,8 @@
             }
           ],
           "superclass": {
-            "name": "Switch",
-            "module": "/src/base/switch.js"
+            "name": "ToggleButton",
+            "module": "/src/base/toggle-button.js"
           },
           "tagName": "md-switch",
           "customElement": true
