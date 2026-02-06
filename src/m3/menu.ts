@@ -1,8 +1,6 @@
 import { customElement } from 'lit/decorators.js';
 
 import { Menu } from '../base/menu.js';
-
-import { menuPartStyles } from './menu-part-styles.css.js';
 import { menuStyles } from './menu-styles.css.js';
 
 /**
@@ -19,11 +17,13 @@ export class M3Menu extends Menu {
     'md-menu-item',
     'md-menu-item-checkbox',
     'md-menu-item-radio',
+    'md-option',
   ];
   override readonly _durations = { show: 300, hide: 200 };
-  override readonly _scrollPadding = 4;
+  // FIXME: Might cause a long list to scroll more than expected
+  // override readonly _scrollPadding = 4;
 
-  static override styles = [menuPartStyles, menuStyles];
+  static override styles = [menuStyles];
 }
 
 declare global {

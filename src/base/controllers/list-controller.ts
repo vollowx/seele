@@ -1,7 +1,8 @@
 import { ReactiveController, ReactiveControllerHost } from 'lit';
 
-import { getIndexByLetter } from '../menu-utils.js';
-import { ListItem } from '../list-item.js';
+import type { ListItem } from '../list-item.js';
+
+import { getIndexByLetter } from '../menu.js';
 
 export interface ListControllerConfig<Item extends ListItem> {
   isItem: (item: HTMLElement) => item is Item;

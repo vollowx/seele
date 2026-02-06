@@ -1,19 +1,14 @@
 import { LitElement, isServer, html, PropertyValues } from 'lit';
-import { property, query, queryAssignedElements } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
+
+import type { Placement, Strategy } from '@floating-ui/dom';
+import type { Field } from './field.js';
+import type { Menu, MenuItemFocusEvent, MenuSelectEvent } from './menu.js';
+import type { Option } from './option.js';
 
 import { InternalsAttached } from './mixins/internals-attached.js';
 import { FocusDelegated } from './mixins/focus-delegated.js';
 import { FormAssociated } from './mixins/form-associated.js';
-import { PopoverController } from './controllers/popover-controller.js';
-import { ListController } from './controllers/list-controller.js';
-
-import { Option } from './option.js';
-import {
-  MenuActions,
-  getActionFromKey,
-  getUpdatedIndex,
-  scrollItemIntoView,
-} from './menu-utils.js';
 
 const VALUE = Symbol('value');
 
@@ -24,24 +19,27 @@ const Base = FormAssociated(FocusDelegated(InternalsAttached(LitElement)));
  * @csspart menu
  * @csspart items
  *
- * @fires {Event} change - Fired when the selected value has changed.
- * @fires {Event} input - Fired when the selected value has changed.
+ * @fires {Event} change - Fires when the value is changed.
+ * @fires {Event} input - Fires when the value is changed.
  *
- * TODO: Consider handle mouseover to focus items.
+ * TODO: Render multiple values
  */
 export class Select extends Base {
-  readonly _possibleItemTags: string[] = [];
-  readonly _durations = { show: 0, hide: 0 };
-  readonly _scrollPadding: number = 0;
-
-  @property({ type: Boolean }) quick = false;
+  // Form-related
   @property({ type: Boolean, reflect: true }) required = false;
+
+  // Passed to field
   @property({ type: Boolean }) error = false;
-  @property({ reflect: true }) align: import('@floating-ui/dom').Placement =
-    'bottom-start';
-  @property({ type: String, reflect: true })
-  alignStrategy: import('@floating-ui/dom').Strategy = 'absolute';
-  @property({ type: Number, reflect: true }) offset = 0;
+
+  // Passed to menu
+  @property({ type: Boolean }) quick = false;
+  @property({ type: Number }) offset = 0;
+  @property({ reflect: true })
+  align: Placement = 'bottom-start';
+  @property({ type: String, reflect: true, attribute: 'align-strategy' })
+  alignStrategy: Strategy = 'absolute';
+
+  @property({ type: Boolean }) open = false;
 
   /**
    * Text to display in the field. Only set for SSR.
@@ -60,8 +58,8 @@ export class Select extends Base {
 
   [VALUE] = '';
 
-  get options() {
-    return this.listController.items;
+  get $options(): Option[] {
+    return (this.$menu?.$items as Option[]) || [];
   }
 
   @property({ type: Number, attribute: 'selected-index' })
@@ -82,61 +80,19 @@ export class Select extends Base {
     return (this.getSelectedOptions() ?? []).map(([option]) => option);
   }
 
-  @property({ type: Boolean, reflect: true }) open = false;
-
-  @query('[part="field"]') $field!: HTMLElement;
-  @query('[part="menu"]') $menu!: HTMLElement;
-  @queryAssignedElements({ flatten: true }) slotItems!: Array<
-    Option | HTMLElement
-  >;
+  @query('[part="field"]') $field!: Field;
+  @query('[part="menu"]') $menu!: Menu;
 
   private lastUserSetValue: string | null = null;
   private lastUserSetSelectedIndex: number | null = null;
   private lastSelectedOption: Option | null = null;
   private lastSelectedOptionRecords: [Option, number][] = [];
 
-  private readonly popoverController = new PopoverController(this, {
-    popover: () => this.$menu,
-    trigger: () => this.$field,
-    positioning: {
-      placement: () => this.align,
-      strategy: () => this.alignStrategy,
-      offset: () => this.offset,
-      windowPadding: () => 16,
-    },
-    durations: {
-      open: () => (this.quick ? 0 : this._durations.show),
-      close: () => (this.quick ? 0 : this._durations.hide),
-    },
-    onClickAway: () => {
-      this.open = false;
-    },
-  });
-
-  protected readonly listController = new ListController<Option>(this, {
-    isItem: (item: HTMLElement): item is Option =>
-      this._possibleItemTags.includes(item.tagName.toLowerCase()) &&
-      !item.hasAttribute('disabled'),
-    getPossibleItems: () => this.slotItems,
-    blurItem: (item: Option) => {
-      item.focused = false;
-    },
-    focusItem: (item: Option) => {
-      item.focused = true;
-      if (this.$field && item.id) {
-        this.$field.setAttribute('aria-activedescendant', item.id);
-      }
-      scrollItemIntoView(this.$menu, item, this._scrollPadding);
-    },
-    wrapNavigation: () => false,
-  });
-
   constructor() {
     super();
 
     if (!isServer) {
-      this.addEventListener('focusout', this.#handleFocusOut);
-      this.addEventListener('click', this.#handleOptionClick);
+      this.addEventListener('focusout', this.handleFocusOut);
     }
   }
 
@@ -151,7 +107,7 @@ export class Select extends Base {
     if (
       !this.lastSelectedOptionRecords.length &&
       !isServer &&
-      !this.options.length
+      !this.$options.length
     ) {
       setTimeout(() => {
         this.updateValueAndDisplayText();
@@ -174,89 +130,105 @@ export class Select extends Base {
 
     if (changed.has('open')) {
       if (this.open) {
-        this.popoverController.animateOpen();
         this.#focusSelectedItemOrFirst();
       } else {
-        this.popoverController.animateClose();
-        this.listController.clearSearch();
+        this.$field.setAttribute('aria-activedescendant', '');
       }
     }
   }
 
   override render() {
-    return html`${this.renderField()} ${this.renderMenu()}`;
+    return html`${this.renderField()}${this.renderMenu()}`;
   }
 
+  /**
+   * Example content:
+   *
+   * ```html
+   * <your-field
+   *   id="field"
+   *   part="field"
+   *   @click=${this.toggle}
+   *   @keydown=${this.handleFieldKeydown}
+   *   tabindex=${this.disabled ? '-1' : '0'}
+   *   role="combobox"
+   *   aria-haspopup="listbox"
+   *   aria-expanded=${this.open}
+   *   aria-controls="menu"
+   *   aria-disabled=${this.disabled}
+   *   aria-required=${this.required}
+   * >
+   *   ${this.renderFieldContent()}
+   * </your-field>
+   * ```
+   */
   protected renderField() {
-    return html`
-      <div
-        part="field"
-        @click=${this.toggle}
-        @keydown=${this.handleFieldKeydown}
-        tabindex=${this.disabled ? '-1' : '0'}
-        role="combobox"
-        aria-haspopup="listbox"
-        aria-expanded=${this.open}
-        aria-controls="menu"
-        aria-disabled=${this.disabled}
-        aria-required=${this.required}
-      >
-        ${this.renderFieldContent()}
-      </div>
-    `;
+    return html``;
   }
 
+  /**
+   * Example content:
+   *
+   * ```html
+   * <your-menu
+   *   id="menu"
+   *   for="field"
+   *   type="listbox"
+   *   data-tabindex="-1"
+   *   ?quick="${this.quick}"
+   *   offset="${this.offset}"
+   *   align="${this.align}"
+   *   align-strategy="${this.alignStrategy}"
+   *   keep-open-blur
+   *   no-focus-control
+   *   ?open="${this.open}"
+   *   @item-focus="${this.handleMenuItemFocus}"
+   *   @select="${this.handleMenuSelect}"
+   * >
+   *   <slot part="items" @slotchange=${this.handleSlotChange}></slot>
+   * </your-menu>
+   * ```
+   */
   protected renderMenu() {
-    return html`
-      <div part="menu" id="menu" role="listbox" tabindex="-1">
-        <slot part="items" @slotchange=${this.handleSlotChange}></slot>
-      </div>
-    `;
+    return html``;
   }
 
   protected renderFieldContent() {
     return html`<span part="value">${this.displayText || html`&nbsp;`}</span>`;
   }
 
+  /**
+   * TODO: Handle clear action
+   */
   protected handleFieldKeydown(event: KeyboardEvent) {
     if (this.disabled) return;
 
-    const action = getActionFromKey(event, this.open);
-    const items = this.listController.items;
-    const currentIndex = this.listController.currentIndex;
-    const maxIndex = items.length - 1;
+    const eventClone = new KeyboardEvent(event.type, event);
+    this.$menu.$menu.dispatchEvent(eventClone);
+  }
 
-    switch (action) {
-      case MenuActions.Last:
-      case MenuActions.First:
-        this.open = true;
-      // intentional fallthrough
-      case MenuActions.Next:
-      case MenuActions.Previous:
-      case MenuActions.PageUp:
-      case MenuActions.PageDown:
-        event.preventDefault();
-        const nextIndex = getUpdatedIndex(currentIndex, maxIndex, action!);
-        this.listController._focusItem(items[nextIndex]);
-        return;
-      case MenuActions.CloseSelect:
-        event.preventDefault();
-        if (this.selectItem(items[currentIndex])) {
-          this.#dispatchChangeEvent();
-        }
-      // intentional fallthrough
-      case MenuActions.Close:
-        event.preventDefault();
-        this.open = false;
-        return;
-      case MenuActions.Type:
-        this.open = true;
-        this.listController.handleType(event.key);
-        return;
-      case MenuActions.Open:
-        event.preventDefault();
-        this.open = true;
-        return;
+  protected handleMenuSelect(event: MenuSelectEvent) {
+    if (this.selectItem(event.detail.item as Option)) {
+      this.#dispatchChangeEvent();
+    }
+    this.open = false;
+  }
+
+  protected handleMenuItemFocus(event: MenuItemFocusEvent) {
+    this.$field.setAttribute('aria-activedescendant', event.detail.item.id);
+  }
+
+  protected handleFocusOut(event: FocusEvent) {
+    const relatedTarget = event.relatedTarget as Node;
+    if (!this.contains(relatedTarget) && !this.$menu.contains(relatedTarget)) {
+      this.open = false;
+    }
+  }
+
+  protected handleSlotChange() {
+    // When slots change, check for initially selected items if value is not set
+    if (!this.value) {
+      this.updateValueAndDisplayText();
     }
   }
 
@@ -300,7 +272,7 @@ export class Select extends Base {
       this.lastSelectedOption = null;
       this[VALUE] = '';
       // Keep displayText if it was set (e.g., from SSR) and options aren't available yet.
-      if (this.options.length === 0 && this.displayText) {
+      if (this.$options.length === 0 && this.displayText) {
         return changed;
       }
       this.displayText = '';
@@ -310,7 +282,7 @@ export class Select extends Base {
   }
 
   private getSelectedOptions(): [Option, number][] | null {
-    const items = this.listController.items;
+    const items = this.$options;
     const records: [Option, number][] = [];
     items.forEach((item, index) => {
       if (item.selected) {
@@ -326,38 +298,13 @@ export class Select extends Base {
     this.dispatchEvent(new Event('change', { bubbles: true }));
   };
 
-  #handleOptionClick = (event: Event) => {
-    const target = event.target as HTMLElement;
-    const item = target.closest(this._possibleItemTags.join(',')) as Option;
-    if (item && this.listController.items.includes(item)) {
-      if (this.selectItem(item)) {
-        this.#dispatchChangeEvent();
-      }
-      this.open = false;
-    }
-  };
-
-  #handleFocusOut = (event: FocusEvent) => {
-    const relatedTarget = event.relatedTarget as Node;
-    if (!this.contains(relatedTarget) && !this.$menu.contains(relatedTarget)) {
-      this.open = false;
-    }
-  };
-
   #focusSelectedItemOrFirst() {
     const selectedOptions = this.getSelectedOptions();
     if (selectedOptions && selectedOptions.length > 0) {
       const [item] = selectedOptions[0];
-      this.listController._focusItem(item);
+      this.$menu.focusItem(item);
     } else {
-      this.listController.focusFirstItem();
-    }
-  }
-
-  protected handleSlotChange() {
-    // When slots change, check for initially selected items if value is not set
-    if (!this.value) {
-      this.updateValueAndDisplayText();
+      this.$menu.focusFirstItem();
     }
   }
 
@@ -370,21 +317,21 @@ export class Select extends Base {
   }
 
   select(value: string) {
-    const item = this.options.find((option) => option.value === value);
+    const item = this.$options.find((option) => option.value === value);
     if (item) {
       this.selectItem(item);
     }
   }
 
   selectIndex(index: number) {
-    const item = this.options[index];
+    const item = this.$options[index];
     if (item) {
       this.selectItem(item);
     }
   }
 
   reset() {
-    for (const option of this.options) {
+    for (const option of this.$options) {
       option.selected = option.hasAttribute('selected');
     }
     this.updateValueAndDisplayText();

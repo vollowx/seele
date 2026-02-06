@@ -6,27 +6,27 @@ import { M3Select } from './select.js';
 import '../field/outlined-field.js';
 
 import { selectStyles } from './select-styles.css.js';
-import { menuPartStyles } from '../menu-part-styles.css.js';
 
 @customElement('md-outlined-select')
 export class MdOutlinedSelect extends M3Select {
-  static override styles = [menuPartStyles, selectStyles];
+  static override styles = [selectStyles];
 
   protected override renderField() {
     return html`
       <md-outlined-field
+        id="field"
         part="field"
         .label=${this.label}
         .populated=${!!this.value}
         .disabled=${this.disabled}
         .required=${this.required}
         .error=${this.error}
-        .focused=${this.open || this.fieldFocused}
+        .focused=${this.open || this.focused}
         supportingtext=${this.supportingText}
         @click=${this.toggle}
         @keydown=${this.handleFieldKeydown}
-        @focus=${() => (this.fieldFocused = true)}
-        @blur=${() => (this.fieldFocused = false)}
+        @focus=${() => (this.focused = true)}
+        @blur=${() => (this.focused = false)}
         tabindex=${this.disabled ? '-1' : '0'}
         role="combobox"
         aria-haspopup="listbox"

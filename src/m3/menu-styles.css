@@ -2,3 +2,77 @@
   display: contents;
   min-width: 112px;
 }
+
+[part='menu'] {
+  /* TODO: Set a generic standard for `z-index` */
+  background: var(--md-sys-color-surface-container);
+  border-radius: 16px;
+  box-shadow: var(--md-sys-elevation-shadow-2);
+  box-sizing: border-box;
+  color: var(--md-sys-color-on-surface);
+  height: inherit;
+  inset: auto;
+  max-height: var(--md-menu-max-height, inherit);
+  max-width: inherit;
+  min-width: inherit;
+  opacity: 0;
+  outline: 0;
+  overflow-y: auto;
+  padding: 4px;
+  position: absolute;
+  transform: scaleY(0.4);
+  -webkit-user-select: none;
+  user-select: none;
+  z-index: 1000;
+}
+
+:host([alignstrategy='fixed']) [part='menu'] {
+  position: fixed;
+}
+
+:host(:state(closed)) [part='menu'] {
+  display: none;
+}
+:host(:state(opening)) [part='menu'] {
+  display: block;
+  opacity: 1;
+  transform: scaleY(1);
+  transition:
+    opacity 67ms,
+    transform var(--md-sys-motion-exp-effects-slow-duration)
+      var(--md-sys-motion-exp-effects-slow);
+}
+:host(:state(opened)) [part='menu'] {
+  display: block;
+  opacity: 1;
+  transform: scaleY(1);
+}
+:host(:state(closing)) [part='menu'] {
+  opacity: 0;
+  transform: scaleY(0.4);
+  transition:
+    opacity var(--md-sys-motion-exp-effects-default-duration),
+    transform var(--md-sys-motion-exp-effects-default-duration)
+      var(--md-sys-motion-exp-effects-default);
+}
+
+[part='items'] {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  opacity: 0;
+}
+
+:host(:state(opening)) [part='items'] {
+  opacity: 1;
+  transition: opacity 67ms linear 67ms;
+}
+
+:host(:state(opened)) [part='items'] {
+  opacity: 1;
+}
+
+:host(:state(closing)) [part='items'] {
+  opacity: 0;
+  transition: opacity 67ms;
+}

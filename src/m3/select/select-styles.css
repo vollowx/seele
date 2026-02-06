@@ -18,6 +18,6 @@
 }
 
 [part='menu'] {
-  max-height: var(--md-select-menu-max-height, 300px);
+  --md-menu-max-height: 300px;
   min-width: 100%;
 }
