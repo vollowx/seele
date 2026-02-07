@@ -1,0 +1,32 @@
+:host {
+  box-sizing: border-box;
+  display: flex;
+  height: var(--md-divider-height, 1px);
+  width: 100%;
+
+  &::before {
+    background-color: var(
+      --md-divider-color,
+      var(--md-sys-color-outline-variant)
+    );
+    content: '';
+    height: 100%;
+    width: 100%;
+  }
+}
+
+@media (forced-colors: active) {
+  :host::before {
+    background: CanvasText;
+  }
+}
+
+:host([inset]),
+:host([inset-start]) {
+  padding-inline-start: 8px;
+}
+
+:host([inset]),
+:host([inset-end]) {
+  padding-inline-end: 8px;
+}

@@ -44,3 +44,15 @@
   flex-direction: column;
   overflow: hidden;
 }
+
+[name='overline'] {
+  font: var(--md-sys-typography-label-small);
+}
+
+[name='supporting-text'] {
+  color: var(
+    --md-item-supporting-text-color,
+    var(--md-sys-color-on-surface-variant)
+  );
+  font: var(--md-sys-typography-body-medium);
+}

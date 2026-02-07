@@ -26,34 +26,21 @@
   z-index: 1000;
 }
 
-:host([alignstrategy='fixed']) [part='menu'] {
-  position: fixed;
+:host([color='vibrant']) [part='menu'] {
+  --md-divider-color: var(--md-sys-color-tertiary);
+  --md-item-supporting-text-color: var(--md-sys-color-on-tertiary-container);
+  background-color: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
 }
 
-:host(:state(closed)) [part='menu'] {
-  display: none;
+:host([color='vibrant']) ::slotted([selected]) {
+  --md-item-supporting-text-color: var(--md-sys-color-on-tertiary);
+  background-color: var(--md-sys-color-tertiary);
+  color: var(--md-sys-color-on-tertiary);
 }
-:host(:state(opening)) [part='menu'] {
-  display: block;
-  opacity: 1;
-  transform: scaleY(1);
-  transition:
-    opacity 67ms,
-    transform var(--md-sys-motion-exp-effects-slow-duration)
-      var(--md-sys-motion-exp-effects-slow);
-}
-:host(:state(opened)) [part='menu'] {
-  display: block;
-  opacity: 1;
-  transform: scaleY(1);
-}
-:host(:state(closing)) [part='menu'] {
-  opacity: 0;
-  transform: scaleY(0.4);
-  transition:
-    opacity var(--md-sys-motion-exp-effects-default-duration),
-    transform var(--md-sys-motion-exp-effects-default-duration)
-      var(--md-sys-motion-exp-effects-default);
+
+:host([alignstrategy='fixed']) [part='menu'] {
+  position: fixed;
 }
 
 [part='items'] {
@@ -63,16 +50,56 @@
   opacity: 0;
 }
 
-:host(:state(opening)) [part='items'] {
-  opacity: 1;
-  transition: opacity 67ms linear 67ms;
+:host(:state(closed)) [part='menu'] {
+  display: none;
 }
 
-:host(:state(opened)) [part='items'] {
-  opacity: 1;
+:host(:state(opening)) {
+  [part='menu'] {
+    display: block;
+    opacity: 1;
+    transform: scaleY(1);
+    transition:
+      opacity 67ms,
+      transform var(--md-sys-motion-exp-spatial-default-duration)
+        var(--md-sys-motion-exp-spatial-default);
+  }
+
+  [part='items'] {
+    opacity: 1;
+    transition: opacity 67ms linear 67ms;
+  }
 }
 
-:host(:state(closing)) [part='items'] {
-  opacity: 0;
-  transition: opacity 67ms;
+:host(:state(opened)) {
+  [part='menu'] {
+    display: block;
+    opacity: 1;
+    transform: scaleY(1);
+  }
+
+  [part='items'] {
+    opacity: 1;
+  }
+}
+
+:host(:state(closing)) {
+  [part='menu'] {
+    opacity: 0;
+    transform: scaleY(0.4);
+    transition:
+      opacity var(--md-sys-motion-exp-effects-fast-duration),
+      transform var(--md-sys-motion-exp-effects-slow-duration)
+        var(--md-sys-motion-exp-effects-slow);
+  }
+
+  [part='items'] {
+    opacity: 0;
+    transition: opacity 67ms;
+  }
+}
+
+::slotted(md-divider) {
+  /* Which makes the gap between item and divider 8px */
+  margin-block: 6px;
 }

@@ -1,7 +1,7 @@
 :host {
   --md-focus-ring-shape: 12px;
-  --md-focus-ring-inward-offset: -4px;
-  border-radius: 12px;
+  --md-focus-ring-inward-offset: -3px;
+  border-radius: 4px;
   display: flex;
   outline: 0;
   -webkit-tap-highlight-color: transparent;
@@ -9,8 +9,18 @@
   user-select: none;
 }
 
+:host(:first-of-type) {
+  border-radius: 12px 12px 4px 4px;
+}
+
+:host(:last-of-type) {
+  border-radius: 4px 4px 12px 12px;
+}
+
 :host(:state(selected)) {
+  --md-item-supporting-text-color: var(--md-sys-color-on-tertiary-container);
   background-color: var(--md-sys-color-tertiary-container);
+  border-radius: 12px;
   color: var(--md-sys-color-on-tertiary-container);
 }
 

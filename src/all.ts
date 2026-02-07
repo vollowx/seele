@@ -3,6 +3,8 @@ export { M3ButtonToggle } from './m3/button/common-button-toggle.js';
 export { M3IconButton } from './m3/button/icon-button.js';
 export { M3IconButtonToggle } from './m3/button/icon-button-toggle.js';
 
+export { M3Divider } from './m3/divider/divider.js';
+
 export { M3FilledTextField } from './m3/text-field/filled-text-field.js';
 export { M3OutlinedTextField } from './m3/text-field/outlined-text-field.js';
 

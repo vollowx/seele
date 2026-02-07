@@ -67,6 +67,7 @@
         id="fixed-align-menu"
         for="fixed-align-menu-btn"
         alignstrategy="fixed"
+        quick
       >
         <md-menu-item>Menu Item 1</md-menu-item>
         <md-menu-item>Menu Item 2</md-menu-item>
@@ -78,15 +79,22 @@
 
     <span style="position: relative; display: inline-block">
       <md-button id="some-menu-btn">Menu with Anchor Set</md-button>
-      <md-menu id="some-menu" for="some-menu-btn" quick>
+      <md-menu id="some-menu" for="some-menu-btn" color="vibrant">
         <md-menu-item id="item-new-text-file">New Text File</md-menu-item>
-        <md-menu-item id="item-new-file">New File...</md-menu-item>
-        <md-menu-item id="item-new-window">New Window</md-menu-item>
-        <md-divider></md-divider>
+        <md-menu-item id="item-new-file">
+          New File...
+          <span slot="supporting-text">wowowowo</span>
+        </md-menu-item>
+        <md-menu-item id="item-new-window">
+          <span slot="overline">hey boy</span>
+          New Window
+          <md-icon slot="end">window</md-icon>
+        </md-menu-item>
+        <md-divider inset></md-divider>
         <md-menu-item id="item-open-file">Open File...</md-menu-item>
         <md-menu-item id="item-open-folder">Open Folder...</md-menu-item>
-        <md-divider></md-divider>
-        <md-menu-item id="item-save">Save</md-menu-item>
+        <md-divider inset></md-divider>
+        <md-menu-item id="item-save" selected>Save</md-menu-item>
         <md-menu-item id="item-save-as">Save As...</md-menu-item>
       </md-menu>
     </span>

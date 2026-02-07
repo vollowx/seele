@@ -45,7 +45,16 @@ export class M3ListItem extends ListItem {
           <md-focus-ring inward></md-focus-ring>
           <md-ripple></md-ripple>
         </div>
+        <slot slot="start" name="start"></slot>
+        <slot slot="overline" name="overline"></slot>
         <slot></slot>
+        <slot slot="headline" name="headline"></slot>
+        <slot slot="supporting-text" name="supporting-text"></slot>
+        <slot
+          slot="trailing-supporting-text"
+          name="trailing-supporting-text"
+        ></slot>
+        <slot slot="end" name="end"></slot>
       </md-item>
     `;
   }

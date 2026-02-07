@@ -1,4 +1,5 @@
 import { customElement } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 
 import { Menu } from '../base/menu.js';
 import { menuStyles } from './menu-styles.css.js';
@@ -24,6 +25,8 @@ export class M3Menu extends Menu {
   // override readonly _scrollPadding = 4;
 
   static override styles = [menuStyles];
+
+  @property({ reflect: true }) color: 'standard' | 'vibrant' = 'standard';
 }
 
 declare global {
