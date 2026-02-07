@@ -26,17 +26,19 @@
   z-index: 1000;
 }
 
-:host([color='vibrant']) [part='menu'] {
-  --md-divider-color: var(--md-sys-color-tertiary);
-  --md-item-supporting-text-color: var(--md-sys-color-on-tertiary-container);
-  background-color: var(--md-sys-color-tertiary-container);
-  color: var(--md-sys-color-on-tertiary-container);
-}
+:host([color='vibrant']) {
+  [part='menu'] {
+    --md-divider-color: var(--md-sys-color-tertiary);
+    --md-item-supporting-text-color: var(--md-sys-color-on-tertiary-container);
+    background-color: var(--md-sys-color-tertiary-container);
+    color: var(--md-sys-color-on-tertiary-container);
+  }
 
-:host([color='vibrant']) ::slotted([selected]) {
-  --md-item-supporting-text-color: var(--md-sys-color-on-tertiary);
-  background-color: var(--md-sys-color-tertiary);
-  color: var(--md-sys-color-on-tertiary);
+  ::slotted([selected]) {
+    --md-item-supporting-text-color: var(--md-sys-color-on-tertiary);
+    background-color: var(--md-sys-color-tertiary);
+    color: var(--md-sys-color-on-tertiary);
+  }
 }
 
 :host([alignstrategy='fixed']) [part='menu'] {
