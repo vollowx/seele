@@ -19,7 +19,7 @@ import { targetStyles } from '../target-styles.css.js';
  * @slot label - label
  */
 @customElement('md-fab')
-export class M3FAB extends Button {
+export class M3Fab extends Button {
   static override styles = [...super.styles, targetStyles, fabStyles];
   override render() {
     return html`
@@ -43,6 +43,6 @@ export class M3FAB extends Button {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'md-fab': M3FAB;
+    'md-fab': M3Fab;
   }
 }
