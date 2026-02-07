@@ -23,6 +23,7 @@ const Base = FormAssociated(FocusDelegated(InternalsAttached(LitElement)));
  * @fires {Event} input - Fires when the value is changed.
  *
  * TODO: Render multiple values
+ * FIXME: `aria-expanded` set twice by both Lit and Menu
  */
 export class Select extends Base {
   // Form-related
