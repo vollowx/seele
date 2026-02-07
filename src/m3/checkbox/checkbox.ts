@@ -1,13 +1,13 @@
 import { html } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 
-import { Checkbox } from '../base/checkbox.js';
+import { Checkbox } from '../../base/checkbox.js';
 
-import './focus-ring.js';
-import { M3Ripple } from './ripple.js';
+import '../focus-ring.js';
+import { M3Ripple } from '../ripple/ripple.js';
 
 import { checkboxStyles } from './checkbox-styles.css.js';
-import { targetStyles } from './target-styles.css.js';
+import { targetStyles } from '../target-styles.css.js';
 
 /**
  * @tag md-checkbox
@@ -41,6 +41,7 @@ export class M3Checkbox extends Checkbox {
 
   override connectedCallback() {
     super.connectedCallback();
+    // TODO: Since Ripple is no longer rendered server-side, this might be unnecessary
     // SSR'd <md-checkbox> components don't have their labels set up on time
     this.updateComplete.then(() => {
       this.$ripple.attach(this, true);

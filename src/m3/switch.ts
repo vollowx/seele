@@ -4,7 +4,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 import { ToggleButton } from '../base/toggle-button.js';
 
 import './focus-ring.js';
-import { M3Ripple } from './ripple.js';
+import { M3Ripple } from './ripple/ripple.js';
 
 import { switchStyles } from './switch-styles.css.js';
 import { targetStyles } from './target-styles.css.js';
