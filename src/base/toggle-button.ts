@@ -106,7 +106,6 @@ export class ToggleButton extends Base {
     e.stopPropagation();
     e.preventDefault();
     if (this._ignoreClick) {
-      console.log('ignoring click from', e.target);
       this._ignoreClick = false;
       return;
     }

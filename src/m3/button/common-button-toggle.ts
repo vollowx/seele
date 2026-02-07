@@ -4,7 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { ToggleButton } from '../../base/toggle-button.js';
 
 import '../focus-ring.js';
-import '../ripple.js';
+import '../ripple/ripple.js';
 
 import { targetStyles } from '../target-styles.css.js';
 import { sharedButtonStyles } from './shared-button-styles.css.js';
@@ -53,7 +53,8 @@ export class M3ButtonToggle extends ToggleButton {
   /**
    * Whether to show the icon at the end of the button.
    */
-  @property({ type: Boolean, reflect: true }) trailingIcon = false;
+  @property({ type: Boolean, reflect: true, attribute: 'trailing-icon' })
+  trailingIcon = false;
 }
 
 declare global {

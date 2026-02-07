@@ -4,7 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { Button } from '../../base/button.js';
 
 import '../focus-ring.js';
-import '../ripple.js';
+import '../ripple/ripple.js';
 
 import { targetStyles } from '../target-styles.css.js';
 import { sharedButtonStyles } from './shared-button-styles.css.js';
