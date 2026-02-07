@@ -1,5 +1,8 @@
 @layer icon-button {
   :host {
+    /* [size=small] */
+    --_wn: 32px; /* width for icon button only [width=narrow] */
+    --_ww: 52px; /* width for icon button only [width=wide] */
     background-color: color-mix(
       in srgb,
       var(--_background-color) var(--_background-opacity, 100%),
@@ -20,11 +23,6 @@
     --_wn: 28px;
     --_ww: 40px;
   }
-  :host([size='small']) {
-    --_wn: 32px; /* width for icon button only [width=narrow] */
-    --_ww: 52px; /* width for icon button only [width=wide] */
-    --_icon-size: 24px !important;
-  }
   :host([size='medium']) {
     --_wn: 48px;
     --_ww: 72px;
@@ -36,14 +34,6 @@
   :host([size='xlarge']) {
     --_wn: 104px;
     --_ww: 184px;
-  }
-
-  :host([variant='text']) {
-    --_color: var(--md-sys-color-on-surface-variant);
-  }
-
-  :host([variant='text']:state(checked):not(:disabled)) {
-    --_text-color: var(--md-sys-color-primary);
   }
 
   :host([width='narrow']) {
@@ -58,5 +48,19 @@
     fill: currentcolor;
     font-size: var(--_icon-size);
     inline-size: 1em;
+  }
+}
+
+@layer override {
+  :host([size='small']) {
+    --_icon-size: 24px;
+  }
+
+  :host([variant='text']) {
+    --_text-color: var(--md-sys-color-on-surface-variant);
+  }
+
+  :host([variant='text']:state(checked)) {
+    --_text-color: var(--_color);
   }
 }

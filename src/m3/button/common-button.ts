@@ -36,21 +36,14 @@ export class M3Button extends Button {
       <slot part="label"></slot>
     `;
   }
-  @property({ reflect: true }) size:
-    | 'xsmall'
-    | 'small'
-    | 'medium'
-    | 'large'
-    | 'xlarge' = 'small';
-  @property({ reflect: true }) shape: 'rounded' | 'square' = 'rounded';
-  @property({ reflect: true }) color: 'primary' | 'secondary' | 'tertiary' =
-    'primary';
-  @property({ reflect: true }) variant:
-    | 'filled'
-    | 'tonal'
-    | 'elevated'
-    | 'outlined'
-    | 'text' = 'filled';
+  @property({ reflect: true })
+  size: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' = 'small';
+  @property({ reflect: true })
+  shape: 'rounded' | 'square' = 'rounded';
+  @property({ reflect: true })
+  color: 'primary' | 'secondary' | 'tertiary' = 'primary';
+  @property({ reflect: true })
+  variant: 'filled' | 'tonal' | 'elevated' | 'outlined' | 'text' = 'filled';
   /**
    * Whether to show the icon at the end of the button.
    */

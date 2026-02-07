@@ -1,4 +1,4 @@
-@layer button-toggle-shared {
+@layer shared-toggle {
   :host {
     transition:
       box-shadow var(--md-sys-motion-std-effects-slow-duration)

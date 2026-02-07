@@ -37,19 +37,14 @@ export class M3IconButtonToggle extends ToggleButton {
       <slot part="icon checked" name="checked"></slot>
     `;
   }
-  @property({ reflect: true }) size:
-    | 'xsmall'
-    | 'small'
-    | 'medium'
-    | 'large'
-    | 'xlarge' = 'small';
-  @property({ reflect: true }) variant:
-    | 'text'
-    | 'filled'
-    | 'tonal'
-    | 'outlined' = 'text';
-  @property({ reflect: true }) width: 'standard' | 'narrow' | 'wide' =
-    'standard';
+  @property({ reflect: true })
+  size: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' = 'small';
+  @property({ reflect: true })
+  color: 'primary' | 'secondary' | 'tertiary' = 'primary';
+  @property({ reflect: true })
+  variant: 'text' | 'filled' | 'tonal' | 'outlined' = 'text';
+  @property({ reflect: true })
+  width: 'standard' | 'narrow' | 'wide' = 'standard';
 }
 
 declare global {

@@ -1,6 +1,6 @@
-@layer common-button, icon-button, button-shared, button-toggle-shared, button-active, button-disabled;
+@layer common-button, icon-button, shared, shared-toggle, override, active, disabled;
 
-@layer button-shared {
+@layer shared {
   :host {
     --_on-color: var(--md-sys-color-on-primary);
     --_color: var(--md-sys-color-primary);
@@ -88,7 +88,7 @@
   }
 }
 
-@layer button-active {
+@layer active {
   /* TODO: Space key pressed should also trigger active state */
   :host(:active) {
     --md-focus-ring-shape: var(--_rad-pr);
@@ -96,7 +96,7 @@
   }
 }
 
-@layer button-disabled {
+@layer disabled {
   :host([variant='outlined']:disabled) {
     --_background-color: var(--md-sys-color-outline);
   }
