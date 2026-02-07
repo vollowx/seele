@@ -1,7 +1,7 @@
 import { html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-import { Item } from '../base/item.js';
+import { Item } from '../../base/item.js';
 
 import { itemStyles } from './item-styles.css.js';
 

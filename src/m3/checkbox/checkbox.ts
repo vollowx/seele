@@ -3,7 +3,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 
 import { Checkbox } from '../../base/checkbox.js';
 
-import '../focus-ring.js';
+import '../focus-ring/focus-ring.js';
 import { M3Ripple } from '../ripple/ripple.js';
 
 import { checkboxStyles } from './checkbox-styles.css.js';

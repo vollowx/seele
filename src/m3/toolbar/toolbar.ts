@@ -4,7 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 import {
   internals,
   InternalsAttached,
-} from '../base/mixins/internals-attached.js';
+} from '../../base/mixins/internals-attached.js';
 
 import { toolbarStyles } from './toolbar-styles.css.js';
 

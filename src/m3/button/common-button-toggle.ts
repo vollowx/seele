@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 
 import { ToggleButton } from '../../base/toggle-button.js';
 
-import '../focus-ring.js';
+import '../focus-ring/focus-ring.js';
 import '../ripple/ripple.js';
 
 import { targetStyles } from '../target-styles.css.js';

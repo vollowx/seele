@@ -1,13 +1,13 @@
 import { LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 
-import { customElement } from '../core/decorators.js';
-import { focusVisible } from '../core/focus-visible.js';
-import { Attachable } from '../base/mixins/attachable.js';
+import { customElement } from '../../core/decorators.js';
+import { focusVisible } from '../../core/focus-visible.js';
+import { Attachable } from '../../base/mixins/attachable.js';
 import {
   InternalsAttached,
   internals,
-} from '../base/mixins/internals-attached.js';
+} from '../../base/mixins/internals-attached.js';
 
 import { focusRingStyles } from './focus-ring-styles.css.js';
 

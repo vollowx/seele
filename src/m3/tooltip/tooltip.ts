@@ -1,6 +1,6 @@
 import { customElement } from 'lit/decorators.js';
 
-import { Tooltip } from '../base/tooltip.js';
+import { Tooltip } from '../../base/tooltip.js';
 
 import { tooltipStyles } from './tooltip-styles.css.js';
 

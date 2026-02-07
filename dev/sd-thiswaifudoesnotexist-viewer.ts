@@ -2,8 +2,8 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import '../src/m3/button/icon-button.js';
-import '../src/m3/toolbar.js';
-import '../src/m3/tooltip.js';
+import '../src/m3/toolbar/toolbar.js';
+import '../src/m3/tooltip/tooltip.js';
 
 @customElement('sd-thiswaifudoesnotexist-viewer')
 export class ThisWaifuDoesNotExist extends LitElement {

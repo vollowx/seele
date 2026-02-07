@@ -31,8 +31,8 @@ export abstract class M3Select extends Select {
         keep-open-blur
         no-focus-control
         ?open="${this.open}"
-        @open="${() => this.open = true}"
-        @close="${() => this.open = false}"
+        @open="${() => (this.open = true)}"
+        @close="${() => (this.open = false)}"
         @item-focus="${this.handleMenuItemFocus}"
         @select="${this.handleMenuSelect}"
       >

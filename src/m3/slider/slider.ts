@@ -4,8 +4,8 @@ import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { when } from 'lit/directives/when.js';
 
-import { Slider } from '../base/slider.js';
-import './focus-ring.js';
+import { Slider } from '../../base/slider.js';
+import '../focus-ring/focus-ring.js';
 
 import { sliderStyles } from './slider-styles.css.js';
 

@@ -49,7 +49,7 @@ This roadmap outlines the current and future goals for SEELE
 | Data table                    |      ❌       |  ❌   |
 | Date picker                   |      ❌       |  ❌   |
 | Dialog                        |      ❌       |  ❌   |
-| Divider                       |      ❌       |  ❌   |
+| Divider                       |      ✅       |  🟡   |
 | Icon                          |      ❌       |  ❌   |
 | List                          |      🟡       |  🟡   |
 | List item                     |      🟡       |  🟡   |

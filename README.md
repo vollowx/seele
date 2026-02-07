@@ -42,7 +42,7 @@ import '@vollowx/seele';
 
 // OR Import specific components (Recommended)
 import '@vollowx/seele/m3/button/common-button.js';
-import '@vollowx/seele/m3/checkbox.js';
+import '@vollowx/seele/m3/checkbox/checkbox.js';
 ```
 
 ### Using Components
