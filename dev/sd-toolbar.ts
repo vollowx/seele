@@ -145,7 +145,7 @@ export class SdToolbar extends LitElement {
         for="action-toggle-theme"
         offset="12"
         align="top"
-        alignStrategy="fixed"
+        align-strategy="fixed"
         @select=${this._handleThemeSelect}
         @open=${() => (this.menuOpen = true)}
         @close=${() => (this.menuOpen = false)}
