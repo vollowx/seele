@@ -1,7 +1,7 @@
 import { customElement } from 'lit/decorators.js';
 
-import { M3ListItem } from './list-item.js';
-import { MenuItemMixin } from '../base/menu-item.js';
+import { M3ListItem } from '../list/list-item.js';
+import { MenuItemMixin } from '../../base/menu-item.js';
 
 /**
  * @tag md-menu-item

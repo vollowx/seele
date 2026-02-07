@@ -1,7 +1,7 @@
 import { customElement } from 'lit/decorators.js';
 import { property } from 'lit/decorators.js';
 
-import { Menu } from '../base/menu.js';
+import { Menu } from '../../base/menu.js';
 import { menuStyles } from './menu-styles.css.js';
 
 /**

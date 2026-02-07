@@ -1,7 +1,7 @@
 import { LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
-import { ListController } from '../base/controllers/list-controller.js';
+import { ListController } from '../../base/controllers/list-controller.js';
 
 import { listStyles } from './list-styles.css.js';
 

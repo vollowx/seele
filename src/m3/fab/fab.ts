@@ -1,13 +1,13 @@
 import { html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-import { Button } from '../base/button.js';
+import { Button } from '../../base/button.js';
 
-import './focus-ring.js';
-import './ripple/ripple.js';
+import '../focus-ring.js';
+import '../ripple/ripple.js';
 
 import { fabStyles } from './fab-styles.css.js';
-import { targetStyles } from './target-styles.css.js';
+import { targetStyles } from '../target-styles.css.js';
 
 /**
  * @tag md-fab

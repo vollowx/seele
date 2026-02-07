@@ -1,7 +1,7 @@
 import { customElement } from 'lit/decorators.js';
 
-import { OptionMixin } from '../base/option.js';
-import { M3ListItem } from './list-item.js';
+import { OptionMixin } from '../../base/option.js';
+import { M3ListItem } from '../list/list-item.js';
 
 /**
  * @tag md-option
