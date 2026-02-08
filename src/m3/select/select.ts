@@ -29,7 +29,6 @@ export abstract class M3Select extends Select {
         align="${this.align}"
         align-strategy="${this.alignStrategy}"
         keep-open-blur
-        no-aria-control
         no-focus-control
         ?open="${this.open}"
         @open="${() => (this.open = true)}"
