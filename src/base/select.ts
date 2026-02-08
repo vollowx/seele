@@ -205,6 +205,8 @@ export class Select extends Base {
     if (this.disabled) return;
 
     const eventClone = new KeyboardEvent(event.type, event);
+    eventClone.preventDefault = () => event.preventDefault();
+    eventClone.stopPropagation = () => event.stopPropagation();
     this.$menu.$menu.dispatchEvent(eventClone);
   }
 
