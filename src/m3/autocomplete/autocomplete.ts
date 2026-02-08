@@ -11,27 +11,30 @@ import type { Menu, MenuSelectEvent } from '../../base/menu.js';
 
 import { InternalsAttached } from '../../base/mixins/internals-attached.js';
 import { FocusDelegated } from '../../base/mixins/focus-delegated.js';
-import { FormAssociated } from '../../base/mixins/form-associated.js';
 
 import { autocompleteStyles } from './autocomplete-styles.css.js';
 import { Input } from '../../base/input.js';
 
-const Base = FormAssociated(FocusDelegated(InternalsAttached(LitElement)));
+const Base = FocusDelegated(InternalsAttached(LitElement));
+
+type AutocompleteMode = 'none' | 'list' | 'both';
 
 /**
  * TODO: Make base Autocomplete
+ * TODO: Check if manually dispatching input/change events on input is necessary
  */
 @customElement('md-autocomplete')
 export class M3Autocomplete extends Base {
   static override styles = [autocompleteStyles];
 
   @property({ type: Boolean, reflect: true }) open = false;
-  @property() value = '';
 
   @property({ type: Number }) offset = 0;
   @property({ reflect: true }) align: Placement = 'bottom-start';
   @property({ type: String, reflect: true, attribute: 'align-strategy' })
   alignStrategy: Strategy = 'absolute';
+
+  @property() mode: AutocompleteMode = 'none';
 
   @query('[part="menu"]') $menu!: Menu;
   @queryAssignedElements({ slot: 'input', flatten: true })
@@ -70,47 +73,86 @@ export class M3Autocomplete extends Base {
     const input = this.$input;
     if (!input) return;
 
-    // Set up ARIA and event listeners on the slotted input
-    input.autocomplete = 'both'; // TODO: both/list configurable
-    input.$inputOrTextarea.role = 'combobox';
-    input.$inputOrTextarea.ariaExpanded = String(this.open);
-    input.$inputOrTextarea.ariaHasPopup = 'listbox';
-    input.$inputOrTextarea.ariaControlsElements = [this.$menu];
+    const $realInput = this.$input.$inputOrTextarea;
+    if ($realInput) {
+      $realInput.role = 'combobox';
+      $realInput.ariaExpanded = String(this.open);
+      $realInput.ariaHasPopup = 'listbox';
+      $realInput.ariaAutoComplete = this.mode;
+      $realInput.ariaControlsElements = [this.$menu];
 
-    input.addEventListener('input', this.handleInput.bind(this));
-    input.addEventListener('keydown', this.handleInputKeydown.bind(this));
-    input.addEventListener('click', () => (this.open = !this.open));
-    // input.addEventListener('focus', () => (this.open = true));
+      input.addEventListener('input', this.handleInput.bind(this));
+      input.addEventListener('keydown', this.handleInputKeydown.bind(this));
+      input.addEventListener('click', () => (this.open = !this.open));
 
-    this.$menu.attach(input);
+      this.$menu.attach($realInput);
+    }
   }
 
   private handleItemsSlotChange() {
-    this.filterOptions();
+    // Initial filter based on current input value (if any)
+    this.filterOptions(this.$input?.value || '');
   }
 
-  private handleInput(event: Event) {
-    const target = event.target as any;
-    this.value = target.value;
-    this.open = true;
-    this.filterOptions();
+  private handleInput(event: InputEvent) {
+    const inputEl = this.$input.$inputOrTextarea as HTMLInputElement;
+    const currentValue = inputEl.value;
 
-    this.dispatchEvent(
-      new CustomEvent('input', { bubbles: true, composed: true })
-    );
+    this.open = true;
+
+    // Filter items based on current value
+    const firstMatch = this.filterOptions(currentValue);
+
+    // Inline completion logic (mode = both)
+    if (this.mode === 'both' && event.inputType !== 'deleteContentBackward') {
+      if (firstMatch && currentValue.length > 0) {
+        this.applyInlineAutoComplete(inputEl, firstMatch, currentValue);
+      }
+    }
+  }
+
+  private applyInlineAutoComplete(
+    inputEl: HTMLInputElement,
+    item: HTMLElement,
+    typedValue: string
+  ) {
+    const suggestion = item.textContent?.trim() || '';
+
+    if (suggestion.toLowerCase().startsWith(typedValue.toLowerCase())) {
+      inputEl.value = suggestion;
+      inputEl.setSelectionRange(typedValue.length, suggestion.length);
+    }
+  }
+
+  private filterOptions(searchTerm: string): HTMLElement | null {
+    if (this.mode === 'none') return null;
+
+    const normalizedSearch = searchTerm.toLowerCase();
+    let firstMatch: HTMLElement | null = null;
+
+    this.itemSlotElements.forEach((item) => {
+      const text = (item.textContent || '').toLowerCase().trim();
+      const isMatch = text.startsWith(normalizedSearch);
+
+      item.hidden = !isMatch;
+      if (isMatch && !firstMatch) {
+        firstMatch = item;
+      }
+    });
+
+    return firstMatch;
   }
 
   private handleInputKeydown(event: KeyboardEvent) {
-    if (this.disabled) return;
+    if (this.$input?.disabled) return;
 
-    if (['ArrowDown', 'ArrowUp', 'Enter', 'Escape'].includes(event.key)) {
-      if (!this.open && event.key === 'ArrowDown') {
-        this.open = true;
-        return;
-      }
-
+    if (['Enter', 'Escape', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
       const eventClone = new KeyboardEvent(event.type, event);
+      eventClone.preventDefault = () => event.preventDefault();
+      eventClone.stopPropagation = () => event.stopPropagation();
       this.$menu.$menu.dispatchEvent(eventClone);
+
+      if (event.key === 'Enter') this.open = false;
     }
   }
 
@@ -121,30 +163,19 @@ export class M3Autocomplete extends Base {
       selectedItem.textContent?.trim() ||
       '';
 
-    this.value = newValue;
     if (this.$input) {
       this.$input.value = newValue;
     }
 
     this.open = false;
-    this.dispatchEvent(new Event('change', { bubbles: true }));
-    this.filterOptions();
-  }
-
-  private filterOptions() {
-    const searchTerm = this.value.toLowerCase();
-
-    this.itemSlotElements.forEach((item) => {
-      const text = (item.textContent || '').toLowerCase();
-      const isMatch = text.includes(searchTerm);
-
-      item.hidden = !isMatch;
-    });
   }
 
   protected override updated(changed: PropertyValues) {
     if (changed.has('open') && this.$input) {
-      this.$input.$inputOrTextarea.ariaExpanded = String(this.open);
+      const $input = this.$input.$inputOrTextarea;
+      if ($input) {
+        $input.ariaExpanded = String(this.open);
+      }
     }
   }
 }
