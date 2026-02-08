@@ -41,7 +41,7 @@ export class Input extends Base {
 
   @property({ type: Boolean, reflect: true }) focused = false;
 
-  @query('[part~=input]') inputOrTextarea!:
+  @query('[part~=input]') $inputOrTextarea!:
     | HTMLInputElement
     | HTMLTextAreaElement;
 
@@ -133,26 +133,26 @@ export class Input extends Base {
   }
 
   private syncValidity() {
-    if (!this.inputOrTextarea) return;
+    if (!this.$inputOrTextarea) return;
     this[internals].setValidity(
-      this.inputOrTextarea.validity,
-      this.inputOrTextarea.validationMessage,
-      this.inputOrTextarea
+      this.$inputOrTextarea.validity,
+      this.$inputOrTextarea.validationMessage,
+      this.$inputOrTextarea
     );
   }
 
   select() {
-    this.inputOrTextarea?.select();
+    this.$inputOrTextarea?.select();
   }
 
   stepUp(n?: number) {
-    (this.inputOrTextarea as HTMLInputElement)?.stepUp(n);
-    this.handleInput({ target: this.inputOrTextarea } as any);
+    (this.$inputOrTextarea as HTMLInputElement)?.stepUp(n);
+    this.handleInput({ target: this.$inputOrTextarea } as any);
   }
 
   stepDown(n?: number) {
-    (this.inputOrTextarea as HTMLInputElement)?.stepDown(n);
-    this.handleInput({ target: this.inputOrTextarea } as any);
+    (this.$inputOrTextarea as HTMLInputElement)?.stepDown(n);
+    this.handleInput({ target: this.$inputOrTextarea } as any);
   }
 
   formResetCallback() {
