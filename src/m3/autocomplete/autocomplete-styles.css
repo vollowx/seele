@@ -1,0 +1,18 @@
+:host {
+  display: inline-block;
+  min-width: 210px;
+  position: relative;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+::slotted([slot='input']) {
+  cursor: pointer;
+  outline: none;
+  width: 100%;
+}
+
+[part='menu'] {
+  --md-menu-max-height: 300px;
+  min-width: 100%;
+}

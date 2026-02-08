@@ -136,5 +136,19 @@
         demoSelectFires.value = `input: value=${event.target.value}`;
       });
     </script>
+
+    <md-autocomplete>
+      <md-outlined-text-field
+        slot="input"
+        label="Yes"
+        placeholder="What do you want"
+      ></md-outlined-text-field>
+      <md-option>Apple</md-option>
+      <md-option>Chrome</md-option>
+      <md-option>Duck</md-option>
+      <md-option>Orange</md-option>
+      <md-option>Pink</md-option>
+      <md-option>Pineapple</md-option>
+    </md-autocomplete>
   </body>
 </html>
