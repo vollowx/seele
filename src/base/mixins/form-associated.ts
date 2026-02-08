@@ -1,6 +1,7 @@
 import { LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
-import { internals } from './internals-attached.js';
+
+import { InternalsAttachedInterface, internals } from './internals-attached.js';
 
 export declare class FormAssociatedInterface {
   form: HTMLFormElement | null;
@@ -16,7 +17,9 @@ export declare class FormAssociatedInterface {
   reportValidity(): boolean;
 }
 
-export const FormAssociated = <T extends Constructor<LitElement>>(
+export const FormAssociated = <
+  T extends Constructor<LitElement & InternalsAttachedInterface>,
+>(
   superClass: T
 ) => {
   class FormAssociatedElement extends superClass {

@@ -1,9 +1,9 @@
 import { LitElement } from 'lit';
-import { internals } from './internals-attached.js';
+import { InternalsAttachedInterface, internals } from './internals-attached.js';
 
 export declare class FocusDelegatedInterface {}
 
-export const FocusDelegated = <T extends Constructor<LitElement>>(
+export const FocusDelegated = <T extends Constructor<LitElement & InternalsAttachedInterface>>(
   superClass: T
 ) => {
   class FocusDelegatedElement extends superClass {
