@@ -18,6 +18,9 @@ import { Input } from '../../base/input.js';
 
 const Base = FormAssociated(FocusDelegated(InternalsAttached(LitElement)));
 
+/**
+ * TODO: Make base Autocomplete
+ */
 @customElement('md-autocomplete')
 export class M3Autocomplete extends Base {
   static override styles = [autocompleteStyles];
@@ -75,7 +78,7 @@ export class M3Autocomplete extends Base {
     input.$inputOrTextarea.ariaControlsElements = [this.$menu];
 
     input.addEventListener('input', this.handleInput.bind(this));
-    input.addEventListener('keydown', this.handleKeydown.bind(this));
+    input.addEventListener('keydown', this.handleInputKeydown.bind(this));
     input.addEventListener('click', () => (this.open = !this.open));
     // input.addEventListener('focus', () => (this.open = true));
 
@@ -97,10 +100,9 @@ export class M3Autocomplete extends Base {
     );
   }
 
-  private handleKeydown(event: KeyboardEvent) {
+  private handleInputKeydown(event: KeyboardEvent) {
     if (this.disabled) return;
 
-    // Forward navigation keys to the Menu's internal key handling
     if (['ArrowDown', 'ArrowUp', 'Enter', 'Escape'].includes(event.key)) {
       if (!this.open && event.key === 'ArrowDown') {
         this.open = true;
