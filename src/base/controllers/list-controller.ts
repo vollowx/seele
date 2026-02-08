@@ -2,8 +2,6 @@ import { ReactiveController, ReactiveControllerHost } from 'lit';
 
 import type { ListItem } from '../list-item.js';
 
-import { getIndexByLetter } from '../menu.js';
-
 export interface ListControllerConfig<Item extends ListItem> {
   isItem: (item: HTMLElement) => item is Item;
   getPossibleItems: () => HTMLElement[];
@@ -46,10 +44,10 @@ export class ListController<
     return this.getPossibleItems().filter(this.isItem);
   }
   get currentIndex(): number {
-    const items = this.getPossibleItems().filter(this.isItem);
-    return items.findIndex((item) => item.focused) ?? -1;
+    if (!this._focusedItem) return -1;
+    return this.items.indexOf(this._focusedItem);
   }
-  _focusedIndex: number = -1;
+  _focusedItem: Item | null = null;
 
   private searchString = '';
   private searchTimeout: number | null = null;
@@ -94,15 +92,14 @@ export class ListController<
   }
 
   _focusItem(item: Item) {
-    if (this._focusedIndex !== -1)
-      this._blurItem(this.items[this._focusedIndex]);
+    if (this._focusedItem !== null) this._blurItem(this._focusedItem);
     this.focusItem(item);
-    this._focusedIndex = this.items.indexOf(item);
+    this._focusedItem = item;
   }
 
   _blurItem(item: Item) {
     this.blurItem(item);
-    this._focusedIndex = -1;
+    this._focusedItem = null;
   }
 
   focusFirstItem() {
@@ -114,26 +111,57 @@ export class ListController<
   }
 
   focusNextItem() {
-    const count = this.items.length;
+    const items = this.items;
+    const count = items.length;
     if (count === 0) return;
-    let nextIndex = this._focusedIndex + 1;
+
+    let nextIndex = this.currentIndex + 1;
     if (nextIndex >= count) {
-      nextIndex = this.wrapNavigation() ? count - 1 : 0;
+      nextIndex = this.wrapNavigation() ? 0 : count - 1;
     }
-    this._focusItem(this.items[nextIndex]);
+
+    this._focusItem(items[nextIndex]);
   }
 
   focusPreviousItem() {
-    const count = this.items.length;
+    const items = this.items;
+    const count = items.length;
     if (count === 0) return;
-    let prevIndex = this._focusedIndex - 1;
+
+    let prevIndex = this.currentIndex - 1;
     if (prevIndex < 0) {
-      prevIndex = this.wrapNavigation() ? 0 : count - 1;
+      prevIndex = this.wrapNavigation() ? count - 1 : 0;
     }
-    this._focusItem(this.items[prevIndex]);
+
+    this._focusItem(items[prevIndex]);
   }
 
   handleSlotChange() {
-    this._focusedIndex = this.currentIndex;
+    const items = this.items;
+    const index = this.currentIndex;
+    this._focusedItem = index >= 0 ? items[index] : null;
+  }
+}
+
+export function getIndexByLetter(
+  options: string[],
+  filter: string,
+  startIndex = 0
+) {
+  const orderedOptions = [
+    ...options.slice(startIndex),
+    ...options.slice(0, startIndex),
+  ];
+  const firstMatch = filterOptions(orderedOptions, filter)[0];
+  const allSameLetter = (array: string[]) =>
+    array.every((letter) => letter === array[0]);
+
+  if (firstMatch) {
+    return options.indexOf(firstMatch);
+  } else if (allSameLetter(filter.split(''))) {
+    const matches = filterOptions(orderedOptions, filter[0]);
+    return options.indexOf(matches[0]);
+  } else {
+    return -1;
   }
 }

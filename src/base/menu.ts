@@ -90,9 +90,11 @@ export class Menu extends Base {
   private readonly listController = new ListController<MenuItem>(this, {
     isItem: (item: HTMLElement): item is MenuItem =>
       this._possibleItemTags.includes(item.tagName.toLowerCase()) &&
-      !item.hasAttribute('disabled'),
+      !item.hasAttribute('disabled') &&
+      !item.hidden,
     getPossibleItems: () => this.slotItems,
     blurItem: (item: MenuItem) => {
+      console.log(item);
       item.focused = false;
     },
     focusItem: (item: MenuItem) => {
@@ -382,29 +384,6 @@ export function getActionFromKey(event: KeyboardEvent, menuOpen: boolean) {
     }
   }
   return undefined;
-}
-
-export function getIndexByLetter(
-  options: string[],
-  filter: string,
-  startIndex = 0
-) {
-  const orderedOptions = [
-    ...options.slice(startIndex),
-    ...options.slice(0, startIndex),
-  ];
-  const firstMatch = filterOptions(orderedOptions, filter)[0];
-  const allSameLetter = (array: string[]) =>
-    array.every((letter) => letter === array[0]);
-
-  if (firstMatch) {
-    return options.indexOf(firstMatch);
-  } else if (allSameLetter(filter.split(''))) {
-    const matches = filterOptions(orderedOptions, filter[0]);
-    return options.indexOf(matches[0]);
-  } else {
-    return -1;
-  }
 }
 
 export function getUpdatedIndex(
