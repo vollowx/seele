@@ -32,8 +32,6 @@ export type MenuItemFocusEvent = CustomEvent<ItemFocusDetail>;
  * @fires {Event} close - Fires when the menu is closed.
  * @fires {MenuSelectEvent} select - Fires when an item is selected.
  * @fires {MenuItemFocusEvent} item-focus - Fires when an item is focused
- *
- * FIXME: aria-activedescendant may not work in and out shadow DOM
  */
 export class Menu extends Base {
   readonly _possibleItemTags: string[] = [];
@@ -99,8 +97,9 @@ export class Menu extends Base {
     },
     focusItem: (item: MenuItem) => {
       item.focused = true;
-      if (!this.noFocusControl)
-        this.$menu.setAttribute('aria-activedescendant', item.id);
+      if (!this.noFocusControl) {
+        this.$menu.ariaActiveDescendantElement = item;
+      }
       scrollItemIntoView(this.$menu, item, this._scrollPadding);
       this.dispatchEvent(
         new CustomEvent('item-focus', {
@@ -179,6 +178,10 @@ export class Menu extends Base {
           }
         });
       } else {
+        if (!this.noFocusControl) {
+          this.$menu.ariaActiveDescendantElement = null;
+        }
+
         this.dispatchEvent(
           new Event('close', { bubbles: true, composed: true })
         );
