@@ -52,8 +52,8 @@ export class Menu extends Base {
   keepOpenClickItem = false;
   @property({ type: Boolean, attribute: 'keep-open-click-away' })
   keepOpenClickAway = false;
-  @property({ type: Boolean, attribute: 'no-list-control' })
-  noListControl = false;
+  @property({ type: Boolean, attribute: 'no-aria-control' })
+  noAriaControl = false;
   @property({ type: Boolean, attribute: 'no-focus-control' })
   noFocusControl = false;
 
@@ -99,7 +99,7 @@ export class Menu extends Base {
     },
     focusItem: (item: MenuItem) => {
       item.focused = true;
-      if (!this.noFocusControl) {
+      if (!this.noAriaControl) {
         this.$menu.ariaActiveDescendantElement = item;
       }
       scrollItemIntoView(this.$menu, item, this._scrollPadding);
@@ -180,7 +180,7 @@ export class Menu extends Base {
           }
         });
       } else {
-        if (!this.noFocusControl) {
+        if (!this.noAriaControl) {
           this.$menu.ariaActiveDescendantElement = null;
         }
 
