@@ -9,11 +9,11 @@
   user-select: none;
 }
 
-:host(:first-of-type) {
+:host(:not([hidden]):first-of-type) {
   border-radius: 12px 12px 4px 4px;
 }
 
-:host(:last-of-type) {
+:host(:not([hidden]):last-of-type) {
   border-radius: 4px 4px 12px 12px;
 }
 
