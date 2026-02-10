@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-md-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>form</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+
+    <link rel="stylesheet" href="./shared.css" />
+    <script type="module" src="./shared.ts"></script>
+  </head>
+  <body>
+    <dev-configurator></dev-configurator>
+
+    <header>
+      <h1>form</h1>
+    </header>
+
+    <main>
+      <section>
+        <h2>seletion controls</h2>
+        <div>
+          <div>
+            <h3>switches</h3>
+            <label>
+              <md-switch></md-switch>
+              Default
+            </label>
+            <label>
+              <md-switch checked></md-switch>
+              Dark Mode
+            </label>
+          </div>
+
+          <div>
+            <h3>checkboxes</h3>
+            <label>
+              <md-checkbox id="parentCheckbox"></md-checkbox>
+              Parent Checkbox
+            </label>
+            <ul>
+              <li>
+                <label>
+                  <md-checkbox class="childCheckbox"></md-checkbox>
+                  Child 1
+                </label>
+              </li>
+              <li>
+                <label>
+                  <md-checkbox class="childCheckbox"></md-checkbox>
+                  Child 2
+                </label>
+              </li>
+              <li>
+                <label>
+                  <md-checkbox class="childCheckbox"></md-checkbox>
+                  Child 3
+                </label>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3>checkboxes (native)</h3>
+            <label
+              ><input type="checkbox" id="parentCheckboxNative" /> Native
+              Parent</label
+            >
+            <ul class="list-unstyled">
+              <li>
+                <label>
+                  <input type="checkbox" class="childCheckboxNative" />
+                  Native Child 1
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input type="checkbox" class="childCheckboxNative" />
+                  Native Child 2
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input type="checkbox" class="childCheckboxNative" />
+                  Native Child 3
+                </label>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>sliders</h2>
+        <div>
+          <label>Continuous: <md-slider></md-slider></label>
+          <label>Range: <md-slider range></md-slider></label>
+          <label>
+            Discrete with Ticks:
+            <md-slider labeled ticks step="10"></md-slider>
+          </label>
+          <label>
+            Disabled:
+            <md-slider labeled ticks step="10" disabled></md-slider>
+          </label>
+        </div>
+      </section>
+
+      <section>
+        <h2>inputs</h2>
+
+        <h3>filled</h3>
+        <div>
+          <md-filled-text-field
+            label="Label"
+            placeholder="Placeholder"
+          ></md-filled-text-field>
+          <md-filled-text-field
+            label="Required"
+            required
+          ></md-filled-text-field>
+          <md-filled-text-field
+            label="Disabled"
+            disabled
+            value="Read only"
+          ></md-filled-text-field>
+
+          <md-filled-text-field
+            label="Textarea"
+            type="textarea"
+            rows="3"
+          ></md-filled-text-field>
+        </div>
+
+        <h3>outlined</h3>
+        <div>
+          <md-outlined-text-field
+            label="Label"
+            placeholder="Placeholder"
+          ></md-outlined-text-field>
+          <md-outlined-text-field
+            label="Required"
+            required
+          ></md-outlined-text-field>
+          <md-outlined-text-field
+            label="Disabled"
+            disabled
+            value="Read only"
+          ></md-outlined-text-field>
+          <md-outlined-text-field
+            label="Textarea"
+            type="textarea"
+            rows="3"
+          ></md-outlined-text-field>
+        </div>
+      </section>
+
+      <section>
+        <h2>form validation & submission</h2>
+        <form id="testForm">
+          <md-outlined-text-field
+            name="email"
+            type="email"
+            label="Email"
+            supportingtext="*required"
+            required
+          ></md-outlined-text-field>
+          <md-filled-text-field
+            name="password"
+            type="password"
+            label="Password"
+            required
+            minlength="8"
+          ></md-filled-text-field>
+
+          <button type="submit">Submit Data</button>
+        </form>
+
+        <div id="output" style="font-family: monospace">
+          results will appear here...
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const setupCheckboxGroup = (parentSelector, childSelector) => {
+        const parent = document.getElementById(parentSelector);
+        const children = document.querySelectorAll(childSelector);
+
+        parent.addEventListener('change', () => {
+          children.forEach((child) => (child.checked = parent.checked));
+        });
+
+        children.forEach((child) => {
+          child.addEventListener('change', () => {
+            const allChecked = Array.from(children).every((cb) => cb.checked);
+            const someChecked = Array.from(children).some((cb) => cb.checked);
+            parent.checked = allChecked;
+
+            parent.indeterminate = !allChecked && someChecked;
+          });
+        });
+      };
+
+      setupCheckboxGroup('parentCheckbox', '.childCheckbox');
+      setupCheckboxGroup('parentCheckboxNative', '.childCheckboxNative');
+
+      const testForm = document.getElementById('testForm');
+      const outputDiv = document.getElementById('output');
+
+      testForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(testForm);
+        const data = Object.fromEntries(formData.entries());
+        outputDiv.innerText =
+          'Submitted Data: ' + JSON.stringify(data, null, 2);
+      });
+    </script>
+  </body>
+</html>

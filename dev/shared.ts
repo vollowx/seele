@@ -1,2 +1,2 @@
 import '../src/all.js';
-import './sd-toolbar.js';
+import './components/configurator.js';

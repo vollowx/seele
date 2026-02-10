@@ -1,12 +1,12 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 
-import '../src/m3/button/icon-button.js';
-import '../src/m3/toolbar/toolbar.js';
-import '../src/m3/tooltip/tooltip.js';
+import '../../src/m3/button/icon-button.js';
+import '../../src/m3/toolbar/toolbar.js';
+import '../../src/m3/tooltip/tooltip.js';
 
-@customElement('sd-thiswaifudoesnotexist-viewer')
-export class ThisWaifuDoesNotExist extends LitElement {
+@customElement('thiswaifudoesnotexist-viewer')
+export class ThisWaifuDoesNotExistViewer extends LitElement {
   static override styles = [
     css`
       :host {
@@ -91,7 +91,7 @@ export class ThisWaifuDoesNotExist extends LitElement {
     `;
   }
 
-  @property({ type: Boolean }) loading = true;
+  @state() loading = true;
   @property({ type: Number }) nth = 50000;
 
   private handleLoad() {
@@ -110,6 +110,6 @@ export class ThisWaifuDoesNotExist extends LitElement {
 // Lord what am I doing
 declare global {
   interface HTMLElementTagNameMap {
-    'sd-thiswaifudoesnotexist-viewer': ThisWaifuDoesNotExist;
+    'thiswaifudoesnotexist-viewer': ThisWaifuDoesNotExistViewer;
   }
 }

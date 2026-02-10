@@ -1,8 +1,8 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
-@customElement('sd-stopwatch')
-export class SDStopwatch extends LitElement {
+@customElement('app-stopwatch')
+export class AppStopwatch extends LitElement {
   static override styles = css`
     :host {
       position: absolute;
@@ -113,6 +113,6 @@ export class SDStopwatch extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'sd-stopwatch': SDStopwatch;
+    'app-stopwatch': AppStopwatch;
   }
 }

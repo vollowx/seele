@@ -83,7 +83,7 @@
 :root {
   --_icon-font-config: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 
-  --md-sys-typography-family: 'Lexend', sans-serif;
+  --md-sys-typography-family: sans-serif;
 
   --md-sys-typography-display-large: 400 3.5625rem / 4rem
     var(--md-sys-typography-family);
