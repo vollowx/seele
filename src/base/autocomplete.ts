@@ -1,9 +1,5 @@
 import { LitElement, html, PropertyValues } from 'lit';
-import {
-  property,
-  query,
-  queryAssignedElements,
-} from 'lit/decorators.js';
+import { property, query, queryAssignedElements } from 'lit/decorators.js';
 
 import type { Placement, Strategy } from '@floating-ui/dom';
 import type { Input } from './input.js';
@@ -22,10 +18,15 @@ type AutocompleteMode = 'none' | 'list' | 'both';
 export class Autocomplete extends Base {
   @property({ type: Boolean }) open = false;
 
+  // Passed to menu
+  @property({ type: Boolean }) quick = false;
   @property({ type: Number }) offset = 0;
-  @property({ reflect: true }) align: Placement = 'bottom-start';
+  @property({ reflect: true })
+  align: Placement = 'bottom-start';
   @property({ type: String, reflect: true, attribute: 'align-strategy' })
   alignStrategy: Strategy = 'absolute';
+  @property({ type: Boolean, attribute: 'keep-open-select' })
+  keepOpenSelect = false;
 
   @property() mode: AutocompleteMode = 'none';
 
@@ -55,9 +56,11 @@ export class Autocomplete extends Base {
    *   id="menu"
    *   type="listbox"
    *   data-tabindex="-1"
+   *   ?quick="${this.quick}"
    *   .offset=${this.offset}
    *   .align=${this.align}
    *   .alignStrategy=${this.alignStrategy}
+   *   ?keep-open-select=${this.keepOpenSelect}
    *   no-focus-control
    *   ?open=${this.open}
    *   @open="${() => (this.open = true)}"
@@ -155,7 +158,7 @@ export class Autocomplete extends Base {
       eventClone.stopPropagation = () => event.stopPropagation();
       this.$menu.$menu.dispatchEvent(eventClone);
 
-      if (event.key === 'Enter') this.open = false;
+      if (event.key === 'Enter' && !this.keepOpenSelect) this.open = false;
     }
   }
 
@@ -170,7 +173,9 @@ export class Autocomplete extends Base {
       this.$input.value = newValue;
     }
 
-    this.open = false;
+    if (!this.keepOpenSelect) {
+      this.open = false;
+    }
   }
 
   protected override updated(changed: PropertyValues) {

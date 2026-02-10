@@ -20,9 +20,11 @@ export class M3Autocomplete extends Autocomplete {
         id="menu"
         type="listbox"
         data-tabindex="-1"
+        ?quick="${this.quick}"
         .offset=${this.offset}
         .align=${this.align}
         .alignStrategy=${this.alignStrategy}
+        ?keep-open-select=${this.keepOpenSelect}
         no-focus-control
         ?open=${this.open}
         @open="${() => (this.open = true)}"

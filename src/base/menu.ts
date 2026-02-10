@@ -48,8 +48,8 @@ export class Menu extends Base {
   alignStrategy: Strategy = 'absolute';
   @property({ type: Boolean, attribute: 'keep-open-blur' })
   keepOpenBlur = false;
-  @property({ type: Boolean, attribute: 'keep-open-click-item' })
-  keepOpenClickItem = false;
+  @property({ type: Boolean, attribute: 'keep-open-select' })
+  keepOpenSelect = false;
   @property({ type: Boolean, attribute: 'keep-open-click-away' })
   keepOpenClickAway = false;
   @property({ type: Boolean, attribute: 'no-focus-control' })
@@ -237,7 +237,7 @@ export class Menu extends Base {
               composed: true,
             })
           );
-          if (this.keepOpenClickItem) return;
+          if (this.keepOpenSelect) return;
           this.open = false;
         }
         return;
@@ -290,7 +290,7 @@ export class Menu extends Base {
       })
     );
 
-    if (!this.keepOpenClickItem) this.open = false;
+    if (!this.keepOpenSelect) this.open = false;
   }
 
   get currentIndex() {
