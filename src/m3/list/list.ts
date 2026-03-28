@@ -1,8 +1,6 @@
-import { LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
-import { ListController } from '../../base/controllers/list-controller.js';
-
+import { List } from '../../base/list.js';
 import { listStyles } from './list-styles.css.js';
 
 /**
@@ -11,7 +9,15 @@ import { listStyles } from './list-styles.css.js';
  * TODO: Use listController
  */
 @customElement('md-list')
-export class M3List extends LitElement {
+export class M3List extends List {
+  override readonly _possibleItemTags = [
+    'md-list-item',
+    'md-list-item-checkbox',
+    'md-list-item-radio',
+  ];
+  // FIXME: Might cause a long list to scroll more than expected
+  // override readonly _scrollPadding = 4;
+
   static override styles = [listStyles];
 }
 
