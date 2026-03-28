@@ -4,12 +4,11 @@ import { property, query, queryAssignedElements } from 'lit/decorators.js';
 import type { ListItem } from './list-item.js';
 
 import { setFocusVisible } from '../core/focus-visible.js';
-import { Attachable } from './mixins/attachable.js';
 import { InternalsAttached } from './mixins/internals-attached.js';
 import { FocusDelegated } from './mixins/focus-delegated.js';
 import { ListController } from './controllers/list-controller.js';
 
-const Base = FocusDelegated(InternalsAttached(Attachable(LitElement)));
+const Base = FocusDelegated(InternalsAttached(LitElement));
 
 interface ListSelectDetail {
   item: ListItem;
@@ -38,9 +37,6 @@ export class List extends Base {
   @property({ type: Boolean, attribute: 'no-focus-control' })
   noFocusControl = false;
 
-  @property({ type: Number, attribute: 'data-tabindex' })
-  override tabIndex = 0;
-
   @query('[part="list"]') $list!: HTMLElement;
   @queryAssignedElements({ flatten: true }) slotItems!: Array<
     ListItem | HTMLElement
@@ -56,7 +52,6 @@ export class List extends Base {
       !item.hidden,
     getPossibleItems: () => this.slotItems,
     blurItem: (item: ListItem) => {
-      console.log(item);
       item.focused = false;
     },
     focusItem: (item: ListItem) => {
@@ -79,10 +74,14 @@ export class List extends Base {
   override render() {
     return html`<div
       part="list"
-      role="list"
-      tabindex="${this.tabIndex}"
-      @keydown=${this.#handleKeyDown.bind(this)}
-      @focusout=${this.#handleFocusOut.bind(this)}
+      role="listbox"
+      tabindex="0"
+      @keydown=${this.#handleKeyDown}
+      @focusin=${this.#handleFocusIn}
+      @focusout=${this.#handleFocusOut}
+      @pointerdown=${this.#handlePointerDown}
+      @click=${this.#handleClick}
+      @mouseover=${this.#handleMouseOver}
     >
       ${this.renderItemSlot()}
     </div>`;
@@ -90,37 +89,6 @@ export class List extends Base {
 
   renderItemSlot() {
     return html`<slot part="items"></slot>`;
-  }
-
-  override connectedCallback() {
-    super.connectedCallback();
-    if (this.$control) {
-      // TODO: Manage $control ARIA attributes
-      // TODO: Handle $control change
-      this.$control.addEventListener(
-        'focusout',
-        this.#handleFocusOut.bind(this)
-      );
-    }
-    this.updateComplete.then(() => {
-      this.$items.forEach((item) => {
-        item.addEventListener(
-          'mouseover',
-          this.#handleItemMouseOver.bind(this)
-        );
-        item.addEventListener('click', this.#handleItemClick.bind(this));
-      });
-    });
-  }
-
-  override disconnectedCallback() {
-    super.disconnectedCallback();
-    if (this.$control) {
-      this.$control.removeEventListener(
-        'focusout',
-        this.#handleFocusOut.bind(this)
-      );
-    }
   }
 
   protected override updated(changed: Map<string, any>) {
@@ -169,38 +137,56 @@ export class List extends Base {
     }
   }
 
-  #handleFocusOut(event: FocusEvent) {
-    const newFocus = event.relatedTarget as Node;
-    const isInside =
-      this.contains(newFocus) ||
-      this.shadowRoot?.contains(newFocus) ||
-      this.$control?.contains(newFocus);
-    if (!isInside) {
-      // TODO: Clear focus rings
+  #handleFocusIn() {
+    if (this.currentIndex == -1) this.listController.focusFirstItem();
+    else this.$items[this.currentIndex].focused = true;
+  }
+
+  #handleFocusOut() {
+    this.$items[this.currentIndex].focused = false;
+  }
+
+  #handleMouseOver(event: MouseEvent) {
+    setFocusVisible(false);
+    const item = (event.target as HTMLElement).closest(
+      this._possibleItemTags.join(',')
+    ) as ListItem;
+    if (item && this.listController.items.includes(item)) {
+      this.listController._focusItem(item);
     }
   }
 
-  #handleItemMouseOver(event: Event) {
-    setFocusVisible(false);
-    const hoveredItem = event.currentTarget as ListItem;
-    this.listController._focusItem(hoveredItem);
+  #handlePointerDown(event: PointerEvent) {
+    event.preventDefault(); // This makes sure that the container is focused
+    this.$list.focus();
+
+    const item = this.#getEventItem(event);
+    if (!item || !this.listController.items.includes(item)) return;
+
+    this.listController._focusItem(item);
   }
 
-  #handleItemClick(event: Event) {
-    const clickedItem = event.currentTarget as ListItem;
-    const index = this.listController.items.indexOf(clickedItem);
+  #handleClick(event: MouseEvent) {
+    this.$list.focus();
 
-    this.listController.items[index].focused = false;
+    const item = this.#getEventItem(event);
+    if (!item || !this.listController.items.includes(item)) return;
+
     this.dispatchEvent(
       new CustomEvent('select', {
         detail: {
-          item: clickedItem,
-          index: index,
+          item: item,
+          index: this.listController.items.indexOf(item),
         },
         bubbles: true,
         composed: true,
       })
     );
+  }
+
+  #getEventItem(event: Event) {
+    const selector = this._possibleItemTags.join(',');
+    return (event.target as HTMLElement).closest(selector) as ListItem;
   }
 
   get currentIndex() {

@@ -1,6 +1,23 @@
 :host {
+  display: contents;
+  min-width: 112px;
+}
+
+[part='list'] {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  gap: 2px;
+  height: inherit;
+  inset: auto;
+  max-height: inherit;
+  max-width: inherit;
+  min-width: inherit;
+  outline: 0;
   overflow-y: auto;
+  padding: 4px;
+  position: absolute;
+  -webkit-user-select: none;
+  user-select: none;
+  width: inherit;
 }
