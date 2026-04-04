@@ -4,7 +4,8 @@
 
 - [Committing specification](https://www.conventionalcommits.org/en/v1.0.0/).
 
-You should always run `bun prettier:fix` before you commit, in order to let your code follows the styling specification.
+You should always run `bun prettier:fix` before you commit, in order to let your
+code follows the styling specification.
 
 ## Element behaviors
 

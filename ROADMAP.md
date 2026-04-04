@@ -2,74 +2,65 @@
 
 This roadmap outlines the current and future goals for SEELE
 
-## Implementations
-
-- ❌ Not started
-- 🟡 In progress
-- ✅ Complete
-
----
-
 ## Base (base)
 
 | Components    | Functionality |
-| ------------- | :-----------: |
-| Button        |      ✅       |
-| Checkbox      |      ✅       |
-| Input         |      ✅       |
-| List          |      🟡       |
-| List item     |      🟡       |
-| Menu          |      🟡       |
-| Menu item     |      🟡       |
-| Option        |      🟡       |
-| Select        |      🟡       |
-| Slider        |      🟡       |
-| Toggle button |      ✅       |
-| Tooltip       |      🟡       |
-
----
+| ------------- | ------------- |
+| Autocomplete  | WIP           |
+| Button        | Done          |
+| Checkbox      | Done          |
+| Input         | Done          |
+| List          | WIP           |
+| List item     | WIP           |
+| Menu          | WIP           |
+| Menu item     | WIP           |
+| Option        | WIP           |
+| Select        | WIP           |
+| Slider        | WIP           |
+| Toggle button | Done          |
+| Tooltip       | WIP           |
 
 ## Material Design 3 (m3)
 
 | Components                    | Functionality | Style |
-| ----------------------------- | :-----------: | :---: |
-| Autocomplete                  |      ❌       |  ❌   |
-| Button                        |      ✅       |  ✅   |
-| Button group                  |      ❌       |  ❌   |
-| FAB                           |      ✅       |  🟡   |
-| FAB menu                      |      ❌       |  ❌   |
-| Icon button                   |      ✅       |  🟡   |
-| Segmented button              |      ❌       |  ❌   |
-| Badge                         |      ❌       |  ❌   |
-| Banner                        |      ❌       |  ❌   |
-| Bottom sheet                  |      ❌       |  ❌   |
-| Card                          |      ❌       |  ❌   |
-| Checkbox                      |      ✅       |  ✅   |
-| Chips                         |      ❌       |  ❌   |
-| Data table                    |      ❌       |  ❌   |
-| Date picker                   |      ❌       |  ❌   |
-| Dialog                        |      ❌       |  ❌   |
-| Divider                       |      ✅       |  🟡   |
-| Icon                          |      ❌       |  ❌   |
-| List                          |      🟡       |  🟡   |
-| List item                     |      🟡       |  🟡   |
-| Menu                          |      🟡       |  🟡   |
-| Menu item                     |      🟡       |  🟡   |
-| Navigation bar                |      ❌       |  ❌   |
-| Navigation drawer             |      ❌       |  ❌   |
-| Navigation rail               |      ❌       |  ❌   |
-| Option                        |      🟡       |  🟡   |
-| Progress indicator (circular) |      ❌       |  ❌   |
-| Progress indicator (linear)   |      ❌       |  ❌   |
-| Radio                         |      ❌       |  ❌   |
-| Ripple                        |      ✅       |  🟡   |
-| Search                        |      ❌       |  ❌   |
-| Select                        |      ✅       |  🟡   |
-| Slider                        |      ✅       |  🟡   |
-| Snackbar                      |      ❌       |  ❌   |
-| Switch                        |      ✅       |  ✅   |
-| Top app bar                   |      ❌       |  ❌   |
-| Tabs                          |      ❌       |  ❌   |
-| Text field                    |      ✅       |  ✅   |
-| Time picker                   |      ❌       |  ❌   |
-| Tooltip                       |      🟡       |  🟡   |
+| ----------------------------- | ------------- | ----- |
+| Autocomplete                  | WIP           | WIP   |
+| Button                        | Done          | Done  |
+| Button group                  |               |       |
+| FAB                           | Done          | WIP   |
+| FAB menu                      |               |       |
+| Icon button                   | Done          | WIP   |
+| Segmented button              |               |       |
+| Badge                         |               |       |
+| Banner                        |               |       |
+| Bottom sheet                  |               |       |
+| Card                          |               |       |
+| Checkbox                      | Done          | Done  |
+| Chips                         |               |       |
+| Data table                    |               |       |
+| Date picker                   |               |       |
+| Dialog                        |               |       |
+| Divider                       | Done          | WIP   |
+| Icon                          |               |       |
+| List                          | WIP           | WIP   |
+| List item                     | WIP           | WIP   |
+| Menu                          | WIP           | WIP   |
+| Menu item                     | WIP           | WIP   |
+| Navigation bar                |               |       |
+| Navigation drawer             |               |       |
+| Navigation rail               |               |       |
+| Option                        | WIP           | WIP   |
+| Progress indicator (circular) |               |       |
+| Progress indicator (linear)   |               |       |
+| Radio                         |               |       |
+| Ripple                        | Done          | WIP   |
+| Search                        |               |       |
+| Select                        | Done          | WIP   |
+| Slider                        | Done          | WIP   |
+| Snackbar                      |               |       |
+| Switch                        | Done          | Done  |
+| Top app bar                   |               |       |
+| Tabs                          |               |       |
+| Text field                    | Done          | Done  |
+| Time picker                   |               |       |
+| Tooltip                       | WIP           | WIP   |
