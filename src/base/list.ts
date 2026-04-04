@@ -1,14 +1,13 @@
-import { LitElement, html } from 'lit';
-import { property, query, queryAssignedElements } from 'lit/decorators.js';
+import { LitElement, html, isServer } from 'lit';
+import { property, queryAssignedElements } from 'lit/decorators.js';
 
 import type { ListItem } from './list-item.js';
 
 import { setFocusVisible } from '../core/focus-visible.js';
-import { InternalsAttached } from './mixins/internals-attached.js';
-import { FocusDelegated } from './mixins/focus-delegated.js';
+import { InternalsAttached, internals } from './mixins/internals-attached.js';
 import { ListController } from './controllers/list-controller.js';
 
-const Base = FocusDelegated(InternalsAttached(LitElement));
+const Base = InternalsAttached(LitElement);
 
 interface ListSelectDetail {
   item: ListItem;
@@ -22,7 +21,6 @@ interface ItemFocusDetail {
 export type ListItemFocusEvent = CustomEvent<ItemFocusDetail>;
 
 /**
- * @csspart list
  * @csspart items
  *
  * @fires {Event} open - Fires when the menu is opened.
@@ -37,7 +35,6 @@ export class List extends Base {
   @property({ type: Boolean, attribute: 'no-focus-control' })
   noFocusControl = false;
 
-  @query('[part="list"]') $list!: HTMLElement;
   @queryAssignedElements({ flatten: true }) slotItems!: Array<
     ListItem | HTMLElement
   >;
@@ -57,9 +54,9 @@ export class List extends Base {
     focusItem: (item: ListItem) => {
       item.focused = true;
       if (!this.noFocusControl) {
-        this.$list.ariaActiveDescendantElement = item;
+        this[internals].ariaActiveDescendantElement = item;
       }
-      scrollItemIntoView(this.$list, item, this._scrollPadding);
+      scrollItemIntoView(this, item, this._scrollPadding);
       this.dispatchEvent(
         new CustomEvent('item-focus', {
           detail: { item: item },
@@ -71,20 +68,24 @@ export class List extends Base {
     wrapNavigation: () => false,
   });
 
+  constructor() {
+    super();
+    if (!isServer) {
+      this[internals].role = 'listbox';
+      if (!this.hasAttribute('tabindex')) {
+        this.setAttribute('tabindex', '0');
+      }
+      this.addEventListener('keydown', (e) => this.#handleKeyDown(e));
+      this.addEventListener('focusin', () => this.#handleFocusIn());
+      this.addEventListener('focusout', () => this.#handleFocusOut());
+      this.addEventListener('pointerdown', (e) => this.#handlePointerDown(e));
+      this.addEventListener('click', (e) => this.#handleClick(e));
+      this.addEventListener('mouseover', (e) => this.#handleMouseOver(e));
+    }
+  }
+
   override render() {
-    return html`<div
-      part="list"
-      role="listbox"
-      tabindex="0"
-      @keydown=${this.#handleKeyDown}
-      @focusin=${this.#handleFocusIn}
-      @focusout=${this.#handleFocusOut}
-      @pointerdown=${this.#handlePointerDown}
-      @click=${this.#handleClick}
-      @mouseover=${this.#handleMouseOver}
-    >
-      ${this.renderItemSlot()}
-    </div>`;
+    return html` ${this.renderItemSlot()} `;
   }
 
   renderItemSlot() {
@@ -158,7 +159,7 @@ export class List extends Base {
 
   #handlePointerDown(event: PointerEvent) {
     event.preventDefault(); // This makes sure that the container is focused
-    this.$list.focus();
+    this.focus();
 
     const item = this.#getEventItem(event);
     if (!item || !this.listController.items.includes(item)) return;
@@ -167,7 +168,7 @@ export class List extends Base {
   }
 
   #handleClick(event: MouseEvent) {
-    this.$list.focus();
+    this.focus();
 
     const item = this.#getEventItem(event);
     if (!item || !this.listController.items.includes(item)) return;
