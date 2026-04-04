@@ -1,23 +1,14 @@
 :host {
-  display: contents;
-  min-width: 112px;
-}
-
-[part='list'] {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  height: inherit;
-  inset: auto;
-  max-height: inherit;
-  max-width: inherit;
-  min-width: inherit;
+  height: max-content;
+  min-width: 112px;
   outline: 0;
   overflow-y: auto;
   padding: 4px;
-  position: absolute;
+  position: relative;
   -webkit-user-select: none;
   user-select: none;
-  width: inherit;
 }
