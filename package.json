@@ -9,8 +9,8 @@
   "module": "./src/all.js",
   "exports": {
     ".": "./src/all.js",
-    "./m3/*": "./src/m3/*.js",
-    "./base/*": "./src/base/*.js"
+    "./base/*": "./src/base/*",
+    "./m3/*": "./src/m3/*"
   },
   "files": [
     "src/**/*.js",

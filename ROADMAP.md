@@ -16,7 +16,7 @@ This roadmap outlines the current and future goals for SEELE
 | Menu item     | WIP           |
 | Option        | WIP           |
 | Select        | WIP           |
-| Slider        | WIP           |
+| Slider        | Done          |
 | Toggle button | Done          |
 | Tooltip       | WIP           |
 
@@ -27,7 +27,7 @@ This roadmap outlines the current and future goals for SEELE
 | Autocomplete                  | WIP           | WIP   |
 | Button                        | Done          | Done  |
 | Button group                  |               |       |
-| FAB                           | Done          | WIP   |
+| FAB                           | Done          | Done  |
 | FAB menu                      |               |       |
 | Icon button                   | Done          | WIP   |
 | Segmented button              |               |       |
@@ -53,7 +53,7 @@ This roadmap outlines the current and future goals for SEELE
 | Progress indicator (circular) |               |       |
 | Progress indicator (linear)   |               |       |
 | Radio                         |               |       |
-| Ripple                        | Done          | WIP   |
+| Ripple                        | Done          | Done  |
 | Search                        |               |       |
 | Select                        | Done          | WIP   |
 | Slider                        | Done          | WIP   |
@@ -63,4 +63,5 @@ This roadmap outlines the current and future goals for SEELE
 | Tabs                          |               |       |
 | Text field                    | Done          | Done  |
 | Time picker                   |               |       |
+| Toolbar                       | WIP           | WIP   |
 | Tooltip                       | WIP           | WIP   |
