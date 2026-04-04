@@ -18,4 +18,5 @@ md-outlined-field {
   outline: none;
   padding: 0;
   width: 100%;
+  -webkit-tap-highlight-color: transparent;
 }
