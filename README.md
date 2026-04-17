@@ -63,14 +63,15 @@ variables in your project. You can find reference implementations in
 [vollowx/seele-docs](https://github.com/vollowx/seele-docs/) or the `dev` folder
 of this repository.
 
-## Browser Supporty
+## Browser Support
 
 SEELE relies on modern web standards like `ElementInternals`.
+However in 2026 you don't really need to worry about this.
 
-- **Chromium**: `>= 125.0`
-- **Firefox**: `>= 126.0`
+- Chromium-based ones: >= 125.0
+- Firefox-based ones: >= 126.0
 
-## Resources
+## Other Information
 
 - [Roadmap](./ROADMAP.md)
 - [Contributing](./CONTRIBUTING.md)
