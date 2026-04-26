@@ -1,14 +1,14 @@
-import { unlinkSync } from 'node:fs';
+import { unlinkSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { transform } from 'lightningcss';
-import { watch } from 'fs';
+import chokidar from 'chokidar';
 
 const projectroot = path.resolve(import.meta.dir, '..');
 const srcdir = path.join(projectroot, 'src');
 
 const args = Bun.argv.slice(2);
-const iswatch = args.some((arg) => arg === '-w' || arg === '--watch');
-const isminify = args.some((arg) => arg === '-m' || arg === '--minify');
+const isWatch = args.some((arg) => arg === '-w' || arg === '--watch');
+const isMinify = args.some((arg) => arg === '-m' || arg === '--minify');
 
 function getExportName(filepath: string): string {
   const filename = path.basename(filepath, '.css');
@@ -53,57 +53,53 @@ async function convertFile(cssPath: string, minify = false) {
     await Bun.write(outpath, ts);
     console.log(`converted: ${path.basename(cssPath)}`);
   } catch (err: any) {
-    console.error(`failed ${path.basename(cssPath)}: ${err.message}`);
+    console.error(`failed to convert ${path.basename(cssPath)}: ${err.message}`);
   }
 }
 
 async function run() {
-  const glob = new Bun.Glob('**/*-styles.css');
+  if (isWatch) {
+    console.log(`watching CSS file changes...`);
 
-  if (iswatch) {
-    console.log(`watching files in ${srcdir}...`);
+    const watcher = chokidar.watch('.', {
+      cwd: srcdir,
+      ignoreInitial: false,
+      usePolling: true,
+      ignored: (path, stats) =>
+        stats?.isFile() && !path.endsWith('-styles.css') ? true : false,
+      // Oh my dear TypeScript
+    });
 
-    // bun's native recursive watcher
-    const watcher = watch(
-      srcdir,
-      { recursive: true },
-      async (event, filename) => {
-        if (!filename || !filename.endsWith('-styles.css')) return;
-
-        const absolutepath = path.join(srcdir, filename);
-
-        if (event === 'rename') {
-          const exists = await Bun.file(absolutepath).exists();
-          if (!exists) {
-            const tspath = `${absolutepath}.ts`;
-            try {
-              unlinkSync(tspath);
-              console.log(`deleted: ${path.basename(tspath)}`);
-            } catch {}
-            return;
-          }
+    watcher
+      .on('add', (file) => convertFile(path.join(srcdir, file), isMinify))
+      .on('change', (file) => convertFile(path.join(srcdir, file), isMinify))
+      .on('unlink', (file) => {
+        const tspath = path.join(srcdir, `${file}.ts`);
+        if (existsSync(tspath)) {
+          unlinkSync(tspath);
+          console.log(`deleted: ${path.basename(tspath)}`);
         }
-        await convertFile(absolutepath, isminify);
-      }
-    );
-
-    // initial build
-    for await (const file of glob.scan(srcdir)) {
-      await convertFile(path.join(srcdir, file), isminify);
-    }
+      });
   } else {
+    const glob = new Bun.Glob('**/*-styles.css');
     const files = Array.from(glob.scanSync(srcdir));
+
     if (files.length === 0) {
-      console.log('no css files found');
+      console.log('no CSS file found');
       return;
     }
 
-    console.log(`processing ${files.length} files (minify: ${isminify})`);
-    await Promise.all(
-      files.map((f) => convertFile(path.join(srcdir, f), isminify))
+    console.log(
+      `converting ${files.length} CSS files (minify: ${isMinify})...`
     );
-    console.log('build complete');
+    await Promise.all(
+      files.map((f) => convertFile(path.join(srcdir, f), isMinify))
+    );
+    console.log('done');
   }
 }
 
-run().catch(() => process.exit(1));
+run().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
