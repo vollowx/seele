@@ -1,3 +1,6 @@
+@import '../src/m3/systems/base.css';
+@import '../src/m3/systems/defaults.css';
+
 :root[data-md-theme='light'] {
   --md-sys-color-background: #f8faf0;
   --md-sys-color-on-background: #191d16;
@@ -82,101 +85,9 @@
 
 :root {
   --_icon-font-config: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-
-  --md-sys-typography-family: sans-serif;
-
-  --md-sys-typography-display-large: 400 3.5625rem / 4rem
-    var(--md-sys-typography-family);
-  --md-sys-typography-display-medium: 400 2.8125rem / 3.5rem
-    var(--md-sys-typography-family);
-  --md-sys-typography-display-small: 400 2.25rem / 3rem
-    var(--md-sys-typography-family);
-  --md-sys-typography-headline-large: 400 2.5rem / 3.125rem
-    var(--md-sys-typography-family);
-  --md-sys-typography-headline-medium: 400 2.25rem / 2.75rem
-    var(--md-sys-typography-family);
-  --md-sys-typography-headline-small: 400 2rem / 2.5rem
-    var(--md-sys-typography-family);
-  --md-sys-typography-title-large: 400 1.375rem / 1.75rem
-    var(--md-sys-typography-family);
-  --md-sys-typography-title-medium: 500 1rem / 1.25rem
-    var(--md-sys-typography-family);
-  --md-sys-typography-title-small: 500 0.875rem / 1.125rem
-    var(--md-sys-typography-family);
-  --md-sys-typography-label-large: 500 0.875rem / 1.25rem
-    var(--md-sys-typography-family);
-  --md-sys-typography-label-medium: 500 0.75rem / 1rem
-    var(--md-sys-typography-family);
-  --md-sys-typography-label-small: 500 0.6875rem / 0.875rem
-    var(--md-sys-typography-family);
-  --md-sys-typography-body-large: 400 1rem / 1.5rem
-    var(--md-sys-typography-family);
-  --md-sys-typography-body-medium: 400 0.875rem / 1.25rem
-    var(--md-sys-typography-family);
-  --md-sys-typography-body-small: 400 0.75rem / 1rem
-    var(--md-sys-typography-family);
-
-  /* std: standard, exp: expressive, mot: motion */
-
-  --md-sys-motion-exp-spatial-fast: cubic-bezier(0.42, 1.67, 0.21, 0.9);
-  --md-sys-motion-exp-spatial-fast-duration: 350ms;
-  --md-sys-motion-exp-spatial-default: cubic-bezier(0.38, 1.21, 0.22, 1);
-  --md-sys-motion-exp-spatial-default-duration: 500ms;
-  --md-sys-motion-exp-spatial-slow: cubic-bezier(0.39, 1.29, 0.35, 0.98);
-  --md-sys-motion-exp-spatial-slow-duration: 650ms;
-
-  --md-sys-motion-exp-effects-fast: cubic-bezier(0.31, 0.94, 0.34, 1);
-  --md-sys-motion-exp-effects-fast-duration: 150ms;
-  --md-sys-motion-exp-effects-default: cubic-bezier(0.34, 0.8, 0.34, 1);
-  --md-sys-motion-exp-effects-default-duration: 200ms;
-  --md-sys-motion-exp-effects-slow: cubic-bezier(0.34, 0.88, 0.34, 1);
-  --md-sys-motion-exp-effects-slow-duration: 300ms;
-
-  --md-sys-motion-std-spatial-fast: cubic-bezier(0.27, 1.06, 0.18, 1);
-  --md-sys-motion-std-spatial-fast-duration: 350ms;
-  --md-sys-motion-std-spatial-default: cubic-bezier(0.27, 1.06, 0.18, 1);
-  --md-sys-motion-std-spatial-default-duration: 500ms;
-  --md-sys-motion-std-spatial-slow: cubic-bezier(0.27, 1.06, 0.18, 1);
-  --md-sys-motion-std-spatial-slow-duration: 750ms;
-
-  --md-sys-motion-std-effects-fast: cubic-bezier(0.31, 0.94, 0.34, 1);
-  --md-sys-motion-std-effects-fast-duration: 150ms;
-  --md-sys-motion-std-effects-default: cubic-bezier(0.34, 0.8, 0.34, 1);
-  --md-sys-motion-std-effects-default-duration: 200ms;
-  --md-sys-motion-std-effects-slow: cubic-bezier(0.34, 0.88, 0.34, 1);
-  --md-sys-motion-std-effects-slow-duration: 300ms;
-
-  --md-sys-elevation-level-0: 0;
-  --md-sys-elevation-level-1: 1;
-  --md-sys-elevation-level-2: 3;
-  --md-sys-elevation-level-3: 6;
-  --md-sys-elevation-level-4: 8;
-  --md-sys-elevation-level-5: 12;
-  --md-sys-elevation-shadow-1:
-    0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px rgba(0, 0, 0, 0.3);
-  --md-sys-elevation-shadow-2:
-    0px 2px 6px 2px rgba(0, 0, 0, 0.15), 0px 1px 2px rgba(0, 0, 0, 0.3);
-  --md-sys-elevation-shadow-3:
-    0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px rgba(0, 0, 0, 0.3);
-  --md-sys-elevation-shadow-4:
-    0px 6px 10px 4px rgba(0, 0, 0, 0.15), 0px 2px 3px rgba(0, 0, 0, 0.3);
-  --md-sys-elevation-shadow-5:
-    0px 8px 12px 6px rgba(0, 0, 0, 0.15), 0px 4px 4px rgba(0, 0, 0, 0.3);
-}
-body {
-  accent-color: var(--md-sys-color-primary);
-  background-color: var(--md-sys-color-background);
-  color: var(--md-sys-color-on-background);
-  font-family: var(--md-sys-typography-family);
-}
-::selection {
-  background-color: var(--md-sys-color-tertiary-container);
-  color: var(--md-sys-color-on-tertiary-container);
+  --md-sys-typography-family: 'Google Sans', sans-serif;
 }
 
-a {
-  color: var(--md-sys-color-primary);
-}
 a:not(:hover):not(:focus-visible) {
   text-decoration: none;
 }
@@ -254,9 +165,4 @@ md-icon {
   text-transform: none;
   white-space: nowrap;
   word-wrap: normal;
-}
-
-body {
-  padding: 16px;
-  box-sizing: border-box;
 }
