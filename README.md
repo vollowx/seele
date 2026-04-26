@@ -1,19 +1,20 @@
 # Standard Extensible Elements
 
-**SEELE** is a modern, lightweight and accessible
+SEELE (**S**tandard **E**xtensible **Ele**ments) is a extensible
 [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components)
-library. It provides a set of highly customizable UI components that follow the
-[Material Design 3](https://m3.material.io/) guidelines out of the box, while
-being designed for easy extension and restyling.
+library with a focus on accessibility and keyboard-control.
 
-Visit the [website of SEELE](https://seele.v9.nz/) for documentation and demos.
+It also provides styled components in the following design guideline(s):
+- [Material You Expressive](https://m3.material.io/)
+
+Documentations and demos are at [seele.projects.v9.nz](https://seele.projects.v9.nz/).
 
 ## Installation
 
 SEELE is published on [npm](https://www.npmjs.com/package/@vollowx/seele),
 install with your preferred package manager:
 
-```bash
+```sh
 npm install @vollowx/seele
 
 yarn add @vollowx/seele
@@ -21,18 +22,18 @@ yarn add @vollowx/seele
 bun add @vollowx/seele
 ```
 
-## Usage
+## Quickstart
 
 ### Importing
 
-You can import the entire library or individual components to keep your bundle size small.
+You can import the entire library or import as needed.
 
 ```javascript
 // Import all components
 import '@vollowx/seele';
 
 // Or import specific components (recommended)
-// They all follow such path :@/catagory/group/component.js
+// They all follow such path: @/catagory/group/component.js
 import '@vollowx/seele/m3/button/common-button.js';
 import '@vollowx/seele/m3/checkbox/checkbox.js';
 ```
@@ -75,4 +76,4 @@ However in 2026 you don't really need to worry about this.
 
 - [Roadmap](./ROADMAP.md)
 - [Contributing](./CONTRIBUTING.md)
-- [License](./LICENSE)
+- [License (Apache-2.0)](./LICENSE)
