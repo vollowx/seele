@@ -12,3 +12,8 @@
   -webkit-user-select: none;
   user-select: none;
 }
+
+:host([color='segmented']) ::slotted(md-list-item) {
+  /* TODO: This is not correctly defined in the guideline, but this looks fine */
+  --_background: var(--md-sys-color-surface-container);
+}

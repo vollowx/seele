@@ -1,4 +1,4 @@
-import { customElement } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 
 import { List } from '../../base/list.js';
 import { listStyles } from './list-styles.css.js';
@@ -19,6 +19,8 @@ export class M3List extends List {
   // override readonly _scrollPadding = 4;
 
   static override styles = [listStyles];
+
+  @property({ reflect: true }) color: 'standard' | 'segmented' = 'standard';
 }
 
 declare global {

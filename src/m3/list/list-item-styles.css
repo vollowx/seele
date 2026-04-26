@@ -1,6 +1,7 @@
 :host {
   --md-focus-ring-shape: 12px;
   --md-focus-ring-inward-offset: -3px;
+  background-color: var(--_background, transparent);
   border-radius: 4px;
   display: flex;
   outline: 0;
