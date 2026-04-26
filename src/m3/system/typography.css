@@ -1,0 +1,34 @@
+:root {
+  --md-sys-typography-family: sans-serif;
+
+  --md-sys-typography-display-large: 400 3.5625rem / 4rem
+    var(--md-sys-typography-family);
+  --md-sys-typography-display-medium: 400 2.8125rem / 3.5rem
+    var(--md-sys-typography-family);
+  --md-sys-typography-display-small: 400 2.25rem / 3rem
+    var(--md-sys-typography-family);
+  --md-sys-typography-headline-large: 400 2.5rem / 3.125rem
+    var(--md-sys-typography-family);
+  --md-sys-typography-headline-medium: 400 2.25rem / 2.75rem
+    var(--md-sys-typography-family);
+  --md-sys-typography-headline-small: 400 2rem / 2.5rem
+    var(--md-sys-typography-family);
+  --md-sys-typography-title-large: 400 1.375rem / 1.75rem
+    var(--md-sys-typography-family);
+  --md-sys-typography-title-medium: 500 1rem / 1.25rem
+    var(--md-sys-typography-family);
+  --md-sys-typography-title-small: 500 0.875rem / 1.125rem
+    var(--md-sys-typography-family);
+  --md-sys-typography-label-large: 500 0.875rem / 1.25rem
+    var(--md-sys-typography-family);
+  --md-sys-typography-label-medium: 500 0.75rem / 1rem
+    var(--md-sys-typography-family);
+  --md-sys-typography-label-small: 500 0.6875rem / 0.875rem
+    var(--md-sys-typography-family);
+  --md-sys-typography-body-large: 400 1rem / 1.5rem
+    var(--md-sys-typography-family);
+  --md-sys-typography-body-medium: 400 0.875rem / 1.25rem
+    var(--md-sys-typography-family);
+  --md-sys-typography-body-small: 400 0.75rem / 1rem
+    var(--md-sys-typography-family);
+}

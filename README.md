@@ -54,15 +54,22 @@ Once imported, the components can be used just like standard HTML elements.
 
 ### Theming
 
-SEELE components use CSS variables for styling.
+SEELE components use CSS variables for styling. To include the systems, add
+this to your style files.
 
-Currently, Material Design 3 token variables are not yet included in the source
-code.
+```css
+@import '@vollowx/seele/m3/systems/base.css';
+/* This includes basic system variables like motion system and typography system */
+@import '@vollowx/seele/m3/systems/defaults.css';
+/* (Optional) This includes basic styling for body, selection and links */
 
-To style the components correctly, you need to define the necessary CSS
-variables in your project. You can find reference implementations in
-[vollowx/seele-docs](https://github.com/vollowx/seele-docs/) or the `dev` folder
-of this repository.
+/*
+ * Note that there is no default color system since the way you implement theme
+ * switching and color changing varies.
+ *
+ * You can still find some references in dev/shared.css
+ */
+```
 
 ## Browser Support
 
