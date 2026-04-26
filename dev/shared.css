@@ -1,5 +1,5 @@
-@import '../src/m3/systems/base.css';
-@import '../src/m3/systems/defaults.css';
+@import '../src/m3/system/base.css';
+@import '../src/m3/system/defaults.css';
 
 :root[data-md-theme='light'] {
   --md-sys-color-background: #f8faf0;

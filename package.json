@@ -1,6 +1,6 @@
 {
   "name": "@vollowx/seele",
-  "version": "0.12.4",
+  "version": "0.12.5",
   "description": "A extensible Web Components library, with Material Design 3 components pre-provided.",
   "author": "vollowx",
   "license": "Apache-2.0",
