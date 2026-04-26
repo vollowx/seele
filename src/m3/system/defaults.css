@@ -2,7 +2,7 @@ body {
   accent-color: var(--md-sys-color-primary);
   background-color: var(--md-sys-color-background);
   color: var(--md-sys-color-on-background);
-  font: var(--md-sys-typography-body-large);
+  font-family: var(--md-sys-typography-family);
 }
 
 ::selection {
@@ -12,17 +12,4 @@ body {
 
 a {
   color: var(--md-sys-color-primary);
-}
-
-h1 {
-  font: var(--md-sys-typography-headline-medium);
-}
-h2 {
-  font: var(--md-sys-typography-headline-small);
-}
-h3 {
-  font: var(--md-sys-typography-title-large);
-}
-h4 {
-  font: var(--md-sys-typography-title-medium);
 }
