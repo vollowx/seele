@@ -88,7 +88,7 @@ these following web features might be used and require higher browser versions:
 - [anchor()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/anchor), Baseline 2026, C 125, F 147, will remove the dependency `floating-dom`
 - [`::view-*`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/::view-transition), Baseline 2025, C 111, F 144, will optimize some animations for menu, dialog, etc
 
-[^1] C = Chromium, F = Firefox.
+[^1]: C = Chromium, F = Firefox.
 
 ## Other Information
 
