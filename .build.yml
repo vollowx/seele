@@ -1,6 +1,22 @@
+image: archlinux
+packages:
+    - bun
+sources:
+    - https://git.sr.ht/~lucaz/seele
+triggers:
+    - action: email
+      condition: failure
+      to: "<vollowx@outlook.com>"
+tasks:
+    - setup: |
+             cd seele
+             bun install
+    - build: |
+             cd seele
+             bun run build
 submitter:
-  git.sr.ht:
-    enabled: true
-    allow-refs:
-      - refs/heads/main
-      - "refs/tags/*"
+    git.sr.ht:
+        enabled: true
+        allow-refs:
+            - refs/heads/main
+            - "refs/tags/*"
