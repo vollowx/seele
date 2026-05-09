@@ -1,6 +1,7 @@
 # Standard Extensible Elements
 
-[![NPM Package](https://img.shields.io/npm/v/%40vollowx%2Fseele)](https://www.npmjs.com/package/@vollowx/seele)
+[![npm package](https://img.shields.io/npm/v/%40vollowx%2Fseele)](https://www.npmjs.com/package/@vollowx/seele)
+[![builds.sr.ht status](https://builds.sr.ht/~lucaz/seele.svg)](https://builds.sr.ht/~lucaz/seele?)
 
 Seele (**S**tandard **E**xtensible **Ele**ments) is a extensible
 [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components)
