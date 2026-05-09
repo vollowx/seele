@@ -1,0 +1,6 @@
+submitter:
+  git.sr.ht:
+    enabled: true
+    allow-refs:
+      - refs/heads/main
+      - "refs/tags/*"
