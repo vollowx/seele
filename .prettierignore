@@ -1,3 +1,5 @@
 *.css.ts
-*.css.js
+*.js
+
+.build.yml
 src/all.ts

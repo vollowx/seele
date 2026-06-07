@@ -34,7 +34,7 @@ async function run() {
 
   if (!target) {
     const validKeys = Object.keys(registry).join(' | ');
-    console.log(`usage: bun scripts/cleanup.ts <${validKeys}>`);
+    console.log(`usage: bun scripts/clean.ts <${validKeys}>`);
     return;
   }
 
@@ -59,7 +59,7 @@ async function run() {
     }
   }
 
-  console.log(`cleanup finished. ${totalDeleted} files removed.`);
+  console.log(`cleaning finished. ${totalDeleted} files removed.`);
 }
 
 run().catch(() => process.exit(1));

@@ -53,7 +53,9 @@ async function convertFile(cssPath: string, minify = false) {
     await Bun.write(outpath, ts);
     console.log(`converted: ${path.basename(cssPath)}`);
   } catch (err: any) {
-    console.error(`failed to convert ${path.basename(cssPath)}: ${err.message}`);
+    console.error(
+      `failed to convert ${path.basename(cssPath)}: ${err.message}`
+    );
   }
 }
 

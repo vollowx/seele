@@ -3,7 +3,9 @@ import { InternalsAttachedInterface, internals } from './internals-attached.js';
 
 export declare class FocusDelegatedInterface {}
 
-export const FocusDelegated = <T extends Constructor<LitElement & InternalsAttachedInterface>>(
+export const FocusDelegated = <
+  T extends Constructor<LitElement & InternalsAttachedInterface>,
+>(
   superClass: T
 ) => {
   class FocusDelegatedElement extends superClass {

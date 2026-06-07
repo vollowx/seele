@@ -3,7 +3,8 @@
   animation-duration:
     calc(var(--md-focus-ring-duration, 600ms) * 0.25),
     calc(var(--md-focus-ring-duration, 600ms) * 0.75);
-  animation-timing-function: cubic-bezier(0.2, 0, 0, 1), cubic-bezier(0.2, 0, 0, 1);
+  animation-timing-function:
+    cubic-bezier(0.2, 0, 0, 1), cubic-bezier(0.2, 0, 0, 1);
   box-sizing: border-box;
   color: var(--md-focus-ring-color, var(--md-sys-color-secondary));
   display: none;
