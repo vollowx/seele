@@ -37,16 +37,6 @@ export class M3Checkbox extends Checkbox {
     `;
   }
   @property({ type: Boolean, reflect: true }) error = false;
-  @query('md-ripple') $ripple!: M3Ripple;
-
-  override connectedCallback() {
-    super.connectedCallback();
-    // TODO: Since Ripple is no longer rendered server-side, this might be unnecessary
-    // SSR'd <md-checkbox> components don't have their labels set up on time
-    this.updateComplete.then(() => {
-      this.$ripple.attach(this, true);
-    });
-  }
 }
 
 declare global {
