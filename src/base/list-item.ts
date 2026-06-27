@@ -21,6 +21,7 @@ export class ListItem extends FormAssociated(InternalsAttached(LitElement)) {
 
   override connectedCallback() {
     super.connectedCallback();
+    this.setAttribute('seele-base', 'option');
     this[internals].role = this._role;
     this.setAttribute('tabindex', '-1');
     this.#updateInternals();

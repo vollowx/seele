@@ -10,6 +10,7 @@ export class TabPanel extends InternalsAttached(LitElement) {
 
   override connectedCallback() {
     super.connectedCallback();
+    this.setAttribute('seele-base', 'tabpanel');
     this[internals].role = this._role;
     if (!this.id) this.id = genUniqueId('tabpanel');
   }

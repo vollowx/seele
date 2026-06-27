@@ -34,7 +34,6 @@ export type MenuItemFocusEvent = CustomEvent<ItemFocusDetail>;
  * @fires {MenuItemFocusEvent} item-focus - Fires when an item is focused
  */
 export class Menu extends Base {
-  readonly _possibleItemTags: string[] = [];
   readonly _durations = { show: 0, hide: 0 };
   readonly _scrollPadding: number = 0;
 
@@ -87,12 +86,11 @@ export class Menu extends Base {
 
   private readonly listController = new ListController<MenuItem>(this, {
     isItem: (item: HTMLElement): item is MenuItem =>
-      this._possibleItemTags.includes(item.tagName.toLowerCase()) &&
+      item.getAttribute('seele-base') === 'option' &&
       !item.hasAttribute('disabled') &&
       !item.hidden,
     getPossibleItems: () => this.slotItems,
     blurItem: (item: MenuItem) => {
-      console.log(item);
       item.focused = false;
     },
     focusItem: (item: MenuItem) => {

@@ -10,11 +10,6 @@ import { listStyles } from './list-styles.css.js';
  */
 @customElement('md-list')
 export class M3List extends List {
-  override readonly _possibleItemTags = [
-    'md-list-item',
-    'md-list-item-checkbox',
-    'md-list-item-radio',
-  ];
   // FIXME: Might cause a long list to scroll more than expected
   // override readonly _scrollPadding = 4;
 

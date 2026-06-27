@@ -14,12 +14,6 @@ import { menuStyles } from './menu-styles.css.js';
  */
 @customElement('md-menu')
 export class M3Menu extends Menu {
-  override readonly _possibleItemTags = [
-    'md-menu-item',
-    'md-menu-item-checkbox',
-    'md-menu-item-radio',
-    'md-option',
-  ];
   override readonly _durations = { show: 300, hide: 150 };
   // FIXME: Might cause a long list to scroll more than expected
   // override readonly _scrollPadding = 4;

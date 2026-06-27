@@ -3,6 +3,10 @@ import { property } from 'lit/decorators.js';
 import { InternalsAttached, internals } from './mixins/internals-attached.js';
 import { genUniqueId } from '../core/unique-id.js';
 
+/**
+ * TODO: disabled
+ * TODO: Material You Expressive styled component
+ */
 export class Tab extends InternalsAttached(LitElement) {
   @property({ type: Boolean, reflect: true }) selected = false;
   @property({ type: Boolean, reflect: true }) focused = false;
@@ -12,6 +16,7 @@ export class Tab extends InternalsAttached(LitElement) {
 
   override connectedCallback() {
     super.connectedCallback();
+    this.setAttribute('seele-base', 'tab');
     this[internals].role = this._role;
     if (!this.id) this.id = genUniqueId('tab');
     this.#updateInternals();

@@ -39,7 +39,7 @@ export class Tabs extends InternalsAttached(LitElement) {
     const root = this.getRootNode() as Document | ShadowRoot;
 
     this.$tabs.forEach(tab => {
-      const panel = root.querySelector(`md-tab-panel[value="${tab.value}"]`) as TabPanel;
+      const panel = root.querySelector(`[seele-base="tab"][value="${tab.value}"]`) as TabPanel;
       if (!panel) console.error('[seele] cannot find a matching panel for tab ', tab);
       // TODO: ariaLabelledByElements
       tab.setAttribute('aria-controls', panel.id);
@@ -88,12 +88,9 @@ export class Tabs extends InternalsAttached(LitElement) {
       event.stopPropagation();
 
       if (event.key !== 'Enter' && event.key !== ' ') {
-         if (this.switch === 'auto') {
-             this.#selectTab(tabs[nextIndex]);
-             tabs[nextIndex].focus();
-         } else {
-             this.#focusTab(tabs[nextIndex]);
-         }
+        this.#focusTab(tabs[nextIndex]);
+        if (this.switch === 'auto')
+          this.#selectTab(tabs[nextIndex]);
       }
     }
   };
@@ -103,6 +100,7 @@ export class Tabs extends InternalsAttached(LitElement) {
     const tab = target.closest('md-tab') as Tab;
 
     if (tab && this.$tabs.includes(tab)) {
+      this.#focusTab(tab);
       this.#selectTab(tab);
     }
   };
@@ -118,14 +116,12 @@ export class Tabs extends InternalsAttached(LitElement) {
 
   #selectTab(selectedTab: Tab) {
     this.selected = selectedTab.value;
+    const root = this.getRootNode() as Document | ShadowRoot;
+    const panels = Array.from(root.querySelectorAll('[seele-base="tabpanel"]')) as TabPanel[];
 
     this.$tabs.forEach(tab => {
       tab.selected = (tab === selectedTab);
     });
-
-    const root = this.getRootNode() as Document | ShadowRoot;
-    const panels = Array.from(root.querySelectorAll('md-tab-panel')) as TabPanel[];
-
     panels.forEach(panel => {
       if (panel.value && selectedTab.value) {
         panel.hidden = panel.value !== selectedTab.value;

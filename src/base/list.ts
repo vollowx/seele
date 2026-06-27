@@ -29,7 +29,6 @@ export type ListItemFocusEvent = CustomEvent<ItemFocusDetail>;
  * @fires {ListItemFocusEvent} item-focus - Fires when an item is focused
  */
 export class List extends Base {
-  readonly _possibleItemTags: string[] = [];
   readonly _scrollPadding: number = 0;
 
   @property({ type: Boolean, attribute: 'no-focus-control' })
@@ -44,7 +43,7 @@ export class List extends Base {
 
   private readonly listController = new ListController<ListItem>(this, {
     isItem: (item: HTMLElement): item is ListItem =>
-      this._possibleItemTags.includes(item.tagName.toLowerCase()) &&
+      item.getAttribute('seele-base') === 'option' &&
       !item.hasAttribute('disabled') &&
       !item.hidden,
     getPossibleItems: () => this.slotItems,
@@ -149,9 +148,7 @@ export class List extends Base {
 
   #handleMouseOver(event: MouseEvent) {
     setFocusVisible(false);
-    const item = (event.target as HTMLElement).closest(
-      this._possibleItemTags.join(',')
-    ) as ListItem;
+    const item = (event.target as HTMLElement).closest('[seele-base="option"]') as ListItem;
     if (item && this.listController.items.includes(item)) {
       this.listController._focusItem(item);
     }
@@ -186,8 +183,7 @@ export class List extends Base {
   }
 
   #getEventItem(event: Event) {
-    const selector = this._possibleItemTags.join(',');
-    return (event.target as HTMLElement).closest(selector) as ListItem;
+    return (event.target as HTMLElement).closest('[seele-base="option"]') as ListItem;
   }
 
   get currentIndex() {
