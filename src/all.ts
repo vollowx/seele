@@ -1,3 +1,5 @@
+// TODO: export core, base elements, mixins and controllers
+
 export { M3Autocomplete }      from './m3/autocomplete/autocomplete.js';
 export { M3Button }            from './m3/button/common-button.js';
 export { M3ButtonToggle }      from './m3/button/common-button-toggle.js';
@@ -18,6 +20,9 @@ export { MdOutlinedSelect }    from './m3/select/outlined-select.js';
 export { M3Option }            from './m3/select/option.js';
 export { M3Slider }            from './m3/slider/slider.js';
 export { M3Switch }            from './m3/switch/switch.js';
+export { M3Tabs }              from './m3/tab/tabs.js';
+export { M3Tab }               from './m3/tab/tab.js';
+export { M3TabPanel }          from './m3/tab/tab-panel.js';
 export { M3FilledTextField }   from './m3/text-field/filled-text-field.js';
 export { M3OutlinedTextField } from './m3/text-field/outlined-text-field.js';
 export { M3Toolbar }           from './m3/toolbar/toolbar.js';

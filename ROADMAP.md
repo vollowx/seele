@@ -17,7 +17,8 @@ This roadmap outlines the current and future goals for SEELE
 | Option        | WIP           |
 | Select        | WIP           |
 | Slider        | Done          |
-| Toggle button | Done          |
+| Tabs          | Done          |
+| Toggle button | WIP           |
 | Tooltip       | WIP           |
 
 ## Material Design 3 (m3)
@@ -60,7 +61,7 @@ This roadmap outlines the current and future goals for SEELE
 | Snackbar                      |               |       |
 | Switch                        | Done          | Done  |
 | Top app bar                   |               |       |
-| Tabs                          |               |       |
+| Tabs                          | WIP           | WIP   |
 | Text field                    | Done          | Done  |
 | Time picker                   |               |       |
 | Toolbar                       | WIP           | WIP   |
