@@ -1,5 +1,4 @@
-import { customElement } from 'lit/decorators.js';
-
+import { customElement } from '../../core/decorators.js';
 import { Tooltip } from '../../base/tooltip.js';
 
 import { tooltipStyles } from './tooltip-styles.css.js';
@@ -7,7 +6,7 @@ import { tooltipStyles } from './tooltip-styles.css.js';
 /**
  * @tag md-tooltip
  */
-@customElement('md-tooltip')
+@customElement('md-tooltip', false)
 export class M3Tooltip extends Tooltip {
   override readonly _durations = { show: 150, hide: 150 };
 
