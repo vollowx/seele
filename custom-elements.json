@@ -1,5 +1,3567 @@
 {
   "schemaVersion": "1.0.0",
   "readme": "",
-  "modules": []
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/autocomplete/autocomplete.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "TODO: Make base Autocomplete\nTODO: Check if manually dispatching input/change events on input is necessary",
+          "name": "M3Autocomplete",
+          "members": [
+            {
+              "kind": "method",
+              "name": "renderMenu"
+            }
+          ],
+          "superclass": {
+            "name": "Autocomplete",
+            "module": "/src/base/autocomplete.js"
+          },
+          "tagName": "md-autocomplete",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Autocomplete",
+          "declaration": {
+            "name": "M3Autocomplete",
+            "module": "src/m3/autocomplete/autocomplete.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-autocomplete",
+          "declaration": {
+            "name": "M3Autocomplete",
+            "module": "src/m3/autocomplete/autocomplete.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/button/common-button-toggle.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3ButtonToggle",
+          "cssParts": [
+            {
+              "name": "label"
+            },
+            {
+              "description": "checked",
+              "name": "label"
+            },
+            {
+              "name": "icon"
+            },
+            {
+              "description": "checked",
+              "name": "icon"
+            }
+          ],
+          "slots": [
+            {
+              "description": "label",
+              "name": ""
+            },
+            {
+              "description": "leading icon",
+              "name": "icon"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'"
+              },
+              "default": "'small'",
+              "attribute": "size",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "shape",
+              "type": {
+                "text": "'rounded' | 'square'"
+              },
+              "default": "'rounded'",
+              "attribute": "shape",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "'primary' | 'secondary' | 'tertiary'"
+              },
+              "default": "'primary'",
+              "attribute": "color",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'filled' | 'tonal' | 'elevated' | 'outlined' | 'text'"
+              },
+              "default": "'filled'",
+              "attribute": "variant",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "trailingIcon",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to show the icon at the end of the button.",
+              "attribute": "trailing-icon",
+              "reflects": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "size",
+              "type": {
+                "text": "'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'"
+              },
+              "default": "'small'",
+              "fieldName": "size"
+            },
+            {
+              "name": "shape",
+              "type": {
+                "text": "'rounded' | 'square'"
+              },
+              "default": "'rounded'",
+              "fieldName": "shape"
+            },
+            {
+              "name": "color",
+              "type": {
+                "text": "'primary' | 'secondary' | 'tertiary'"
+              },
+              "default": "'primary'",
+              "fieldName": "color"
+            },
+            {
+              "name": "variant",
+              "type": {
+                "text": "'filled' | 'tonal' | 'elevated' | 'outlined' | 'text'"
+              },
+              "default": "'filled'",
+              "fieldName": "variant"
+            },
+            {
+              "name": "trailing-icon",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to show the icon at the end of the button.",
+              "fieldName": "trailingIcon"
+            }
+          ],
+          "superclass": {
+            "name": "ToggleButton",
+            "module": "/src/base/toggle-button.js"
+          },
+          "tagName": "md-button-toggle",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3ButtonToggle",
+          "declaration": {
+            "name": "M3ButtonToggle",
+            "module": "src/m3/button/common-button-toggle.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-button-toggle",
+          "declaration": {
+            "name": "M3ButtonToggle",
+            "module": "src/m3/button/common-button-toggle.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/button/common-button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Button",
+          "cssParts": [
+            {
+              "name": "label"
+            },
+            {
+              "name": "icon"
+            }
+          ],
+          "slots": [
+            {
+              "description": "label",
+              "name": ""
+            },
+            {
+              "description": "leading icon",
+              "name": "icon"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'"
+              },
+              "default": "'small'",
+              "attribute": "size",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "shape",
+              "type": {
+                "text": "'rounded' | 'square'"
+              },
+              "default": "'rounded'",
+              "attribute": "shape",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "'primary' | 'secondary' | 'tertiary'"
+              },
+              "default": "'primary'",
+              "attribute": "color",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'filled' | 'tonal' | 'elevated' | 'outlined' | 'text'"
+              },
+              "default": "'filled'",
+              "attribute": "variant",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "trailingIcon",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to show the icon at the end of the button.",
+              "attribute": "trailing-icon",
+              "reflects": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "size",
+              "type": {
+                "text": "'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'"
+              },
+              "default": "'small'",
+              "fieldName": "size"
+            },
+            {
+              "name": "shape",
+              "type": {
+                "text": "'rounded' | 'square'"
+              },
+              "default": "'rounded'",
+              "fieldName": "shape"
+            },
+            {
+              "name": "color",
+              "type": {
+                "text": "'primary' | 'secondary' | 'tertiary'"
+              },
+              "default": "'primary'",
+              "fieldName": "color"
+            },
+            {
+              "name": "variant",
+              "type": {
+                "text": "'filled' | 'tonal' | 'elevated' | 'outlined' | 'text'"
+              },
+              "default": "'filled'",
+              "fieldName": "variant"
+            },
+            {
+              "name": "trailing-icon",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to show the icon at the end of the button.",
+              "fieldName": "trailingIcon"
+            }
+          ],
+          "superclass": {
+            "name": "Button",
+            "module": "/src/base/button.js"
+          },
+          "tagName": "md-button",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Button",
+          "declaration": {
+            "name": "M3Button",
+            "module": "src/m3/button/common-button.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-button",
+          "declaration": {
+            "name": "M3Button",
+            "module": "src/m3/button/common-button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/button/icon-button-toggle.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3IconButtonToggle",
+          "cssParts": [
+            {
+              "name": "icon"
+            }
+          ],
+          "slots": [
+            {
+              "description": "icon",
+              "name": ""
+            },
+            {
+              "description": "icon when checked",
+              "name": "checked"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'"
+              },
+              "default": "'small'",
+              "attribute": "size",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "'primary' | 'secondary' | 'tertiary'"
+              },
+              "default": "'primary'",
+              "attribute": "color",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'text' | 'filled' | 'tonal' | 'outlined'"
+              },
+              "default": "'text'",
+              "attribute": "variant",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "'standard' | 'narrow' | 'wide'"
+              },
+              "default": "'standard'",
+              "attribute": "width",
+              "reflects": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "size",
+              "type": {
+                "text": "'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'"
+              },
+              "default": "'small'",
+              "fieldName": "size"
+            },
+            {
+              "name": "color",
+              "type": {
+                "text": "'primary' | 'secondary' | 'tertiary'"
+              },
+              "default": "'primary'",
+              "fieldName": "color"
+            },
+            {
+              "name": "variant",
+              "type": {
+                "text": "'text' | 'filled' | 'tonal' | 'outlined'"
+              },
+              "default": "'text'",
+              "fieldName": "variant"
+            },
+            {
+              "name": "width",
+              "type": {
+                "text": "'standard' | 'narrow' | 'wide'"
+              },
+              "default": "'standard'",
+              "fieldName": "width"
+            }
+          ],
+          "superclass": {
+            "name": "ToggleButton",
+            "module": "/src/base/toggle-button.js"
+          },
+          "tagName": "md-icon-button-toggle",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3IconButtonToggle",
+          "declaration": {
+            "name": "M3IconButtonToggle",
+            "module": "src/m3/button/icon-button-toggle.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-icon-button-toggle",
+          "declaration": {
+            "name": "M3IconButtonToggle",
+            "module": "src/m3/button/icon-button-toggle.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/button/icon-button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3IconButton",
+          "cssParts": [
+            {
+              "name": "icon"
+            }
+          ],
+          "slots": [
+            {
+              "description": "icon",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'"
+              },
+              "default": "'small'",
+              "attribute": "size",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "'primary' | 'secondary' | 'tertiary'"
+              },
+              "default": "'primary'",
+              "attribute": "color",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "'text' | 'filled' | 'tonal' | 'outlined'"
+              },
+              "default": "'text'",
+              "attribute": "variant",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "'standard' | 'narrow' | 'wide'"
+              },
+              "default": "'standard'",
+              "attribute": "width",
+              "reflects": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "size",
+              "type": {
+                "text": "'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'"
+              },
+              "default": "'small'",
+              "fieldName": "size"
+            },
+            {
+              "name": "color",
+              "type": {
+                "text": "'primary' | 'secondary' | 'tertiary'"
+              },
+              "default": "'primary'",
+              "fieldName": "color"
+            },
+            {
+              "name": "variant",
+              "type": {
+                "text": "'text' | 'filled' | 'tonal' | 'outlined'"
+              },
+              "default": "'text'",
+              "fieldName": "variant"
+            },
+            {
+              "name": "width",
+              "type": {
+                "text": "'standard' | 'narrow' | 'wide'"
+              },
+              "default": "'standard'",
+              "fieldName": "width"
+            }
+          ],
+          "superclass": {
+            "name": "Button",
+            "module": "/src/base/button.js"
+          },
+          "tagName": "md-icon-button",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3IconButton",
+          "declaration": {
+            "name": "M3IconButton",
+            "module": "src/m3/button/icon-button.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-icon-button",
+          "declaration": {
+            "name": "M3IconButton",
+            "module": "src/m3/button/icon-button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/checkbox/checkbox.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Checkbox",
+          "cssParts": [
+            {
+              "name": "icon"
+            },
+            {
+              "name": "mark"
+            },
+            {
+              "name": "mark-short"
+            },
+            {
+              "name": "mark-long"
+            }
+          ],
+          "members": [
+            {
+              "kind": "method",
+              "name": "renderIcon"
+            },
+            {
+              "kind": "field",
+              "name": "error",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "error",
+              "reflects": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "error",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "error"
+            }
+          ],
+          "superclass": {
+            "name": "Checkbox",
+            "module": "/src/base/checkbox.js"
+          },
+          "tagName": "md-checkbox",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Checkbox",
+          "declaration": {
+            "name": "M3Checkbox",
+            "module": "src/m3/checkbox/checkbox.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-checkbox",
+          "declaration": {
+            "name": "M3Checkbox",
+            "module": "src/m3/checkbox/checkbox.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/divider/divider.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Divider",
+          "members": [
+            {
+              "kind": "field",
+              "name": "vertical",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "vertical"
+            },
+            {
+              "kind": "field",
+              "name": "inset",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "inset"
+            },
+            {
+              "kind": "field",
+              "name": "insetStart",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "inset-start"
+            },
+            {
+              "kind": "field",
+              "name": "insetEnd",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "inset-end"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "vertical",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "vertical"
+            },
+            {
+              "name": "inset",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "inset"
+            },
+            {
+              "name": "inset-start",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "insetStart"
+            },
+            {
+              "name": "inset-end",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "insetEnd"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "md-divider",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Divider",
+          "declaration": {
+            "name": "M3Divider",
+            "module": "src/m3/divider/divider.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-divider",
+          "declaration": {
+            "name": "M3Divider",
+            "module": "src/m3/divider/divider.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/fab/fab.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Fab",
+          "cssParts": [
+            {
+              "name": "icon"
+            },
+            {
+              "name": "label"
+            }
+          ],
+          "slots": [
+            {
+              "description": "icon",
+              "name": ""
+            },
+            {
+              "description": "label",
+              "name": "label"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "'default' | 'medium' | 'large'"
+              },
+              "default": "'default'",
+              "attribute": "size",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "| 'surface'\n    | 'primary-container'\n    | 'secondary-container'\n    | 'tertiary-container'\n    | 'primary'\n    | 'secondary'\n    | 'tertiary'"
+              },
+              "default": "'primary'",
+              "attribute": "color",
+              "reflects": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "size",
+              "type": {
+                "text": "'default' | 'medium' | 'large'"
+              },
+              "default": "'default'",
+              "fieldName": "size"
+            },
+            {
+              "name": "color",
+              "type": {
+                "text": "| 'surface'\n    | 'primary-container'\n    | 'secondary-container'\n    | 'tertiary-container'\n    | 'primary'\n    | 'secondary'\n    | 'tertiary'"
+              },
+              "default": "'primary'",
+              "fieldName": "color"
+            }
+          ],
+          "superclass": {
+            "name": "Button",
+            "module": "/src/base/button.js"
+          },
+          "tagName": "md-fab",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Fab",
+          "declaration": {
+            "name": "M3Fab",
+            "module": "src/m3/fab/fab.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-fab",
+          "declaration": {
+            "name": "M3Fab",
+            "module": "src/m3/fab/fab.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/field/field.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Field",
+          "members": [
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "attribute": "label",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "supportingText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "attribute": "supportingText",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "disabled",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "error",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "error",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "focused",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "focused",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "populated",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "populated",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "hasLabel",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "hasLabel",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "hasStart",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "hasEnd",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "method",
+              "name": "renderContainerContent",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "TemplateResult"
+                }
+              },
+              "description": "Should be implemented by subclasses."
+            },
+            {
+              "kind": "method",
+              "name": "renderSupportingText",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "renderStart",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "renderEnd",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "handleSlotChange",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "Event"
+              },
+              "description": "Fired when the selected value has changed.",
+              "name": "change"
+            },
+            {
+              "type": {
+                "text": "Event"
+              },
+              "description": "Fired when the selected value has changed.",
+              "name": "input"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "fieldName": "label"
+            },
+            {
+              "name": "supportingText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "fieldName": "supportingText"
+            },
+            {
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "disabled"
+            },
+            {
+              "name": "error",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "error"
+            },
+            {
+              "name": "focused",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "focused"
+            },
+            {
+              "name": "populated",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "populated"
+            },
+            {
+              "name": "hasLabel",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "hasLabel"
+            }
+          ],
+          "superclass": {
+            "name": "Field",
+            "module": "/src/base/field.js"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Field",
+          "declaration": {
+            "name": "M3Field",
+            "module": "src/m3/field/field.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/field/filled-field.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3FilledField",
+          "members": [
+            {
+              "kind": "method",
+              "name": "renderContainerContent",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "TemplateResult"
+                }
+              },
+              "description": "Should be implemented by subclasses.",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "attribute": "label",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "supportingText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "attribute": "supportingText",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "disabled",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "error",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "error",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "focused",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "focused",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "populated",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "populated",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "hasLabel",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "hasLabel",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "hasStart",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "hasEnd",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderSupportingText",
+              "privacy": "protected",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderStart",
+              "privacy": "protected",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderEnd",
+              "privacy": "protected",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "handleSlotChange",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "M3Field",
+            "module": "/src/m3/field/field.js"
+          },
+          "tagName": "md-filled-field",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "fieldName": "label",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "name": "supportingText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "fieldName": "supportingText",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "disabled",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "name": "error",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "error",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "name": "focused",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "focused",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "name": "populated",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "populated",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "name": "hasLabel",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "hasLabel",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "Event"
+              },
+              "description": "Fired when the selected value has changed.",
+              "name": "change",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "type": {
+                "text": "Event"
+              },
+              "description": "Fired when the selected value has changed.",
+              "name": "input",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3FilledField",
+          "declaration": {
+            "name": "M3FilledField",
+            "module": "src/m3/field/filled-field.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-filled-field",
+          "declaration": {
+            "name": "M3FilledField",
+            "module": "src/m3/field/filled-field.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/field/outlined-field.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3OutlinedField",
+          "members": [
+            {
+              "kind": "method",
+              "name": "renderContainerContent",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "TemplateResult"
+                }
+              },
+              "description": "Should be implemented by subclasses.",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderOutline",
+              "privacy": "protected"
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "attribute": "label",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "supportingText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "attribute": "supportingText",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "disabled",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "error",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "error",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "focused",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "focused",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "populated",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "populated",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "hasLabel",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "hasLabel",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "hasStart",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "hasEnd",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderSupportingText",
+              "privacy": "protected",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderStart",
+              "privacy": "protected",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderEnd",
+              "privacy": "protected",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "handleSlotChange",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "M3Field",
+            "module": "/src/m3/field/field.js"
+          },
+          "tagName": "md-outlined-field",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "fieldName": "label",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "name": "supportingText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "fieldName": "supportingText",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "disabled",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "name": "error",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "error",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "name": "focused",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "focused",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "name": "populated",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "populated",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "name": "hasLabel",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "hasLabel",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "Event"
+              },
+              "description": "Fired when the selected value has changed.",
+              "name": "change",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            },
+            {
+              "type": {
+                "text": "Event"
+              },
+              "description": "Fired when the selected value has changed.",
+              "name": "input",
+              "inheritedFrom": {
+                "name": "M3Field",
+                "module": "src/m3/field/field.ts"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3OutlinedField",
+          "declaration": {
+            "name": "M3OutlinedField",
+            "module": "src/m3/field/outlined-field.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-outlined-field",
+          "declaration": {
+            "name": "M3OutlinedField",
+            "module": "src/m3/field/outlined-field.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/focus-ring/focus-ring.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3FocusRing",
+          "cssProperties": [
+            {
+              "name": "--md-focus-ring-active-width"
+            },
+            {
+              "name": "--md-focus-ring-color"
+            },
+            {
+              "name": "--md-focus-ring-duration"
+            },
+            {
+              "name": "--md-focus-ring-inward-offset"
+            },
+            {
+              "name": "--md-focus-ring-outward-offset"
+            },
+            {
+              "name": "--md-focus-ring-shape"
+            },
+            {
+              "name": "--md-focus-ring-shape-end-end"
+            },
+            {
+              "name": "--md-focus-ring-shape-end-start"
+            },
+            {
+              "name": "--md-focus-ring-shape-start-end"
+            },
+            {
+              "name": "--md-focus-ring-shape-start-start"
+            },
+            {
+              "name": "--md-focus-ring-width"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "inward",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "inward",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "#boundFocusIn",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#boundFocusOut",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#boundPointerDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#handleFocusIn",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#handleFocusOut",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#handlePointerDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "visualFocus"
+            },
+            {
+              "kind": "method",
+              "name": "visualBlur"
+            },
+            {
+              "kind": "method",
+              "name": "handleControlChange",
+              "parameters": [
+                {
+                  "name": "prev",
+                  "default": "null",
+                  "type": {
+                    "text": "HTMLElement | null"
+                  }
+                },
+                {
+                  "name": "next",
+                  "default": "null",
+                  "type": {
+                    "text": "HTMLElement | null"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "ariaHidden",
+              "type": {
+                "text": "string"
+              },
+              "default": "'true'"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "inward",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "inward"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "Attachable",
+              "module": "/src/base/mixins/attachable.js"
+            },
+            {
+              "name": "InternalsAttached",
+              "module": "/src/base/mixins/internals-attached.js"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "md-focus-ring",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3FocusRing",
+          "declaration": {
+            "name": "M3FocusRing",
+            "module": "src/m3/focus-ring/focus-ring.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-focus-ring",
+          "declaration": {
+            "name": "M3FocusRing",
+            "module": "src/m3/focus-ring/focus-ring.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/item/item.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Item",
+          "cssParts": [
+            {
+              "name": "container"
+            },
+            {
+              "name": "start"
+            },
+            {
+              "name": "text"
+            },
+            {
+              "name": "overline"
+            },
+            {
+              "name": "headline"
+            },
+            {
+              "name": "supporting-text"
+            },
+            {
+              "name": "trailing-supporting-text"
+            },
+            {
+              "name": "end"
+            }
+          ],
+          "slots": [
+            {
+              "description": "container element",
+              "name": "container"
+            },
+            {
+              "description": "start content",
+              "name": "start"
+            },
+            {
+              "description": "overline text",
+              "name": "overline"
+            },
+            {
+              "description": "headline text",
+              "name": "headline"
+            },
+            {
+              "description": "supporting text",
+              "name": "supporting-text"
+            },
+            {
+              "description": "trailing supporting text",
+              "name": "trailing-supporting-text"
+            },
+            {
+              "description": "end content",
+              "name": "end"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "multiline",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "multiline",
+              "reflects": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "multiline",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "multiline"
+            }
+          ],
+          "superclass": {
+            "name": "Item",
+            "module": "/src/base/item.js"
+          },
+          "tagName": "md-item",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Item",
+          "declaration": {
+            "name": "M3Item",
+            "module": "src/m3/item/item.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-item",
+          "declaration": {
+            "name": "M3Item",
+            "module": "src/m3/item/item.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/list/list-item.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3ListItem",
+          "slots": [
+            {
+              "description": "contents in md-item",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "ripple",
+              "type": {
+                "text": "M3Ripple"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "focusRing",
+              "type": {
+                "text": "M3FocusRing"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "ListItem",
+            "module": "/src/base/list-item.js"
+          },
+          "tagName": "md-list-item",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3ListItem",
+          "declaration": {
+            "name": "M3ListItem",
+            "module": "src/m3/list/list-item.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-list-item",
+          "declaration": {
+            "name": "M3ListItem",
+            "module": "src/m3/list/list-item.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/list/list.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3List",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_possibleItemTags",
+              "type": {
+                "text": "array"
+              },
+              "readonly": true,
+              "default": "[ 'md-list-item', 'md-list-item-checkbox', 'md-list-item-radio', ]"
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "'standard' | 'segmented'"
+              },
+              "default": "'standard'",
+              "attribute": "color",
+              "reflects": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "color",
+              "type": {
+                "text": "'standard' | 'segmented'"
+              },
+              "default": "'standard'",
+              "fieldName": "color"
+            }
+          ],
+          "superclass": {
+            "name": "List",
+            "module": "/src/base/list.js"
+          },
+          "tagName": "md-list",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3List",
+          "declaration": {
+            "name": "M3List",
+            "module": "src/m3/list/list.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-list",
+          "declaration": {
+            "name": "M3List",
+            "module": "src/m3/list/list.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/menu/menu-item.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3MenuItem",
+          "slots": [
+            {
+              "description": "contents in md-item",
+              "name": "",
+              "inheritedFrom": {
+                "name": "M3ListItem",
+                "module": "src/m3/list/list-item.ts"
+              }
+            }
+          ],
+          "mixins": [
+            {
+              "name": "MenuItemMixin",
+              "module": "/src/base/menu-item.js"
+            }
+          ],
+          "superclass": {
+            "name": "M3ListItem",
+            "module": "/src/m3/list/list-item.js"
+          },
+          "tagName": "md-menu-item",
+          "customElement": true,
+          "members": [
+            {
+              "kind": "field",
+              "name": "ripple",
+              "type": {
+                "text": "M3Ripple"
+              },
+              "inheritedFrom": {
+                "name": "M3ListItem",
+                "module": "src/m3/list/list-item.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "focusRing",
+              "type": {
+                "text": "M3FocusRing"
+              },
+              "inheritedFrom": {
+                "name": "M3ListItem",
+                "module": "src/m3/list/list-item.ts"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3MenuItem",
+          "declaration": {
+            "name": "M3MenuItem",
+            "module": "src/m3/menu/menu-item.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-menu-item",
+          "declaration": {
+            "name": "M3MenuItem",
+            "module": "src/m3/menu/menu-item.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/menu/menu.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Menu",
+          "cssParts": [
+            {
+              "name": "menu-surface"
+            },
+            {
+              "name": "list"
+            }
+          ],
+          "slots": [
+            {
+              "description": "menu items",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "_possibleItemTags",
+              "type": {
+                "text": "array"
+              },
+              "readonly": true,
+              "default": "[ 'md-menu-item', 'md-menu-item-checkbox', 'md-menu-item-radio', 'md-option', ]"
+            },
+            {
+              "kind": "field",
+              "name": "_durations",
+              "type": {
+                "text": "object"
+              },
+              "readonly": true,
+              "default": "{ show: 300, hide: 150 }"
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "'standard' | 'vibrant'"
+              },
+              "default": "'standard'",
+              "attribute": "color",
+              "reflects": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "color",
+              "type": {
+                "text": "'standard' | 'vibrant'"
+              },
+              "default": "'standard'",
+              "fieldName": "color"
+            }
+          ],
+          "superclass": {
+            "name": "Menu",
+            "module": "/src/base/menu.js"
+          },
+          "tagName": "md-menu",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Menu",
+          "declaration": {
+            "name": "M3Menu",
+            "module": "src/m3/menu/menu.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-menu",
+          "declaration": {
+            "name": "M3Menu",
+            "module": "src/m3/menu/menu.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/ripple/ripple.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Ripple",
+          "cssProperties": [
+            {
+              "name": "--md-ripple-color"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "clickBehavior",
+              "type": {
+                "text": "'always' | 'none'"
+              },
+              "default": "'always'",
+              "attribute": "clickBehavior"
+            },
+            {
+              "kind": "field",
+              "name": "enterBehavior",
+              "type": {
+                "text": "'always' | 'none'"
+              },
+              "default": "'always'",
+              "attribute": "enterBehavior"
+            },
+            {
+              "kind": "field",
+              "name": "spaceBehavior",
+              "type": {
+                "text": "'always' | 'once' | 'none'"
+              },
+              "default": "'once'",
+              "attribute": "spaceBehavior"
+            },
+            {
+              "kind": "field",
+              "name": "$ripples",
+              "type": {
+                "text": "HTMLSpanElement[]"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "#spaceKeyDown",
+              "privacy": "private",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "#pointerDown",
+              "privacy": "private",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "#lastTime",
+              "privacy": "private",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "handleKeyDown"
+            },
+            {
+              "kind": "field",
+              "name": "handleKeyUp"
+            },
+            {
+              "kind": "field",
+              "name": "handlePointerEnter"
+            },
+            {
+              "kind": "field",
+              "name": "handlePointerLeave"
+            },
+            {
+              "kind": "field",
+              "name": "handlePointerDown"
+            },
+            {
+              "kind": "field",
+              "name": "handlePointerUp"
+            },
+            {
+              "kind": "method",
+              "name": "handleControlChange",
+              "parameters": [
+                {
+                  "name": "prev",
+                  "default": "null",
+                  "type": {
+                    "text": "HTMLElement | null"
+                  }
+                },
+                {
+                  "name": "next",
+                  "default": "null",
+                  "type": {
+                    "text": "HTMLElement | HTMLInputElement | null"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "calculateRipple",
+              "parameters": [
+                {
+                  "name": "e",
+                  "default": "null",
+                  "type": {
+                    "text": "MouseEvent | null"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addRipple",
+              "parameters": [
+                {
+                  "name": "e",
+                  "default": "null",
+                  "type": {
+                    "text": "MouseEvent | null"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeRipple",
+              "parameters": [
+                {
+                  "name": "ripple",
+                  "type": {
+                    "text": "HTMLSpanElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "removeRippleAll"
+            },
+            {
+              "kind": "field",
+              "name": "ariaHidden",
+              "type": {
+                "text": "string"
+              },
+              "default": "'true'"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "clickBehavior",
+              "type": {
+                "text": "'always' | 'none'"
+              },
+              "default": "'always'",
+              "fieldName": "clickBehavior"
+            },
+            {
+              "name": "enterBehavior",
+              "type": {
+                "text": "'always' | 'none'"
+              },
+              "default": "'always'",
+              "fieldName": "enterBehavior"
+            },
+            {
+              "name": "spaceBehavior",
+              "type": {
+                "text": "'always' | 'once' | 'none'"
+              },
+              "default": "'once'",
+              "fieldName": "spaceBehavior"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "Attachable",
+              "module": "/src/base/mixins/attachable.js"
+            },
+            {
+              "name": "InternalsAttached",
+              "module": "/src/base/mixins/internals-attached.js"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "md-ripple",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Ripple",
+          "declaration": {
+            "name": "M3Ripple",
+            "module": "src/m3/ripple/ripple.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-ripple",
+          "declaration": {
+            "name": "M3Ripple",
+            "module": "src/m3/ripple/ripple.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/select/filled-select.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MdFilledSelect",
+          "members": [
+            {
+              "kind": "method",
+              "name": "renderField",
+              "privacy": "protected"
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "attribute": "label",
+              "inheritedFrom": {
+                "name": "M3Select",
+                "module": "src/m3/select/select.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "supportingText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "attribute": "supportingText",
+              "inheritedFrom": {
+                "name": "M3Select",
+                "module": "src/m3/select/select.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "focused",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "protected",
+              "default": "false",
+              "inheritedFrom": {
+                "name": "M3Select",
+                "module": "src/m3/select/select.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "field",
+              "type": {
+                "text": "M3Field"
+              },
+              "privacy": "protected",
+              "inheritedFrom": {
+                "name": "M3Select",
+                "module": "src/m3/select/select.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderMenu",
+              "privacy": "protected",
+              "inheritedFrom": {
+                "name": "M3Select",
+                "module": "src/m3/select/select.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "M3Select",
+            "module": "/src/m3/select/select.js"
+          },
+          "tagName": "md-filled-select",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "fieldName": "label",
+              "inheritedFrom": {
+                "name": "M3Select",
+                "module": "src/m3/select/select.ts"
+              }
+            },
+            {
+              "name": "supportingText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "fieldName": "supportingText",
+              "inheritedFrom": {
+                "name": "M3Select",
+                "module": "src/m3/select/select.ts"
+              }
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "Event"
+              },
+              "description": "Fired when the selected value has changed.",
+              "name": "change",
+              "inheritedFrom": {
+                "name": "M3Select",
+                "module": "src/m3/select/select.ts"
+              }
+            },
+            {
+              "type": {
+                "text": "Event"
+              },
+              "description": "Fired when the selected value has changed.",
+              "name": "input",
+              "inheritedFrom": {
+                "name": "M3Select",
+                "module": "src/m3/select/select.ts"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MdFilledSelect",
+          "declaration": {
+            "name": "MdFilledSelect",
+            "module": "src/m3/select/filled-select.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-filled-select",
+          "declaration": {
+            "name": "MdFilledSelect",
+            "module": "src/m3/select/filled-select.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/select/option.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Option",
+          "slots": [
+            {
+              "description": "contents in md-menu-item",
+              "name": "",
+              "inheritedFrom": {
+                "name": "M3ListItem",
+                "module": "src/m3/list/list-item.ts"
+              }
+            }
+          ],
+          "mixins": [
+            {
+              "name": "OptionMixin",
+              "module": "/src/base/option.js"
+            }
+          ],
+          "superclass": {
+            "name": "M3ListItem",
+            "module": "/src/m3/list/list-item.js"
+          },
+          "tagName": "md-option",
+          "customElement": true,
+          "members": [
+            {
+              "kind": "field",
+              "name": "ripple",
+              "type": {
+                "text": "M3Ripple"
+              },
+              "inheritedFrom": {
+                "name": "M3ListItem",
+                "module": "src/m3/list/list-item.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "focusRing",
+              "type": {
+                "text": "M3FocusRing"
+              },
+              "inheritedFrom": {
+                "name": "M3ListItem",
+                "module": "src/m3/list/list-item.ts"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Option",
+          "declaration": {
+            "name": "M3Option",
+            "module": "src/m3/select/option.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-option",
+          "declaration": {
+            "name": "M3Option",
+            "module": "src/m3/select/option.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/select/outlined-select.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MdOutlinedSelect",
+          "members": [
+            {
+              "kind": "method",
+              "name": "renderField",
+              "privacy": "protected"
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "attribute": "label",
+              "inheritedFrom": {
+                "name": "M3Select",
+                "module": "src/m3/select/select.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "supportingText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "attribute": "supportingText",
+              "inheritedFrom": {
+                "name": "M3Select",
+                "module": "src/m3/select/select.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "focused",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "protected",
+              "default": "false",
+              "inheritedFrom": {
+                "name": "M3Select",
+                "module": "src/m3/select/select.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "field",
+              "type": {
+                "text": "M3Field"
+              },
+              "privacy": "protected",
+              "inheritedFrom": {
+                "name": "M3Select",
+                "module": "src/m3/select/select.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderMenu",
+              "privacy": "protected",
+              "inheritedFrom": {
+                "name": "M3Select",
+                "module": "src/m3/select/select.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "M3Select",
+            "module": "/src/m3/select/select.js"
+          },
+          "tagName": "md-outlined-select",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "fieldName": "label",
+              "inheritedFrom": {
+                "name": "M3Select",
+                "module": "src/m3/select/select.ts"
+              }
+            },
+            {
+              "name": "supportingText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "fieldName": "supportingText",
+              "inheritedFrom": {
+                "name": "M3Select",
+                "module": "src/m3/select/select.ts"
+              }
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "Event"
+              },
+              "description": "Fired when the selected value has changed.",
+              "name": "change",
+              "inheritedFrom": {
+                "name": "M3Select",
+                "module": "src/m3/select/select.ts"
+              }
+            },
+            {
+              "type": {
+                "text": "Event"
+              },
+              "description": "Fired when the selected value has changed.",
+              "name": "input",
+              "inheritedFrom": {
+                "name": "M3Select",
+                "module": "src/m3/select/select.ts"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MdOutlinedSelect",
+          "declaration": {
+            "name": "MdOutlinedSelect",
+            "module": "src/m3/select/outlined-select.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-outlined-select",
+          "declaration": {
+            "name": "MdOutlinedSelect",
+            "module": "src/m3/select/outlined-select.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/select/select.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Select",
+          "members": [
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "attribute": "label"
+            },
+            {
+              "kind": "field",
+              "name": "supportingText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "attribute": "supportingText"
+            },
+            {
+              "kind": "field",
+              "name": "focused",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "protected",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "field",
+              "type": {
+                "text": "M3Field"
+              },
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "renderMenu",
+              "privacy": "protected"
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "Event"
+              },
+              "description": "Fired when the selected value has changed.",
+              "name": "change"
+            },
+            {
+              "type": {
+                "text": "Event"
+              },
+              "description": "Fired when the selected value has changed.",
+              "name": "input"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "fieldName": "label"
+            },
+            {
+              "name": "supportingText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "fieldName": "supportingText"
+            }
+          ],
+          "superclass": {
+            "name": "Select",
+            "module": "/src/base/select.js"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Select",
+          "declaration": {
+            "name": "M3Select",
+            "module": "src/m3/select/select.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/slider/slider.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Slider",
+          "members": [
+            {
+              "kind": "method",
+              "name": "renderTrack",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "renderLabel",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderHandle",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "{ start, label }",
+                  "type": {
+                    "text": "{ start: boolean; label: string }"
+                  }
+                }
+              ]
+            }
+          ],
+          "superclass": {
+            "name": "Slider",
+            "module": "/src/base/slider.js"
+          },
+          "tagName": "md-slider",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Slider",
+          "declaration": {
+            "name": "M3Slider",
+            "module": "src/m3/slider/slider.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-slider",
+          "declaration": {
+            "name": "M3Slider",
+            "module": "src/m3/slider/slider.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/switch/switch.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Switch",
+          "cssParts": [
+            {
+              "name": "thumb"
+            },
+            {
+              "name": "label"
+            }
+          ],
+          "members": [
+            {
+              "kind": "method",
+              "name": "renderOnIcon"
+            },
+            {
+              "kind": "method",
+              "name": "renderOffIcon"
+            },
+            {
+              "kind": "field",
+              "name": "$ripple",
+              "type": {
+                "text": "M3Ripple"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "$thumb",
+              "type": {
+                "text": "HTMLSpanElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "icons",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "icons",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "checkedIconOnly",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "checkedIconOnly",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "#pointerDownX",
+              "privacy": "private",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "#handlePointerDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#handlePointerMove",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#handlePointerUp",
+              "privacy": "private"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "icons",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "icons"
+            },
+            {
+              "name": "checkedIconOnly",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "checkedIconOnly"
+            }
+          ],
+          "superclass": {
+            "name": "ToggleButton",
+            "module": "/src/base/toggle-button.js"
+          },
+          "tagName": "md-switch",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Switch",
+          "declaration": {
+            "name": "M3Switch",
+            "module": "src/m3/switch/switch.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-switch",
+          "declaration": {
+            "name": "M3Switch",
+            "module": "src/m3/switch/switch.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/text-field/filled-text-field.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3FilledTextField",
+          "members": [
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "attribute": "label",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "supportingText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "attribute": "supportingText",
+              "reflects": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "fieldName": "label"
+            },
+            {
+              "name": "supportingText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "fieldName": "supportingText"
+            }
+          ],
+          "superclass": {
+            "name": "Input",
+            "module": "/src/base/input.js"
+          },
+          "tagName": "md-filled-text-field",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3FilledTextField",
+          "declaration": {
+            "name": "M3FilledTextField",
+            "module": "src/m3/text-field/filled-text-field.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-filled-text-field",
+          "declaration": {
+            "name": "M3FilledTextField",
+            "module": "src/m3/text-field/filled-text-field.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/text-field/outlined-text-field.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3OutlinedTextField",
+          "members": [
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "attribute": "label",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "supportingText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "attribute": "supportingText",
+              "reflects": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "fieldName": "label"
+            },
+            {
+              "name": "supportingText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "fieldName": "supportingText"
+            }
+          ],
+          "superclass": {
+            "name": "Input",
+            "module": "/src/base/input.js"
+          },
+          "tagName": "md-outlined-text-field",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3OutlinedTextField",
+          "declaration": {
+            "name": "M3OutlinedTextField",
+            "module": "src/m3/text-field/outlined-text-field.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-outlined-text-field",
+          "declaration": {
+            "name": "M3OutlinedTextField",
+            "module": "src/m3/text-field/outlined-text-field.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/toolbar/toolbar.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Toolbar",
+          "cssParts": [
+            {
+              "name": "container"
+            },
+            {
+              "name": "fab-slot"
+            }
+          ],
+          "slots": [
+            {
+              "description": "toolbar contents",
+              "name": ""
+            },
+            {
+              "description": "FAB element",
+              "name": "fab"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "'docked' | 'floating'"
+              },
+              "default": "'docked'",
+              "attribute": "type",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "'standard' | 'vibrant'"
+              },
+              "default": "'standard'",
+              "attribute": "color",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "orientation",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              },
+              "default": "'horizontal'",
+              "attribute": "orientation",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "role",
+              "type": {
+                "text": "string"
+              },
+              "default": "'toolbar'"
+            },
+            {
+              "kind": "field",
+              "name": "ariaOrientation"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "type",
+              "type": {
+                "text": "'docked' | 'floating'"
+              },
+              "default": "'docked'",
+              "fieldName": "type"
+            },
+            {
+              "name": "color",
+              "type": {
+                "text": "'standard' | 'vibrant'"
+              },
+              "default": "'standard'",
+              "fieldName": "color"
+            },
+            {
+              "name": "orientation",
+              "type": {
+                "text": "'horizontal' | 'vertical'"
+              },
+              "default": "'horizontal'",
+              "fieldName": "orientation"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "InternalsAttached",
+              "module": "/src/base/mixins/internals-attached.js"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "md-toolbar",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Toolbar",
+          "declaration": {
+            "name": "M3Toolbar",
+            "module": "src/m3/toolbar/toolbar.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-toolbar",
+          "declaration": {
+            "name": "M3Toolbar",
+            "module": "src/m3/toolbar/toolbar.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/tooltip/tooltip.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Tooltip",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_durations",
+              "type": {
+                "text": "object"
+              },
+              "readonly": true,
+              "default": "{ show: 150, hide: 150 }"
+            }
+          ],
+          "superclass": {
+            "name": "Tooltip",
+            "module": "/src/base/tooltip.js"
+          },
+          "tagName": "md-tooltip",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Tooltip",
+          "declaration": {
+            "name": "M3Tooltip",
+            "module": "src/m3/tooltip/tooltip.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-tooltip",
+          "declaration": {
+            "name": "M3Tooltip",
+            "module": "src/m3/tooltip/tooltip.ts"
+          }
+        }
+      ]
+    }
+  ]
 }

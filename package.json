@@ -38,13 +38,11 @@
     "build": "bun run build:styles && bun run build:compile",
     "build:compile": "bun scripts/build.ts",
     "build:styles": "bun scripts/build-styles.ts --minify",
-    "clean": "bun run clean:compile && bun run clean:styles",
-    "clean:compile": "bun scripts/clean.ts compile",
-    "clean:styles": "bun scripts/clean.ts styles",
+    "clean": "./scripts/clean.sh",
     "prepublishOnly": "bun clean && bun run build",
     "format": "prettier . --check",
     "format:write": "prettier . --check --write",
-    "cem": "bunx cem analyze --litelement --globs 'src/m3/*.ts' --exclude 'src/m3/*.css.ts'"
+    "cem": "cem analyze --litelement --globs './src/m3/**/*.ts' --exclude './src/**/*.css.ts'"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.11.0",
