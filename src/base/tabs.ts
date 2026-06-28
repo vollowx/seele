@@ -1,11 +1,14 @@
 import { LitElement, html, isServer } from 'lit';
 import { property, queryAssignedElements } from 'lit/decorators.js';
 
-import { InternalsAttached, internals } from './mixins/internals-attached.js';
+import { internals } from './mixins/internals-attached.js';
 import type { Tab } from './tab.js';
 import type { TabPanel } from './tab-panel.js';
 
-export class Tabs extends InternalsAttached(LitElement) {
+/**
+ * @fires {CustomEvent} tab-select
+ */
+export class Tabs extends LitElement {
   @property({ type: String }) switch: 'auto' | 'manual' = 'manual';
   @property({ type: String, reflect: true }) selected = '';
 
@@ -16,11 +19,15 @@ export class Tabs extends InternalsAttached(LitElement) {
   get $tabs(): Tab[] {
     return this.$slotItems.filter(item => item[internals].role === 'tab') as Tab[];
   }
+  get $parent(): HTMLElement {
+    return this.parentNode instanceof ShadowRoot
+        ? ((this.parentNode as ShadowRoot).host as HTMLElement)
+        : this.parentElement;
+  }
 
   override connectedCallback() {
     super.connectedCallback();
     if (!isServer) {
-      this[internals].role = this._role;
       this.addEventListener('keydown', this.#handleKeyDown.bind(this));
       this.addEventListener('click', this.#handleClick.bind(this));
     }
@@ -28,18 +35,17 @@ export class Tabs extends InternalsAttached(LitElement) {
 
   protected override updated(changed: Map<string, any>) {
     if (changed.has('selected') && this.selected) {
-       const targetTab = this.$tabs.find(t => (t.value || t.id) === this.selected);
+       const targetTab = this.$tabs.find(t => t.value === this.selected);
        if (targetTab && !targetTab.selected) {
-         this.#selectTab(targetTab);
+         this.selectTab(targetTab);
        }
     }
   }
 
   #handleSlotChange(_: Event) {
-    const root = this.getRootNode() as Document | ShadowRoot;
-
+    const parent = this.$parent;
     this.$tabs.forEach(tab => {
-      const panel = root.querySelector(`[seele-base="tab"][value="${tab.value}"]`) as TabPanel;
+      const panel = parent.querySelector(`[seele-base="tab"][value="${tab.value}"]`) as TabPanel;
       if (!panel) console.error('[seele] cannot find a matching panel for tab ', tab);
       // TODO: ariaLabelledByElements
       tab.setAttribute('aria-controls', panel.id);
@@ -77,7 +83,7 @@ export class Tabs extends InternalsAttached(LitElement) {
       case 'Enter':
       case ' ':
         if (currentIndex !== -1) {
-           this.#selectTab(tabs[currentIndex]);
+           this.selectTab(tabs[currentIndex]);
         }
         handled = true;
         break;
@@ -88,9 +94,9 @@ export class Tabs extends InternalsAttached(LitElement) {
       event.stopPropagation();
 
       if (event.key !== 'Enter' && event.key !== ' ') {
-        this.#focusTab(tabs[nextIndex]);
+        this.focusTab(tabs[nextIndex]);
         if (this.switch === 'auto')
-          this.#selectTab(tabs[nextIndex]);
+          this.selectTab(tabs[nextIndex]);
       }
     }
   };
@@ -100,12 +106,12 @@ export class Tabs extends InternalsAttached(LitElement) {
     const tab = target.closest('md-tab') as Tab;
 
     if (tab && this.$tabs.includes(tab)) {
-      this.#focusTab(tab);
-      this.#selectTab(tab);
+      this.focusTab(tab);
+      this.selectTab(tab);
     }
   };
 
-  #focusTab(tab: Tab) {
+  focusTab(tab: Tab) {
     this.$tabs.forEach(t => {
       t.blur();
       t.tabIndex = -1;
@@ -114,13 +120,14 @@ export class Tabs extends InternalsAttached(LitElement) {
     tab.focus();
   }
 
-  #selectTab(selectedTab: Tab) {
+  selectTab(selectedTab: Tab) {
     this.selected = selectedTab.value;
-    const root = this.getRootNode() as Document | ShadowRoot;
-    const panels = Array.from(root.querySelectorAll('[seele-base="tabpanel"]')) as TabPanel[];
+    const parent = this.$parent;
+    const panels = Array.from(parent.querySelectorAll('[seele-base="tabpanel"]')) as TabPanel[];
 
     this.$tabs.forEach(tab => {
       tab.selected = (tab === selectedTab);
+      tab.tabIndex = (tab === selectedTab) ? 0 : -1;
     });
     panels.forEach(panel => {
       if (panel.value && selectedTab.value) {
@@ -136,6 +143,10 @@ export class Tabs extends InternalsAttached(LitElement) {
   }
 
   override render() {
-    return html`<slot @slotchange=${this.#handleSlotChange}></slot>`;
+    return html`
+      <div part="tablist" role="tablist">
+        <slot @slotchange=${this.#handleSlotChange}></slot>
+      </div>
+    `;
   }
 }

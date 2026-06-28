@@ -156,7 +156,7 @@ label:has(md-switch:disabled) {
 /* Fake web component */
 md-icon {
   display: inline-block;
-  font-family: 'Material Symbols Rounded';
+  font-family: 'Material Symbols Outlined';
   font-style: normal;
   font-weight: normal;
   font-variation-settings: var(--_icon-font-config);

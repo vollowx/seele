@@ -10,34 +10,78 @@
       href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400;0,17..18,700;1,17..18,400;1,17..18,700&display=swap"
       rel="stylesheet"
     />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="./shared.css" />
     <script type="module" src="./shared.ts"></script>
   </head>
   <body>
     <dev-configurator></dev-configurator>
 
-    <md-tabs selected="2">
-      <md-tab value="1" selected>Tab 1</md-tab>
-      <md-tab value="2">Tab 2</md-tab>
-      <md-tab value="3">Tab 3</md-tab>
-      <md-tab value="4">Tab 4</md-tab>
-    </md-tabs>
+    <div style="width: 500px;">
+      <md-tabs selected="2">
+        <md-tab value="1">
+          <md-icon slot="icon">edit</md-icon>
+          Tab 1
+        </md-tab>
+        <md-tab value="2">
+          <md-icon slot="icon">edit</md-icon>
+          Tab 2
+        </md-tab>
+        <md-tab value="3">
+          <md-icon slot="icon">edit</md-icon>
+          Tab 3
+        </md-tab>
+        <md-tab value="4">
+          <md-icon slot="icon">edit</md-icon>
+          Tab 4
+        </md-tab>
+      </md-tabs>
+      <md-tab-panel value="1">
+        <p>J. Clarkson</p>
+      </md-tab-panel>
+      <md-tab-panel value="2">
+        <p>J. Boar</p>
+      </md-tab-panel>
+      <md-tab-panel value="3">
+        <p>R. Ham</p>
+      </md-tab-panel>
+      <md-tab-panel value="4">
+        <p>Le William</p>
+      </md-tab-panel>
+    </div>
 
-    <md-tab-panel value="1">
-      <p>J. Clarkson</p>
-    </md-tab-panel>
-
-    <md-tab-panel value="2">
-      <p>J. Boar</p>
-    </md-tab-panel>
-
-    <md-tab-panel value="3">
-      <p>R. Ham</p>
-    </md-tab-panel>
-
-    <md-tab-panel value="4">
-      <p>Le William</p>
-    </md-tab-panel>
+    <div>
+      <md-tabs secondary iconsabove switch="auto" selected="3">
+        <md-tab value="1">
+          <md-icon slot="icon">edit</md-icon>
+          Tab 1
+        </md-tab>
+        <md-tab value="2">
+          <md-icon slot="icon">edit</md-icon>
+          Tab 2
+        </md-tab>
+        <md-tab value="3">
+          <md-icon slot="icon">edit</md-icon>
+          Tab 3
+        </md-tab>
+        <md-tab value="4">
+          <md-icon slot="icon">edit</md-icon>
+          Tab 4
+        </md-tab>
+      </md-tabs>
+      <md-tab-panel value="1">
+        <p>J. Clarkson</p>
+      </md-tab-panel>
+      <md-tab-panel value="2">
+        <p>J. Boar</p>
+      </md-tab-panel>
+      <md-tab-panel value="3">
+        <p>R. Ham</p>
+      </md-tab-panel>
+      <md-tab-panel value="4">
+        <p>Le William</p>
+      </md-tab-panel>
+    </div>
 
     <h1>buttons</h1>
 

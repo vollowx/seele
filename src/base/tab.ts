@@ -5,7 +5,6 @@ import { genUniqueId } from '../core/unique-id.js';
 
 /**
  * TODO: disabled
- * TODO: Material You Expressive styled component
  */
 export class Tab extends InternalsAttached(LitElement) {
   @property({ type: Boolean, reflect: true }) selected = false;
@@ -20,7 +19,6 @@ export class Tab extends InternalsAttached(LitElement) {
     this[internals].role = this._role;
     if (!this.id) this.id = genUniqueId('tab');
     this.#updateInternals();
-    this.setAttribute('tabindex', this.selected ? '0' : '-1');
   }
 
   protected override updated(changed: Map<string, any>) {

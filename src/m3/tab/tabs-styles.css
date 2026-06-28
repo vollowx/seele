@@ -1,0 +1,43 @@
+:host {
+  --_tab-selected-color: var(--md-sys-color-primary);
+  display: block;
+  position: relative;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  overflow-x: auto;
+  overflow-y: hidden;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+[part="tablist"] {
+  display: flex;
+}
+
+[part="indicator"] {
+  position: absolute;
+  bottom: 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background-color: var(--md-sys-color-primary);
+  transition: var(--md-sys-motion-std-effects-slow-duration)
+    var(--md-sys-motion-std-effects-slow);
+  will-change: left, width;
+}
+
+::slotted(*) {
+  flex: 1;
+}
+
+:host([secondary]) {
+  --_tab-selected-color: var(--md-sys-color-on-surface);
+}
+:host([secondary]) [part="indicator"] {
+  border-radius: 0;
+  height: 2px;
+}
+
+:host([iconsabove]) {
+  --_tab-flex-dir: column;
+  --_tab-height: 64px;
+}

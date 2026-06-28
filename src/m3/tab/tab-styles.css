@@ -1,0 +1,36 @@
+:host {
+  --md-focus-ring-shape: 8px;
+  box-sizing: border-box;
+  color: var(--md-sys-color-on-surface-variant);
+  cursor: pointer;
+  display: inline-flex;
+  flex-shrink: 0;
+  font: var(--md-sys-typography-title-small);
+  justify-content: center;
+  outline: none;
+  padding: 0 16px;
+  position: relative;
+  user-select: none;
+}
+:host([selected]) {
+  color: var(--_tab-selected-color);
+}
+:host([selected]) md-focus-ring {
+  margin-bottom: 4px;
+}
+
+[part='content'] {
+  align-items: center;
+  display: inline-flex;
+  flex-direction: var(--_tab-flex-dir, row);
+  gap: 8px;
+  height: var(--_tab-height, 48px);
+  justify-content: center;
+}
+
+[part~='icon'] {
+  block-size: 1em;
+  fill: currentcolor;
+  font-size: 24px;
+  inline-size: 1em;
+}
