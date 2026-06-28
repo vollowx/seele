@@ -33,10 +33,10 @@ export abstract class M3Select extends Select {
         ?open="${this.open}"
         @open="${() => (this.open = true)}"
         @close="${() => (this.open = false)}"
-        @item-focus="${this.handleMenuItemFocus}"
-        @select="${this.handleMenuSelect}"
+        @item-focus="${this._handleMenuItemFocus}"
+        @select="${this._handleMenuSelect}"
       >
-        <slot part="items" @slotchange=${this.handleSlotChange}></slot>
+        <slot part="items" @slotchange=${this._handleSlotChange}></slot>
       </md-menu>
     `;
   }

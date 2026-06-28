@@ -10,6 +10,9 @@ export default {
   nodeResolve: { exportConditions: mode === 'dev' ? ['development'] : [] },
   preserveSymlinks: true,
   watch: true,
+  port: 4003,
+  open: '/dev/', // Not intented to be this rude, just wanted to give new
+                 // users some good expression not seeing 'not found'.
   plugins: [
     esbuildPlugin({
       ts: true,
