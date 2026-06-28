@@ -6,10 +6,10 @@ import { tooltipStyles } from './tooltip-styles.css.js';
 /**
  * @tag md-tooltip
  *
- * TODO: probably should not disable SSR, since the raw text would flash
- * when loading
+ * TODO: should not disable SSR, since the raw text would flash, but could try
+ * to SSR a simpler one
  */
-@customElement('md-tooltip', false)
+@customElement('md-tooltip', true)
 export class M3Tooltip extends Tooltip {
   override readonly _durations = { show: 150, hide: 150 };
 
