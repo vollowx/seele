@@ -42,8 +42,7 @@ export class Input extends Base {
   @property({ type: Boolean, reflect: true }) focused = false;
 
   @query('[part~=input]') $inputOrTextarea!:
-    | HTMLInputElement
-    | HTMLTextAreaElement;
+    HTMLInputElement | HTMLTextAreaElement;
 
   override render() {
     const isTextarea = this.type === 'textarea';

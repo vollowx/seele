@@ -8,9 +8,9 @@ import { hiddenStyles } from './hidden-styles.css.js';
 const Base = FormAssociated(InternalsAttached(LitElement));
 
 export class Button extends Base {
-  static override styles = [hiddenStyles];
-
   @property({ reflect: true }) type: 'button' | 'submit' | 'reset' = 'button';
+
+  static override styles = [hiddenStyles];
 
   constructor() {
     super();

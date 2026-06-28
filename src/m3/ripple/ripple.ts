@@ -29,18 +29,17 @@ function distance(
  */
 @customElement('md-ripple', false)
 export class M3Ripple extends Attachable(InternalsAttached(LitElement)) {
-  static override styles = [rippleStyles];
-
   @property() clickBehavior: 'always' | 'none' = 'always';
   @property() enterBehavior: 'always' | 'none' = 'always';
   @property() spaceBehavior: 'always' | 'once' | 'none' = 'once';
+  $ripples: HTMLSpanElement[] = [];
+
+  static override styles = [rippleStyles];
 
   constructor() {
     super();
     this[internals].ariaHidden = 'true';
   }
-
-  $ripples: HTMLSpanElement[] = [];
 
   #spaceKeyDown = false;
   #pointerDown = false;

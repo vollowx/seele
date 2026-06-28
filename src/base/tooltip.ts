@@ -29,6 +29,10 @@ export class Tooltip extends Base {
 
   @query('slot') $slot: HTMLSlotElement;
 
+  override render() {
+    return html`<slot @slotchange="${this.#handleSlotChange}"></slot>`;
+  }
+
   // Different from those in the popoverController, these timers are used to
   // manage the delay before showing/hiding the tooltip.
   #openTimer: NodeJS.Timeout = null;
@@ -55,10 +59,6 @@ export class Tooltip extends Base {
   constructor() {
     super();
     this[internals].role = 'tooltip';
-  }
-
-  override render() {
-    return html`<slot @slotchange="${this.#handleSlotChange}"></slot>`;
   }
 
   override handleControlChange(

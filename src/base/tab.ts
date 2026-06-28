@@ -7,11 +7,15 @@ import { genUniqueId } from '../core/unique-id.js';
  * TODO: disabled
  */
 export class Tab extends InternalsAttached(LitElement) {
+  protected _role: string = 'tab';
+
   @property({ type: Boolean, reflect: true }) selected = false;
   @property({ type: Boolean, reflect: true }) focused = false;
   @property({ type: String, reflect: true }) value = '';
 
-  protected _role: string = 'tab';
+  override render() {
+    return html`<slot></slot>`;
+  }
 
   override connectedCallback() {
     super.connectedCallback();
@@ -48,9 +52,5 @@ export class Tab extends InternalsAttached(LitElement) {
   override blur() {
     this.focused = false;
     super.blur();
-  }
-
-  override render() {
-    return html`<slot></slot>`;
   }
 }

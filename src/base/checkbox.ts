@@ -14,11 +14,11 @@ const PROPERTY_FROM_ARIA_CHECKED = {
 const Base = FormAssociated(InternalsAttached(LitElement));
 
 export class Checkbox extends Base {
-  static override styles = [hiddenStyles];
-
   @property({ type: Boolean }) checked = false;
   @property({ type: Boolean }) indeterminate = false;
   @property({ type: Boolean, reflect: true }) required = false;
+
+  static override styles = [hiddenStyles];
 
   constructor() {
     super();

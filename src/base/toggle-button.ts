@@ -23,7 +23,7 @@ export class ToggleButton extends Base {
     this[internals].role = 'button';
 
     this.checked = this.hasAttribute('checked');
-    this.updateInternals();
+    this._updateInternals();
   }
 
   override connectedCallback() {
@@ -48,11 +48,11 @@ export class ToggleButton extends Base {
 
   protected override updated(changed: Map<string, any>) {
     if (changed.has('checked') || changed.has('disabled')) {
-      this.updateInternals();
+      this._updateInternals();
     }
   }
 
-  protected updateInternals() {
+  protected _updateInternals() {
     this[internals].states.delete('unchecked');
     this[internals].states.delete('checked');
     this[internals].ariaPressed = this.checked ? 'true' : 'false';

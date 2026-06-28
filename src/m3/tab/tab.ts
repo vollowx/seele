@@ -10,6 +10,8 @@ import { tabStyles } from './tab-styles.css.js';
 
 @customElement('md-tab')
 export class M3Tab extends Tab {
+  @query('[part="content"]') $content: HTMLDivElement;
+
   static override styles = [targetStyles, tabStyles];
   override render() {
     return html`
@@ -22,7 +24,6 @@ export class M3Tab extends Tab {
       </div>
     `;
   }
-  @query('[part="content"]') $content: HTMLDivElement;
 }
 
 declare global {

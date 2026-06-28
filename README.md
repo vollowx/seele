@@ -12,7 +12,7 @@ It also provides styled components in the following design guideline(s):
 
 - [Material You Expressive](https://m3.material.io/)
 
-Documentations and demos are at [seele.projects.v9.nz](https://seele.projects.v9.nz/).
+Documentations and demos are at [tideover.cc/seele/](https://tideover.cc/seele/).
 
 ## Installation
 

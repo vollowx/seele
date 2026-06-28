@@ -86,15 +86,17 @@ export class M3Slider extends Slider {
         <div class="active"></div>
         <div class="inactive-after"></div>
       </div>
-      ${this.ticks
-        ? html`
-            <div class="tickmarks">
-              <div class="inactive-before"></div>
-              <div class="active"></div>
-              <div class="inactive-after"></div>
-            </div>
-          `
-        : nothing}
+      ${
+        this.ticks
+          ? html`
+              <div class="tickmarks">
+                <div class="inactive-before"></div>
+                <div class="active"></div>
+                <div class="inactive-after"></div>
+              </div>
+            `
+          : nothing
+      }
     `;
   }
 

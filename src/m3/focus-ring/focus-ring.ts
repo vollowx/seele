@@ -28,25 +28,22 @@ import { focusRingStyles } from './focus-ring-styles.css.js';
  */
 @customElement('md-focus-ring', false)
 export class M3FocusRing extends Attachable(InternalsAttached(LitElement)) {
+  @property({ type: Boolean, reflect: true }) inward = false;
+  static override styles = [focusRingStyles];
+
   constructor() {
     super();
     this[internals].ariaHidden = 'true';
   }
-  static override styles = [focusRingStyles];
-  @property({ type: Boolean, reflect: true }) inward = false;
 
-  #boundFocusIn = this.#handleFocusIn.bind(this);
-  #boundFocusOut = this.#handleFocusOut.bind(this);
-  #boundPointerDown = this.#handlePointerDown.bind(this);
-
-  #handleFocusIn() {
+  #handleFocusIn = () => {
     if (focusVisible) this[internals].states.add('visible');
     else this[internals].states.delete('visible');
   }
-  #handleFocusOut() {
+  #handleFocusOut = () => {
     this[internals].states.delete('visible');
   }
-  #handlePointerDown() {
+  #handlePointerDown = () => {
     this[internals].states.delete('visible');
   }
 
@@ -63,9 +60,9 @@ export class M3FocusRing extends Attachable(InternalsAttached(LitElement)) {
     next: HTMLElement | null = null
   ) {
     const eventHandlers = {
-      focusin: this.#boundFocusIn,
-      focusout: this.#boundFocusOut,
-      pointerdown: this.#boundPointerDown,
+      focusin: this.#handleFocusIn,
+      focusout: this.#handleFocusOut,
+      pointerdown: this.#handlePointerDown,
     };
 
     Object.keys(eventHandlers).forEach((eventName) => {

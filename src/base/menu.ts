@@ -66,6 +66,22 @@ export class Menu extends Base {
   }
   private $lastFocused: HTMLElement | null = null;
 
+  override render() {
+    return html`<div
+      part="menu"
+      role="${this.type}"
+      tabindex="${this.tabIndex}"
+      @keydown=${this.#handleKeyDown.bind(this)}
+      @focusout=${this.#handleFocusOut.bind(this)}
+    >
+      ${this.renderItemSlot()}
+    </div>`;
+  }
+
+  renderItemSlot() {
+    return html`<slot part="items"></slot>`;
+  }
+
   private readonly popoverController = new PopoverController(this, {
     popover: () => this.$menu,
     trigger: () => this.$control,
@@ -109,22 +125,6 @@ export class Menu extends Base {
     },
     wrapNavigation: () => false,
   });
-
-  override render() {
-    return html`<div
-      part="menu"
-      role="${this.type}"
-      tabindex="${this.tabIndex}"
-      @keydown=${this.#handleKeyDown.bind(this)}
-      @focusout=${this.#handleFocusOut.bind(this)}
-    >
-      ${this.renderItemSlot()}
-    </div>`;
-  }
-
-  renderItemSlot() {
-    return html`<slot part="items"></slot>`;
-  }
 
   override connectedCallback() {
     super.connectedCallback();

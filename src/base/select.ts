@@ -89,55 +89,6 @@ export class Select extends Base {
   private lastSelectedOption: Option | null = null;
   private lastSelectedOptionRecords: [Option, number][] = [];
 
-  constructor() {
-    super();
-
-    if (!isServer) {
-      this.addEventListener('focusout', this.handleFocusOut);
-    }
-  }
-
-  protected override async firstUpdated(changed: PropertyValues<Select>) {
-    // If this has been handled on update already due to SSR, try again.
-    if (!this.lastSelectedOptionRecords.length) {
-      this.initUserSelection();
-    }
-
-    // Case for when the DOM is streaming, there are no children, and a child
-    // has [selected] set on it, we need to wait for DOM to render something.
-    if (
-      !this.lastSelectedOptionRecords.length &&
-      !isServer &&
-      !this.$options.length
-    ) {
-      setTimeout(() => {
-        this.updateValueAndDisplayText();
-      }, 0);
-    }
-
-    super.firstUpdated(changed);
-  }
-
-  protected override update(changed: PropertyValues<Select>) {
-    if (!this.hasUpdated) {
-      this.initUserSelection();
-    }
-
-    super.update(changed);
-  }
-
-  protected override updated(changed: PropertyValues) {
-    super.updated(changed);
-
-    if (changed.has('open')) {
-      if (this.open) {
-        this.#focusSelectedItemOrFirst();
-      } else {
-        this.$field.setAttribute('aria-activedescendant', '');
-      }
-    }
-  }
-
   override render() {
     return html`${this.renderField()}${this.renderMenu()}`;
   }
@@ -198,10 +149,59 @@ export class Select extends Base {
     return html`<span part="value">${this.displayText || html`&nbsp;`}</span>`;
   }
 
+  constructor() {
+    super();
+
+    if (!isServer) {
+      this.addEventListener('focusout', this._handleFocusOut);
+    }
+  }
+
+  protected override async firstUpdated(changed: PropertyValues<Select>) {
+    // If this has been handled on update already due to SSR, try again.
+    if (!this.lastSelectedOptionRecords.length) {
+      this.initUserSelection();
+    }
+
+    // Case for when the DOM is streaming, there are no children, and a child
+    // has [selected] set on it, we need to wait for DOM to render something.
+    if (
+      !this.lastSelectedOptionRecords.length &&
+      !isServer &&
+      !this.$options.length
+    ) {
+      setTimeout(() => {
+        this.updateValueAndDisplayText();
+      }, 0);
+    }
+
+    super.firstUpdated(changed);
+  }
+
+  protected override update(changed: PropertyValues<Select>) {
+    if (!this.hasUpdated) {
+      this.initUserSelection();
+    }
+
+    super.update(changed);
+  }
+
+  protected override updated(changed: PropertyValues) {
+    super.updated(changed);
+
+    if (changed.has('open')) {
+      if (this.open) {
+        this.#focusSelectedItemOrFirst();
+      } else {
+        this.$field.setAttribute('aria-activedescendant', '');
+      }
+    }
+  }
+
   /**
    * TODO: Handle clear action
    */
-  protected handleFieldKeydown(event: KeyboardEvent) {
+  protected _handleFieldKeydown(event: KeyboardEvent) {
     if (this.disabled) return;
 
     const eventClone = new KeyboardEvent(event.type, event);
@@ -210,25 +210,25 @@ export class Select extends Base {
     this.$menu.$menu.dispatchEvent(eventClone);
   }
 
-  protected handleMenuSelect(event: MenuSelectEvent) {
+  protected _handleMenuSelect(event: MenuSelectEvent) {
     if (this.selectItem(event.detail.item as Option)) {
       this.#dispatchChangeEvent();
     }
     this.open = false;
   }
 
-  protected handleMenuItemFocus(event: MenuItemFocusEvent) {
+  protected _handleMenuItemFocus(event: MenuItemFocusEvent) {
     this.$field.setAttribute('aria-activedescendant', event.detail.item.id);
   }
 
-  protected handleFocusOut(event: FocusEvent) {
+  protected _handleFocusOut(event: FocusEvent) {
     const relatedTarget = event.relatedTarget as Node;
     if (!this.contains(relatedTarget) && !this.$menu.contains(relatedTarget)) {
       this.open = false;
     }
   }
 
-  protected handleSlotChange() {
+  protected _handleSlotChange() {
     // When slots change, check for initially selected items if value is not set
     if (!this.value) {
       this.updateValueAndDisplayText();

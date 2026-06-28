@@ -41,6 +41,14 @@ export class List extends Base {
     return this.listController.items || [];
   }
 
+  override render() {
+    return html` ${this.renderItemSlot()} `;
+  }
+
+  renderItemSlot() {
+    return html`<slot part="items"></slot>`;
+  }
+
   private readonly listController = new ListController<ListItem>(this, {
     isItem: (item: HTMLElement): item is ListItem =>
       item.getAttribute('seele-base') === 'option' &&
@@ -81,14 +89,6 @@ export class List extends Base {
       this.addEventListener('click', (e) => this.#handleClick(e));
       this.addEventListener('mouseover', (e) => this.#handleMouseOver(e));
     }
-  }
-
-  override render() {
-    return html` ${this.renderItemSlot()} `;
-  }
-
-  renderItemSlot() {
-    return html`<slot part="items"></slot>`;
   }
 
   protected override updated(changed: Map<string, any>) {
@@ -148,7 +148,9 @@ export class List extends Base {
 
   #handleMouseOver(event: MouseEvent) {
     setFocusVisible(false);
-    const item = (event.target as HTMLElement).closest('[seele-base="option"]') as ListItem;
+    const item = (event.target as HTMLElement).closest(
+      '[seele-base="option"]'
+    ) as ListItem;
     if (item && this.listController.items.includes(item)) {
       this.listController._focusItem(item);
     }
@@ -183,7 +185,9 @@ export class List extends Base {
   }
 
   #getEventItem(event: Event) {
-    return (event.target as HTMLElement).closest('[seele-base="option"]') as ListItem;
+    return (event.target as HTMLElement).closest(
+      '[seele-base="option"]'
+    ) as ListItem;
   }
 
   get currentIndex() {

@@ -16,30 +16,10 @@ import { listItemStyles } from './list-item-styles.css.js';
  */
 @customElement('md-list-item')
 export class M3ListItem extends ListItem {
-  constructor() {
-    super();
-    this.updateComplete.then(() => {
-      this.ripple.$control = this;
-      this.focusRing.$control = this;
-    });
-  }
-
-  static override styles = [...super.styles, listItemStyles];
-
-  protected override updated(changed: Map<string, any>) {
-    super.updated(changed);
-    if (changed.has('focused')) {
-      if (this.focused) {
-        this.focusRing.visualFocus();
-      } else {
-        this.focusRing.visualBlur();
-      }
-    }
-  }
-
   @query('md-ripple') ripple!: M3Ripple;
   @query('md-focus-ring') focusRing!: M3FocusRing;
 
+  static override styles = [...super.styles, listItemStyles];
   override render() {
     return html`
       <md-item>
@@ -59,6 +39,25 @@ export class M3ListItem extends ListItem {
         <slot slot="end" name="end"></slot>
       </md-item>
     `;
+  }
+
+  constructor() {
+    super();
+    this.updateComplete.then(() => {
+      this.ripple.$control = this;
+      this.focusRing.$control = this;
+    });
+  }
+
+  protected override updated(changed: Map<string, any>) {
+    super.updated(changed);
+    if (changed.has('focused')) {
+      if (this.focused) {
+        this.focusRing.visualFocus();
+      } else {
+        this.focusRing.visualBlur();
+      }
+    }
   }
 }
 

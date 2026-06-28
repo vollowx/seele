@@ -8,6 +8,8 @@ import { FormAssociated } from './mixins/form-associated.js';
 import { hiddenStyles } from './hidden-styles.css.js';
 
 export class ListItem extends FormAssociated(InternalsAttached(LitElement)) {
+  _role: string = 'option';
+
   static override styles = [hiddenStyles];
 
   @property({ type: Boolean, reflect: true }) selected = false;
@@ -16,8 +18,6 @@ export class ListItem extends FormAssociated(InternalsAttached(LitElement)) {
   get displayText(): string {
     return this.innerText.trim();
   }
-
-  _role: string = 'option';
 
   override connectedCallback() {
     super.connectedCallback();

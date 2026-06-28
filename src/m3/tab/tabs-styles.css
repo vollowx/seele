@@ -10,11 +10,11 @@
   scrollbar-width: none;
 }
 
-[part="tablist"] {
+[part='tablist'] {
   display: flex;
 }
 
-[part="indicator"] {
+[part='indicator'] {
   position: absolute;
   bottom: 0;
   height: 3px;
@@ -32,7 +32,7 @@
 :host([secondary]) {
   --_tab-selected-color: var(--md-sys-color-on-surface);
 }
-:host([secondary]) [part="indicator"] {
+:host([secondary]) [part='indicator'] {
   border-radius: 0;
   height: 2px;
 }

@@ -9,8 +9,6 @@ import { fieldStyles } from './field-styles.css.js';
  * @fires {Event} input - Fired when the selected value has changed.
  */
 export abstract class M3Field extends Field {
-  static override styles = [fieldStyles];
-
   @property({ type: String, reflect: true }) label = '';
   @property({ type: String, reflect: true }) supportingText = '';
   @property({ type: Boolean, reflect: true }) disabled = false;
@@ -23,12 +21,7 @@ export abstract class M3Field extends Field {
   @state() hasStart = false;
   @state() hasEnd = false;
 
-  override update(changedProperties: PropertyValues) {
-    if (changedProperties.has('label')) {
-      this.hasLabel = !!this.label;
-    }
-    super.update(changedProperties);
-  }
+  static override styles = [fieldStyles];
 
   override render() {
     return html`
@@ -66,6 +59,13 @@ export abstract class M3Field extends Field {
       ?hidden=${!this.hasEnd}
       @slotchange=${this.handleSlotChange}
     ></slot>`;
+  }
+
+  override update(changedProperties: PropertyValues) {
+    if (changedProperties.has('label')) {
+      this.hasLabel = !!this.label;
+    }
+    super.update(changedProperties);
   }
 
   protected handleSlotChange(e: Event) {

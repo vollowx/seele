@@ -20,6 +20,16 @@ import { targetStyles } from '../target-styles.css.js';
  */
 @customElement('md-fab')
 export class M3Fab extends Button {
+  @property({ reflect: true }) size: 'default' | 'medium' | 'large' = 'default';
+  @property({ reflect: true }) color:
+    | 'surface'
+    | 'primary-container'
+    | 'secondary-container'
+    | 'tertiary-container'
+    | 'primary'
+    | 'secondary'
+    | 'tertiary' = 'primary';
+
   static override styles = [...super.styles, targetStyles, fabStyles];
   override render() {
     return html`
@@ -30,15 +40,6 @@ export class M3Fab extends Button {
       <slot part="label" name="label"></slot>
     `;
   }
-  @property({ reflect: true }) size: 'default' | 'medium' | 'large' = 'default';
-  @property({ reflect: true }) color:
-    | 'surface'
-    | 'primary-container'
-    | 'secondary-container'
-    | 'tertiary-container'
-    | 'primary'
-    | 'secondary'
-    | 'tertiary' = 'primary';
 }
 
 declare global {

@@ -18,9 +18,9 @@ export class M3Menu extends Menu {
   // FIXME: Might cause a long list to scroll more than expected
   // override readonly _scrollPadding = 4;
 
-  static override styles = [menuStyles];
-
   @property({ reflect: true }) color: 'standard' | 'vibrant' = 'standard';
+
+  static override styles = [menuStyles];
 }
 
 declare global {

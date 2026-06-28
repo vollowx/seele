@@ -452,17 +452,18 @@ function dispatchActivationClick(element: HTMLElement) {
 
 function redispatchEvent(element: Element, event: Event) {
   if (event.bubbles && (event.composed || event.defaultPrevented)) {
-    const copy = new (event.constructor as new (
-      type: string,
-      eventInitDict?: EventInit
-    ) => Event)(event.type, event);
+    const copy = new (
+      event.constructor as new (
+        type: string,
+        eventInitDict?: EventInit
+      ) => Event
+    )(event.type, event);
     element.dispatchEvent(copy);
     return true;
   }
-  const copy = new (event.constructor as new (
-    type: string,
-    eventInitDict?: EventInit
-  ) => Event)(event.type, {
+  const copy = new (
+    event.constructor as new (type: string, eventInitDict?: EventInit) => Event
+  )(event.type, {
     bubbles: event.bubbles,
     cancelable: event.cancelable,
     composed: event.composed,

@@ -13,9 +13,9 @@ export class M3List extends List {
   // FIXME: Might cause a long list to scroll more than expected
   // override readonly _scrollPadding = 4;
 
-  static override styles = [listStyles];
-
   @property({ reflect: true }) color: 'standard' | 'segmented' = 'standard';
+
+  static override styles = [listStyles];
 }
 
 declare global {

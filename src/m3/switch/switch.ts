@@ -21,6 +21,9 @@ function isRTL() {
  */
 @customElement('md-switch')
 export class M3Switch extends ToggleButton {
+  @query('md-ripple') $ripple!: M3Ripple;
+  @query('[part~="thumb"]') $thumb!: HTMLSpanElement;
+
   static override styles = [targetStyles, switchStyles];
   override render() {
     return html`
@@ -50,9 +53,6 @@ export class M3Switch extends ToggleButton {
       </svg>
     `;
   }
-
-  @query('md-ripple') $ripple!: M3Ripple;
-  @query('[part~="thumb"]') $thumb!: HTMLSpanElement;
 
   override connectedCallback() {
     super.connectedCallback();

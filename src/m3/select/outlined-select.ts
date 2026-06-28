@@ -24,7 +24,7 @@ export class MdOutlinedSelect extends M3Select {
         .focused=${this.open || this.focused}
         supportingtext=${this.supportingText}
         @click=${this.toggle}
-        @keydown=${this.handleFieldKeydown}
+        @keydown=${this._handleFieldKeydown}
         @focus=${() => (this.focused = true)}
         @blur=${() => (this.focused = false)}
         tabindex=${this.disabled ? '-1' : '0'}

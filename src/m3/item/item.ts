@@ -27,6 +27,8 @@ import { itemStyles } from './item-styles.css.js';
  */
 @customElement('md-item')
 export class M3Item extends Item {
+  @property({ type: Boolean, reflect: true }) multiline = false;
+
   static override styles = [itemStyles];
 
   override render() {
@@ -43,8 +45,6 @@ export class M3Item extends Item {
       <slot name="end"></slot>
     `;
   }
-
-  @property({ type: Boolean, reflect: true }) multiline = false;
 }
 
 declare global {

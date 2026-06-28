@@ -6,7 +6,6 @@ import { Autocomplete } from '../../base/autocomplete.js';
 import { autocompleteStyles } from './autocomplete-styles.css.js';
 
 /**
- * TODO: Make base Autocomplete
  * TODO: Check if manually dispatching input/change events on input is necessary
  */
 @customElement('md-autocomplete')

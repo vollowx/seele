@@ -5,7 +5,6 @@ import { dividerStyles } from './divider-styles.css.js';
 
 @customElement('md-divider')
 export class M3Divider extends LitElement {
-  static override styles = [dividerStyles];
   @property({ type: Boolean, reflect: false })
   vertical = false;
   @property({ type: Boolean, reflect: false })
@@ -14,4 +13,6 @@ export class M3Divider extends LitElement {
   insetStart = false;
   @property({ type: Boolean, reflect: false, attribute: 'inset-end' })
   insetEnd = false;
+
+  static override styles = [dividerStyles];
 }

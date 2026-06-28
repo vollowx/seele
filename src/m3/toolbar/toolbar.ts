@@ -19,25 +19,12 @@ import { toolbarStyles } from './toolbar-styles.css.js';
  */
 @customElement('md-toolbar')
 export class M3Toolbar extends InternalsAttached(LitElement) {
-  static override styles = [toolbarStyles];
-
-  constructor() {
-    super();
-    this[internals].role = 'toolbar';
-    this[internals].ariaOrientation = this.orientation;
-  }
-
   @property({ reflect: true }) type: 'docked' | 'floating' = 'docked';
   @property({ reflect: true }) color: 'standard' | 'vibrant' = 'standard';
   @property({ reflect: true }) orientation: 'horizontal' | 'vertical' =
     'horizontal';
 
-  protected override updated(changed: Map<string, unknown>) {
-    if (changed.has('orientation')) {
-      this[internals].ariaOrientation = this.orientation;
-    }
-  }
-
+  static override styles = [toolbarStyles];
   override render() {
     return html`
       <div part="container">
@@ -47,6 +34,18 @@ export class M3Toolbar extends InternalsAttached(LitElement) {
         <slot name="fab"></slot>
       </div>
     `;
+  }
+
+  constructor() {
+    super();
+    this[internals].role = 'toolbar';
+    this[internals].ariaOrientation = this.orientation;
+  }
+
+  protected override updated(changed: Map<string, unknown>) {
+    if (changed.has('orientation')) {
+      this[internals].ariaOrientation = this.orientation;
+    }
   }
 }
 

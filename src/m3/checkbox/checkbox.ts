@@ -19,6 +19,8 @@ import { targetStyles } from '../target-styles.css.js';
  */
 @customElement('md-checkbox')
 export class M3Checkbox extends Checkbox {
+  @property({ type: Boolean, reflect: true }) error = false;
+
   static override styles = [...super.styles, targetStyles, checkboxStyles];
   override render() {
     return html`
@@ -36,7 +38,6 @@ export class M3Checkbox extends Checkbox {
       </svg>
     `;
   }
-  @property({ type: Boolean, reflect: true }) error = false;
 }
 
 declare global {

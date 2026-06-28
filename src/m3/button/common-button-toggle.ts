@@ -24,6 +24,20 @@ import { commonButtonStyles } from './common-button-styles.css.js';
  */
 @customElement('md-button-toggle')
 export class M3ButtonToggle extends ToggleButton {
+  @property({ reflect: true })
+  size: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' = 'small';
+  @property({ reflect: true })
+  shape: 'rounded' | 'square' = 'rounded';
+  @property({ reflect: true })
+  color: 'primary' | 'secondary' | 'tertiary' = 'primary';
+  @property({ reflect: true })
+  variant: 'filled' | 'tonal' | 'elevated' | 'outlined' | 'text' = 'filled';
+  /**
+   * Whether to show the icon at the end of the button.
+   */
+  @property({ type: Boolean, reflect: true, attribute: 'trailing-icon' })
+  trailingIcon = false;
+
   static override styles = [
     ...super.styles,
     targetStyles,
@@ -42,19 +56,6 @@ export class M3ButtonToggle extends ToggleButton {
       <slot part="label checked" name="checked"></slot>
     `;
   }
-  @property({ reflect: true })
-  size: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' = 'small';
-  @property({ reflect: true })
-  shape: 'rounded' | 'square' = 'rounded';
-  @property({ reflect: true })
-  color: 'primary' | 'secondary' | 'tertiary' = 'primary';
-  @property({ reflect: true })
-  variant: 'filled' | 'tonal' | 'elevated' | 'outlined' | 'text' = 'filled';
-  /**
-   * Whether to show the icon at the end of the button.
-   */
-  @property({ type: Boolean, reflect: true, attribute: 'trailing-icon' })
-  trailingIcon = false;
 }
 
 declare global {

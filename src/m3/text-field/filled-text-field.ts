@@ -13,7 +13,6 @@ export class M3FilledTextField extends Input {
   @property({ reflect: true }) supportingText = '';
 
   static override styles = [textFieldStyles];
-
   override render() {
     return html`
       <md-filled-field
