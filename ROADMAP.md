@@ -21,7 +21,7 @@ This roadmap outlines the current and future goals for SEELE
 | Toggle button | WIP           |
 | Tooltip       | WIP           |
 
-## Material Design 3 (m3)
+## Material You Expressive (m3)
 
 | Components                    | Functionality | Style |
 | ----------------------------- | ------------- | ----- |
