@@ -5,7 +5,7 @@
     var(--md-sys-motion-spatial-default);
 
   background: var(--md-sys-color-surface-container);
-  border-radius: 16px / 46px; /* roughly fixes border-radius being squished during transformation */
+  border-radius: 16px / 32px; /* roughly fixes border-radius being squished during transformation */
   box-shadow: var(--md-sys-elevation-shadow-2);
   color: var(--md-sys-color-on-surface);
 
@@ -20,8 +20,9 @@
     overlay var(--_f) allow-discrete;
 }
 
-:host([strategy='fixed']) {
-  position: fixed;
+:host([quick]),
+:host([quick]) slot {
+  transition: none !important;
 }
 
 :host([vibrant]) {
@@ -61,7 +62,7 @@ slot {
 
 @starting-style {
   :host(:popover-open) {
-    border-radius: 16px / 46px;
+    border-radius: 16px / 32px;
     opacity: 0;
     transform: scaleY(0.5);
 

@@ -1,6 +1,6 @@
 :host {
   display: inline-block;
-  min-width: 210px;
+  width: 300px;
   position: relative;
   -webkit-user-select: none;
   user-select: none;
@@ -13,6 +13,9 @@
 }
 
 [part='popup'] {
-  --md-menu-max-height: 300px;
-  min-width: inherit;
+  width: inherit;
+}
+
+[part='menu'] {
+  max-height: 400px;
 }

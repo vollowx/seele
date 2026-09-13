@@ -4,6 +4,7 @@ import { popupStyles } from './popup-styles.css.js';
 
 @customElement('md-popup')
 export class M3Popup extends Popup {
+  @property({ type: Boolean, reflect: true }) quick = false;
   @property({ type: Boolean, reflect: true }) vibrant = false;
 
   static override styles = [...super.styles, popupStyles];

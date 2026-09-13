@@ -18,6 +18,9 @@
 }
 
 [part='popup'] {
-  --md-menu-max-height: 300px;
   min-width: inherit;
+}
+
+[part='menu'] {
+  max-height: 400px;
 }

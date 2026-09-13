@@ -2,7 +2,8 @@
   box-sizing: border-box;
   display: block;
   height: inherit;
-  max-height: 300px;
+  max-height: calc(100dvh - 16px);
+  min-width: inherit;
   width: inherit;
   outline: 0;
   overflow-y: auto;
