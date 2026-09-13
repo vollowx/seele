@@ -95,6 +95,7 @@ a:not(:hover):not(:focus-visible) {
 }
 
 body {
+  margin: 16px;
   min-height: 100dvh;
 }
 

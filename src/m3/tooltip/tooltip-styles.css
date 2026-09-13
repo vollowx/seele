@@ -1,14 +1,8 @@
 :host {
-  position: absolute;
-  inset: auto;
-  margin: 0;
-  padding: 4px 8px;
-  border: none;
-  box-sizing: border-box;
-
   align-items: center;
   background-color: var(--md-sys-color-inverse-surface);
   border-radius: 4px;
+  box-sizing: border-box;
   color: transparent;
   display: flex;
   font: var(--md-sys-typography-body-small);
@@ -16,46 +10,48 @@
   max-width: var(--_max-width, 300px);
   min-height: 24px;
   opacity: 0;
+  padding: 4px 8px;
   pointer-events: none;
+  position: absolute;
   top: 0;
-  transform: scaleY(0.5);
+  transform: scaleY(0.35);
   width: max-content;
   z-index: 800;
-
-  transition:
-    color linear 67ms,
-    opacity var(--md-sys-motion-effects-fast-duration)
-      var(--md-sys-motion-effects-fast),
-    transform var(--md-sys-motion-spatial-fast-duration)
-      var(--md-sys-motion-spatial-fast),
-    display var(--md-sys-motion-effects-fast-duration) allow-discrete,
-    overlay var(--md-sys-motion-effects-fast-duration) allow-discrete;
 }
-
-:host(:popover-open) {
+:host(:state(closed)) {
+  display: none;
+}
+/*
+ * TODO: Use calculated height instead of scaling transform.
+ * Should be added as a CSS variable in popoverController.
+ * Should also update M3Menu and M3Select accordingly.
+ */
+:host(:state(opening):not([force-invisible])) {
   color: var(--md-sys-color-inverse-on-surface);
   opacity: 1;
   pointer-events: auto;
   transform: scaleY(1);
-
   transition:
-    color 67ms linear 67ms,
+    color linear 67ms 67ms,
     opacity var(--md-sys-motion-effects-fast-duration)
       var(--md-sys-motion-effects-fast),
     transform var(--md-sys-motion-spatial-fast-duration)
       var(--md-sys-motion-spatial-fast);
 }
-
-@starting-style {
-  :host(:popover-open) {
-    color: transparent;
-    opacity: 0;
-    pointer-events: none;
-    transform: scaleY(0.5);
-  }
+:host(:state(opened):not([force-invisible])) {
+  color: var(--md-sys-color-inverse-on-surface);
+  opacity: 1;
+  pointer-events: auto;
+  transform: scaleY(1);
 }
-
-:host([force-invisible]) {
+:host(:state(closing):not([force-invisible])) {
+  color: transparent;
   opacity: 0;
-  pointer-events: none;
+  transform: scaleY(0.35);
+  transition:
+    color linear 67ms,
+    opacity var(--md-sys-motion-effects-fast-duration)
+      var(--md-sys-motion-effects-fast),
+    transform var(--md-sys-motion-spatial-fast-duration)
+      var(--md-sys-motion-spatial-fast);
 }
