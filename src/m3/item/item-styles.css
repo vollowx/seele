@@ -6,8 +6,8 @@
   flex: 1;
   font: var(--md-sys-typography-body-large);
   gap: 16px;
-  min-height: calc(48px + 4px * var(--md-sys-spacing-density, 0));
-  padding: calc(12px + 2px * var(--md-sys-spacing-density, 0)) 12px;
+  min-height: calc(48px + 4px * var(--md-sys-spacing-density));
+  padding: calc(12px + 2px * var(--md-sys-spacing-density)) 12px;
   position: relative;
   text-overflow: ellipsis;
   -webkit-user-select: none;
