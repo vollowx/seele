@@ -1,125 +1,70 @@
 <!doctype html>
-<html lang="en" dir="ltr" data-md-theme="dark">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>menu or using menu</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400;0,17..18,700;1,17..18,400;1,17..18,700&display=swap"
-      rel="stylesheet"
-    />
     <link rel="stylesheet" href="./shared.css" />
     <script type="module" src="./shared.ts"></script>
   </head>
-  <body>
+  <body style="padding-block: 500px; --md-sys-spacing-density: -3">
     <dev-configurator></dev-configurator>
 
     <h1>menu or using menu</h1>
 
-    <h2>standard menu</h2>
+    <h2>menu</h2>
 
-    <md-menu style="width: 250px">
+    <md-menu style="max-width: 250px">
       <md-menu-item>Menu Item 1</md-menu-item>
       <md-menu-item>Menu Item 2</md-menu-item>
       <md-menu-item selected>Menu Item 3</md-menu-item>
       <md-menu-item disabled>Menu Item 4</md-menu-item>
     </md-menu>
 
-    <span style="position: relative; display: inline-block">
-      <md-button id="menu-with-item-ids-btn"
-        >Menu with Item IDs Empty</md-button
-      >
-      <md-composed-menu for="menu-with-item-ids-btn">
-        <md-menu-item>Menu Item 1</md-menu-item>
-        <md-menu-item>Menu Item 2</md-menu-item>
-        <md-menu-item selected>Menu Item 3</md-menu-item>
-        <md-menu-item disabled>Menu Item 4</md-menu-item>
-      </md-composed-menu>
-    </span>
-
-    <span style="position: relative; display: inline-block">
-      <md-button id="fixed-align-menu-btn">alignstrategy=fixed</md-button>
-      <md-composed-menu
-        for="fixed-align-menu-btn"
-        strategy="fixed"
-        quick
-      >
-        <md-menu-item>Menu Item 1</md-menu-item>
-        <md-menu-item>Menu Item 2</md-menu-item>
-        <md-menu-item selected>Menu Item 3</md-menu-item>
-        <md-menu-item disabled>Menu Item 4</md-menu-item>
-      </md-composed-menu>
-      <md-tooltip for="fixed-align-menu-btn">Align Reference</md-tooltip>
-    </span>
-
-    <span style="position: relative; display: inline-block">
-      <md-button id="some-menu-btn">Menu with Anchor Set</md-button>
-      <md-composed-menu for="some-menu-btn" color="vibrant">
-        <md-menu-item id="item-new-text-file">New Text File</md-menu-item>
-        <md-menu-item id="item-new-file">
-          New File...
-          <span slot="supporting-text">wowowowo</span>
-        </md-menu-item>
-        <md-menu-item id="item-new-window">
-          <span slot="overline">hey boy</span>
-          New Window
-          <md-icon slot="end">window</md-icon>
-        </md-menu-item>
-        <md-divider inset></md-divider>
-        <md-menu-item id="item-open-file">Open File...</md-menu-item>
-        <md-menu-item id="item-open-folder">Open Folder...</md-menu-item>
-        <md-divider inset></md-divider>
-        <md-menu-item id="item-save" selected>Save</md-menu-item>
-        <md-menu-item id="item-save-as">Save As...</md-menu-item>
-      </md-composed-menu>
-    </span>
-
-    <h2>context menu</h2>
-
-    <div
-      id="context-menu-area"
-      style="
-        width: 100%;
-        height: 200px;
-        background: var(--md-sys-color-surface-container);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px dashed var(--md-sys-color-outline);
-        border-radius: 16px;
-        user-select: none;
-        box-sizing: border-box;
-      "
-    >
-      Right click here
-    </div>
-    <div
-      id="context-menu-anchor"
-      style="position: fixed; pointer-events: none"
-    ></div>
-    <!-- You definitely can position the menu without using anchor element, but you will need to deal with other cases like flipping -->
-    <md-composed-menu id="context-menu" for="context-menu-anchor" strategy="fixed">
-      <md-menu-item>Edit</md-menu-item>
-      <md-menu-item>Copy</md-menu-item>
-      <md-menu-item>Cut</md-menu-item>
-      <md-menu-item>Delete</md-menu-item>
+    <md-button id="bn1">Vibrant menu</md-button>
+    <md-composed-menu for="bn1" vibrant>
+      <md-menu-item id="item-new-text-file">New Text File</md-menu-item>
+      <md-menu-item id="item-new-file">
+        New File...
+        <span slot="supporting-text">wowowowo</span>
+      </md-menu-item>
+      <md-menu-item id="item-new-window">
+        <span slot="overline">hey boy</span>
+        New Window
+        <md-icon slot="end">window</md-icon>
+      </md-menu-item>
+      <md-divider inset></md-divider>
+      <md-menu-item id="item-open-file">Open File...</md-menu-item>
+      <md-menu-item id="item-open-folder">Open Folder...</md-menu-item>
+      <md-divider inset></md-divider>
+      <md-menu-item id="item-save" selected>Save</md-menu-item>
+      <md-menu-item id="item-save-as">Save As...</md-menu-item>
     </md-composed-menu>
 
-    <script type="module">
-      // Context Menu
-      // const area = document.getElementById('context-menu-area');
-      // const anchor = document.getElementById('context-menu-anchor');
-      // const contextMenu = document.getElementById('context-menu');
-      //
-      // area.addEventListener('contextmenu', (e) => {
-      //   e.preventDefault();
-      //   anchor.style.left = `${e.clientX}px`;
-      //   anchor.style.top = `${e.clientY}px`;
-      //   contextMenu.open = true;
-      // });
-    </script>
+    <md-button variant="tonal" id="bn2">strategy=fixed</md-button>
+    <md-composed-menu for="bn2" strategy="fixed">
+      <md-menu-item>Menu Item 1</md-menu-item>
+      <md-menu-item>Menu Item 2</md-menu-item>
+      <md-menu-item selected>Menu Item 3</md-menu-item>
+      <md-menu-item disabled>Menu Item 4</md-menu-item>
+    </md-composed-menu>
+
+    <button id="bn3" popovertarget="menu3">Native popover</button>
+    <md-composed-menu
+      style="
+        position-area: block-end span-inline-end;
+        position-try-fallbacks: block-end span-inline-start;
+        transform-origin: top;
+      "
+      id="menu3"
+    >
+      <md-menu-item>Menu Item 1</md-menu-item>
+      <md-menu-item>Menu Item 2</md-menu-item>
+      <md-menu-item selected>Menu Item 3</md-menu-item>
+      <md-menu-item disabled>Menu Item 4</md-menu-item>
+    </md-composed-menu>
+
+    <h2>select</h2>
 
     <label for="native-select">Native select:</label>
 
@@ -137,7 +82,7 @@
       <input type="text" readonly id="native-select-fires" />
     </label>
 
-    <label for="demo-select">Custom filled select:</label>
+    <label for="demo-select">Custom select:</label>
 
     <md-filled-select id="demo-select" label="Choose a fruit">
       <md-option value="blank" aria-label="blank"></md-option>
@@ -148,9 +93,14 @@
       <md-option value="elderberry">Elderberry</md-option>
     </md-filled-select>
 
-    <br /><br />
+    <label style="display: block"
+      >event:
+      <input type="text" readonly id="demo-select-fires" />
+    </label>
 
-    <label for="demo-outlined-select">Custom outlined select:</label>
+    <br />
+
+    <label for="demo-outlined-select">Outlined select:</label>
     <md-outlined-select id="demo-outlined-select" label="Choose a fruit">
       <md-option value="apple">Apple</md-option>
       <md-option value="banana">Banana</md-option>
@@ -158,11 +108,6 @@
       <md-option value="peach" disabled>Peach</md-option>
       <md-option value="elderberry">Elderberry</md-option>
     </md-outlined-select>
-
-    <label style="display: block"
-      >event:
-      <input type="text" readonly id="demo-select-fires" />
-    </label>
 
     <p>Very long select list</p>
 
@@ -241,7 +186,7 @@
 
     <p>List stolen from mui.com.</p>
 
-    <md-autocomplete mode="both" style="min-width: 600px">
+    <md-autocomplete mode="both">
       <md-outlined-text-field
         slot="input"
         label="Best Movies"
@@ -355,7 +300,7 @@
 
     <p>Now goes list mode</p>
 
-    <md-autocomplete mode="list" style="width: 300px">
+    <md-autocomplete mode="list">
       <md-outlined-text-field
         slot="input"
         label="Best Movies"

@@ -27,7 +27,7 @@ export class M3Autocomplete extends Autocomplete {
         <md-menu
           part="menu"
           id="menu"
-          type="listbox"
+          role="listbox"
           tabindex="-1"
           @action=${this.handleMenuAction}
         >

@@ -27,6 +27,7 @@ import '@vollowx/seele/m3/popup/popup.js';
 
 ### Properties
 
-| name      | description       |
-| ---       | ---               |
-| `vibrant` | Reflected boolean |
+| name      | description                                                |
+| ---       | ---                                                        |
+| `quick`   | Reflected boolean; disables showing and hiding transitions |
+| `vibrant` | Reflected boolean                                          |

@@ -1,17 +1,11 @@
-/**
- * NOTE: demos at dev/pending.html
- * TODO: hijack all `hidePopover()`s to allow more complex JS animations
- */
-
 import { LitElement, html, PropertyValues, isServer } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import {
   autoUpdate,
   computePosition,
   arrow,
   flip,
   offset,
-  shift,
   Placement,
   Strategy,
 } from '@floating-ui/dom';
@@ -28,9 +22,28 @@ import { transformOriginFromArrow } from './controllers/popover-controller.js';
 import { popupStyles } from './popup-styles.css.js';
 
 /**
+ * TODO: use [popover=auto]
+ *
+ * Light dismiss closes a popup for a click outside, and normally ignores the
+ * trigger, yet non-button triggers are not recognized.
+ * That makes clicking the trigger do
+ * 1. light dismiss
+ * 2. .toggle()
+ * when the popup is open on mobile devices (tested on Safari mobile 26).
+ *
+ * I chose to use manual popovers, which effectively makes most of the benefits
+ * of the use of Popover API lost. The workarounds should be removed after
+ * custom elements can get button behavior natively.
+ *
+ * Ref:
+ * - https://github.com/openui/open-ui/issues/1088
+ * - https://github.com/MicrosoftEdge/MSEdgeExplainers/blob/main/PlatformProvidedBehaviors/explainer.md
+ * - https://github.com/whatwg/html/issues/12150
+ */
+
+/**
  * When using popup with menu, you need to manually bind them using `aria-controls`
  */
-@customElement('complementary-popup')
 export class Popup extends Attachable(InternalsAttached(LitElement)) {
   @property({ type: Boolean, reflect: true })
   open = false;
@@ -53,17 +66,18 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
   constructor() {
     super();
     this.setAttribute('notransition', '');
-    if (!this.hasAttribute('popover')) this.setAttribute('popover', 'auto');
+    if (!this.hasAttribute('popover')) this.setAttribute('popover', 'manual');
     if (!isServer) {
       this.addEventListener('request-popup-hide', this.#handleRequestHide);
-      // this.addEventListener('beforetoggle', this.#handleBeforeToggle);
-      this.addEventListener('toggle', this.#handleToggle);
       this.addEventListener('focusout', this.#handleFocusOut);
+      this.addEventListener('keydown', this.#handleKeyDown);
     }
   }
 
   override connectedCallback() {
     super.connectedCallback();
+    document.addEventListener('click', this.#handleGlobalClick, true);
+    window.addEventListener('pointerdown', this.#handleGlobalPointerDown);
     requestAnimationFrame(() =>
       requestAnimationFrame(() => this.removeAttribute('notransition'))
     );
@@ -71,15 +85,16 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
 
   override disconnectedCallback() {
     this._cleanup();
+    document.removeEventListener('click', this.#handleGlobalClick, true);
+    window.removeEventListener('pointerdown', this.#handleGlobalPointerDown);
     super.disconnectedCallback();
   }
 
   protected override updated(changedProperties: PropertyValues<this>) {
-    if (changedProperties.has('open')) {
-      this.#syncTriggerAria();
-      if (this.open) this._show();
-      else this._hide();
-    }
+    if (!changedProperties.has('open')) return;
+    this.#syncTriggerAria();
+    if (this.open) this.#show();
+    else this.#hide();
   }
 
   override [autoAttachToParent] = false;
@@ -89,11 +104,9 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
   ): void {
     if (prev) {
       prev.removeEventListener('click', this.#handleTriggerClick);
-      prev.removeEventListener('focusout', this.#handleFocusOut);
     }
     if (next) {
       next.addEventListener('click', this.#handleTriggerClick);
-      next.addEventListener('focusout', this.#handleFocusOut);
 
       const ariaNext = this.$ariaControl ? this.$ariaControl : next;
       if (!next.ariaHasPopup) ariaNext.ariaHasPopup = 'true';
@@ -101,34 +114,29 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
     }
   }
 
+  #$lastFocused: HTMLElement | null = null;
+  #pointerPath: EventTarget[] = [];
+
   #handleRequestHide = () => {
-    this.hide();
+    if (this.open) {
+      this.hide();
+    }
   };
-  // #allowHidePopover = false;
-  // #handleBeforeToggle = (e: ToggleEvent) => {
-  //   // Intercept browser light-dismiss (ESC, click outside) or external hidePopover() calls
-  //   if (e.newState === 'closed' && !this.#allowHidePopover) {
-  //     e.preventDefault();
-  //     if (this.open) {
-  //       this.hide();
-  //     }
-  //   }
-  // };
-  #handleToggle = (e: ToggleEvent) => {
-    e.preventDefault();
-    if (e.newState === 'closed' && this.open) this.hide();
-  };
+
   #handleFocusOut = (e: FocusEvent) => {
-    // for `this` and `this.$control`
-    if (this.noFocusControl || !this.open) return;
+    if (
+      this.noFocusControl ||
+      !this.open ||
+      this.#pointerPath.includes(this.$control)
+    )
+      return;
 
     const target = e.relatedTarget as Node | null;
 
-    if (target && (this.contains(target) || this.$control?.contains(target))) {
-      return;
-    }
+    if (this.contains(target)) return;
 
     if (target) {
+      this.#$lastFocused = null;
       this.hide();
       return;
     }
@@ -137,9 +145,37 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
       if (!document.hasFocus()) this.hide();
     });
   };
-  #handleTriggerClick = (e: MouseEvent) => {
-    e.preventDefault();
+
+  #handleTriggerClick = () => {
     this.toggle();
+  };
+
+  #handleGlobalClick = (e: MouseEvent) => {
+    if (!this.open) return;
+
+    let shouldHide = true;
+    e.composedPath().forEach((el) => {
+      if (el === this || el === this.$control) shouldHide = false;
+    });
+
+    if (shouldHide) {
+      this.hide();
+    }
+  };
+
+  #handleKeyDown = (e: KeyboardEvent) => {
+    this.#pointerPath = [];
+    if (e.key !== 'Escape' || !this.open) return;
+
+    const active = document.activeElement;
+    if (!this.contains(active) && !this.noFocusControl) return;
+
+    e.preventDefault();
+    this.hide();
+  };
+
+  #handleGlobalPointerDown = (event: PointerEvent) => {
+    this.#pointerPath = event.composedPath();
   };
 
   #syncTriggerAria() {
@@ -158,19 +194,27 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
     }
   }
 
-  async toggle(): Promise<void> {
+  toggle() {
     this.open = !this.open;
   }
-  async show(): Promise<void> {
-    this.open = true;
+  show() {
+    if (!this.open) this.open = true;
   }
-  async hide(): Promise<void> {
-    this.open = false;
+  hide() {
+    if (this.open) this.open = false;
   }
-  async _show(): Promise<void> {
-    if (this.isConnected && !this.matches(':popover-open')) this.showPopover();
+
+  async #show(): Promise<void> {
+    this.#$lastFocused = this.$control
+      ? this.$control
+      : document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
 
     const trigger = this.$control;
+
+    if (this.isConnected && !this.matches(':popover-open'))
+      this.showPopover({ source: trigger ?? undefined });
 
     if (trigger) {
       this._cleanup();
@@ -180,28 +224,20 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
       await this.#reposition();
     }
 
-    // await this._showing();
-
     requestAnimationFrame(() => {
       if (this.open) this.#focusFirstInteractiveElement();
     });
   }
-  async _hide(): Promise<void> {
-    // await this._hiding();
+  #hide() {
     this._cleanup();
 
     if (this.matches(':popover-open')) this.hidePopover();
-    // if (this.matches(':popover-open')) {
-    //   this.#allowHidePopover = true;
-    //   try {
-    //     this.hidePopover();
-    //   } finally {
-    //     this.#allowHidePopover = false;
-    //   }
-    // }
+
+    const lastFocused = this.#$lastFocused;
+    this.#$lastFocused = null;
+
+    lastFocused?.focus?.();
   }
-  // async _showing(): Promise<void> {}
-  // async _hiding(): Promise<void> {}
 
   #cleanupAutoUpdate?: () => void;
   #dummyArrow = isServer ? null : document.createElement('div');
@@ -218,7 +254,6 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
         middleware: [
           offset(this.offset),
           flip({ padding: this.windowPadding }),
-          shift({ padding: this.windowPadding, crossAxis: true }),
           arrow({ element: this.#dummyArrow }),
         ],
       }
