@@ -14,8 +14,9 @@
 
 name             | description
 ---              | ---
-`align`          | Reflected string; floating-ui placement; `top` by default
-`offset`         | Reflected number; pixel distance from anchor; `4` by default
+`align`          | String; floating-ui placement; `top` by default
+`offset`         | Number; pixel distance from anchor; `4` by default
+`windowPadding`  | Number; minimum distance from viewport edge; `8` by default; `window-padding` as attr
 `forceInvisible` | Reflected boolean; force the tooltip to stay hidden
 `$slot`          | The default slot element
 
