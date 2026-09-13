@@ -8,7 +8,7 @@ import { tooltipStyles } from './tooltip-styles.css.js';
  */
 @customElement('md-tooltip', true)
 export class M3Tooltip extends Tooltip {
-  static override styles = [tooltipStyles];
+  static override styles = [...super.styles, tooltipStyles];
 }
 
 declare global {

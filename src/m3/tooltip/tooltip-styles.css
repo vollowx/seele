@@ -1,11 +1,4 @@
 :host {
-  position: absolute;
-  inset: auto;
-  margin: 0;
-  padding: 4px 8px;
-  border: none;
-  box-sizing: border-box;
-
   align-items: center;
   background-color: var(--md-sys-color-inverse-surface);
   border-radius: 4px;
@@ -16,7 +9,7 @@
   max-width: var(--_max-width, 300px);
   min-height: 24px;
   opacity: 0;
-  pointer-events: none;
+  padding: 4px 8px;
   top: 0;
   transform: scaleY(0.5);
   width: max-content;
@@ -35,9 +28,7 @@
 :host(:popover-open) {
   color: var(--md-sys-color-inverse-on-surface);
   opacity: 1;
-  pointer-events: auto;
   transform: scaleY(1);
-
   transition:
     color 67ms linear 67ms,
     opacity var(--md-sys-motion-effects-fast-duration)
@@ -50,12 +41,6 @@
   :host(:popover-open) {
     color: transparent;
     opacity: 0;
-    pointer-events: none;
     transform: scaleY(0.5);
   }
-}
-
-:host([force-invisible]) {
-  opacity: 0;
-  pointer-events: none;
 }

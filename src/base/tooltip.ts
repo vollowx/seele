@@ -1,4 +1,4 @@
-import { LitElement, html, isServer } from 'lit';
+import { LitElement, PropertyValues, html, isServer } from 'lit';
 import { property, query } from 'lit/decorators.js';
 
 import {
@@ -14,6 +14,8 @@ import { focusVisible } from '../core/focus.js';
 import { Attachable, handleControlChange } from './mixins/attachable.js';
 import { InternalsAttached, internals } from './mixins/internals-attached.js';
 import { transformOriginFromArrow } from './positioning.js';
+
+import { tooltipStyles } from './tooltip-styles.css.js';
 
 let lastHidingTime = 0;
 
@@ -33,12 +35,15 @@ export class Tooltip extends Base {
 
   @property({ reflect: true }) align: import('@floating-ui/dom').Placement =
     'top';
-  @property({ type: Number, reflect: true }) offset = 4;
+  @property({ type: Number }) offset = 4;
   @property({ type: Number, attribute: 'window-padding' }) windowPadding = 8;
   @property({ type: Boolean, reflect: true, attribute: 'force-invisible' })
   forceInvisible = false;
+  @property({ type: Boolean, reflect: true }) open = false;
 
   @query('slot') $slot: HTMLSlotElement;
+
+  static override styles = [tooltipStyles];
 
   override render() {
     return html`<slot @slotchange="${this.#handleSlotChange}"></slot>`;
@@ -48,13 +53,11 @@ export class Tooltip extends Base {
   #openTimer: NodeJS.Timeout = null;
   #closeTimer: NodeJS.Timeout = null;
 
-  #visible = false;
   get visible() {
-    return this.#visible;
+    return this.open;
   }
   set visible(value: boolean) {
-    if (value) this.#show();
-    else this.#hide();
+    this.open = value;
   }
 
   constructor() {
@@ -63,15 +66,16 @@ export class Tooltip extends Base {
     if (!this.hasAttribute('popover')) this.setAttribute('popover', 'manual');
   }
 
-  override connectedCallback() {
-    super.connectedCallback();
-    window.addEventListener('pointerup', this.#handleGlobalPointerUp);
-  }
-
   override disconnectedCallback() {
     this._cleanup();
     window.removeEventListener('pointerup', this.#handleGlobalPointerUp);
     super.disconnectedCallback();
+  }
+
+  protected override updated(changedProperties: PropertyValues<this>) {
+    if (!changedProperties.has('open')) return;
+    if (this.open) this.#show();
+    else this.#hide();
   }
 
   override [handleControlChange](
@@ -94,39 +98,6 @@ export class Tooltip extends Base {
 
     if (prev) prev.removeAttribute('aria-label');
     if (next) next.setAttribute('aria-label', this.textContent ?? '');
-  }
-
-  async #show() {
-    if (this.#visible) return;
-    this.#visible = true;
-
-    clearTimeout(this.#openTimer);
-    clearTimeout(this.#closeTimer);
-
-    const trigger = this.$control;
-
-    if (trigger) {
-      this._cleanup();
-      this.#cleanupAutoUpdate = autoUpdate(trigger, this, () =>
-        this.reposition()
-      );
-      await this.reposition();
-    }
-
-    if (this.isConnected && !this.matches(':popover-open'))
-      this.showPopover({ source: trigger ?? undefined });
-  }
-
-  async #hide() {
-    if (!this.#visible) return;
-    this.#visible = false;
-
-    clearTimeout(this.#openTimer);
-    clearTimeout(this.#closeTimer);
-
-    this._cleanup();
-
-    if (this.matches(':popover-open')) this.hidePopover();
   }
 
   #handleSlotChange = () => {
@@ -194,6 +165,33 @@ export class Tooltip extends Base {
     this.#closeTimer = setTimeout(() => {
       this.visible = false;
     }, delay);
+  }
+
+  async #show() {
+    setTimeout(() => {
+      if (this.open)
+        window.addEventListener('pointerup', this.#handleGlobalPointerUp);
+    }, 0);
+
+    const trigger = this.$control;
+
+    if (this.isConnected && !this.matches(':popover-open'))
+      this.showPopover({ source: trigger ?? undefined });
+
+    if (trigger) {
+      this._cleanup();
+      this.#cleanupAutoUpdate = autoUpdate(trigger, this, () =>
+        this.reposition()
+      );
+      await this.reposition();
+    }
+  }
+
+  async #hide() {
+    window.removeEventListener('pointerup', this.#handleGlobalPointerUp);
+    this._cleanup();
+
+    if (this.matches(':popover-open')) this.hidePopover();
   }
 
   #cleanupAutoUpdate?: () => void;
