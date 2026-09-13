@@ -53,13 +53,6 @@ export class Tooltip extends Base {
   #openTimer: NodeJS.Timeout = null;
   #closeTimer: NodeJS.Timeout = null;
 
-  get visible() {
-    return this.open;
-  }
-  set visible(value: boolean) {
-    this.open = value;
-  }
-
   constructor() {
     super();
     this[internals].role = 'tooltip';
@@ -101,7 +94,7 @@ export class Tooltip extends Base {
   }
 
   #handleSlotChange = () => {
-    if (!this.visible)
+    if (!this.open)
       this.$control.setAttribute('aria-label', this.textContent ?? '');
   };
 
@@ -141,14 +134,14 @@ export class Tooltip extends Base {
     if (trigger && path.includes(trigger)) return;
     if (path.includes(this)) return;
 
-    this.visible = false;
+    this.open = false;
   };
 
   #scheduleShow(delay: number, allowInstantShow = false) {
     clearTimeout(this.#closeTimer);
     this.#openTimer = setTimeout(
       () => {
-        this.visible = true;
+        this.open = true;
       },
       allowInstantShow &&
         Date.now() - lastHidingTime < this._delays.recentlyShowed
@@ -158,12 +151,12 @@ export class Tooltip extends Base {
   }
 
   #scheduleHide(delay: number) {
-    if (this.visible) {
+    if (this.open) {
       lastHidingTime = Date.now();
     }
     clearTimeout(this.#openTimer);
     this.#closeTimer = setTimeout(() => {
-      this.visible = false;
+      this.open = false;
     }, delay);
   }
 

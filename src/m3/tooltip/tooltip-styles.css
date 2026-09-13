@@ -21,8 +21,8 @@
       var(--md-sys-motion-effects-fast),
     transform var(--md-sys-motion-spatial-fast-duration)
       var(--md-sys-motion-spatial-fast),
-    display var(--md-sys-motion-effects-fast-duration) allow-discrete,
-    overlay var(--md-sys-motion-effects-fast-duration) allow-discrete;
+    display var(--md-sys-motion-spatial-fast-duration) allow-discrete,
+    overlay var(--md-sys-motion-spatial-fast-duration) allow-discrete;
 }
 
 :host(:popover-open) {
