@@ -1438,42 +1438,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/m3/experimental/popup.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "M3Popup",
-          "members": [],
-          "superclass": {
-            "name": "Popup",
-            "module": "/src/base/experimental/popup.js"
-          },
-          "tagName": "md-popup",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "M3Popup",
-          "declaration": {
-            "name": "M3Popup",
-            "module": "src/m3/experimental/popup.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "md-popup",
-          "declaration": {
-            "name": "M3Popup",
-            "module": "src/m3/experimental/popup.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/m3/fab/fab.ts",
       "declarations": [
         {
@@ -2834,12 +2798,12 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/m3/loading-indicator/loading-indicator.ts",
+      "path": "src/m3/loading/loading.ts",
       "declarations": [
         {
           "kind": "class",
           "description": "",
-          "name": "M3LoadingIndicator",
+          "name": "M3Loading",
           "members": [
             {
               "kind": "field",
@@ -2992,18 +2956,113 @@
       "exports": [
         {
           "kind": "js",
-          "name": "M3LoadingIndicator",
+          "name": "M3Loading",
           "declaration": {
-            "name": "M3LoadingIndicator",
-            "module": "src/m3/loading-indicator/loading-indicator.ts"
+            "name": "M3Loading",
+            "module": "src/m3/loading/loading.ts"
           }
         },
         {
           "kind": "custom-element-definition",
           "name": "md-loading",
           "declaration": {
-            "name": "M3LoadingIndicator",
-            "module": "src/m3/loading-indicator/loading-indicator.ts"
+            "name": "M3Loading",
+            "module": "src/m3/loading/loading.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/menu/composed-menu.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "TODO: consider adding ariaLabel that is passed to the menu",
+          "name": "M3ComposedMenu",
+          "members": [
+            {
+              "kind": "field",
+              "name": "vibrant",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "vibrant",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "$menu",
+              "type": {
+                "text": "M3Menu"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "[handleControlChange]",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "prev",
+                  "type": {
+                    "text": "HTMLElement | null"
+                  }
+                },
+                {
+                  "name": "next",
+                  "type": {
+                    "text": "HTMLElement | null"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "role",
+              "type": {
+                "text": "string"
+              },
+              "default": "'application'"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "vibrant",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "vibrant"
+            }
+          ],
+          "superclass": {
+            "name": "Popup",
+            "module": "/src/base/popup.js"
+          },
+          "tagName": "md-composed-menu",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3ComposedMenu",
+          "declaration": {
+            "name": "M3ComposedMenu",
+            "module": "src/m3/menu/composed-menu.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-composed-menu",
+          "declaration": {
+            "name": "M3ComposedMenu",
+            "module": "src/m3/menu/composed-menu.ts"
           }
         }
       ]
@@ -3093,10 +3152,7 @@
           "name": "M3Menu",
           "cssParts": [
             {
-              "name": "menu-surface"
-            },
-            {
-              "name": "list"
+              "name": "items"
             }
           ],
           "slots": [
@@ -3105,37 +3161,7 @@
               "name": ""
             }
           ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "_durations",
-              "type": {
-                "text": "object"
-              },
-              "readonly": true,
-              "default": "{ show: 300, hide: 150 }"
-            },
-            {
-              "kind": "field",
-              "name": "color",
-              "type": {
-                "text": "'standard' | 'vibrant'"
-              },
-              "default": "'standard'",
-              "attribute": "color",
-              "reflects": true
-            }
-          ],
-          "attributes": [
-            {
-              "name": "color",
-              "type": {
-                "text": "'standard' | 'vibrant'"
-              },
-              "default": "'standard'",
-              "fieldName": "color"
-            }
-          ],
+          "members": [],
           "superclass": {
             "name": "Menu",
             "module": "/src/base/menu.js"
@@ -3291,6 +3317,134 @@
           "declaration": {
             "name": "M3NavigationRail",
             "module": "src/m3/navigation/navigation-rail.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/popup/popup.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "M3Popup",
+          "members": [
+            {
+              "kind": "field",
+              "name": "quick",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "quick",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "vibrant",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "vibrant",
+              "reflects": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "quick",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "quick"
+            },
+            {
+              "name": "vibrant",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "vibrant"
+            }
+          ],
+          "superclass": {
+            "name": "Popup",
+            "module": "/src/base/popup.js"
+          },
+          "tagName": "md-popup",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3Popup",
+          "declaration": {
+            "name": "M3Popup",
+            "module": "src/m3/popup/popup.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-popup",
+          "declaration": {
+            "name": "M3Popup",
+            "module": "src/m3/popup/popup.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/m3/progress/linear-progress.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "TODO: wavy?\nNOTE: buffering progress indicator is no longer documented in MD3",
+          "name": "M3LinearProgress",
+          "cssParts": [
+            {
+              "name": "track"
+            },
+            {
+              "name": "gap"
+            },
+            {
+              "name": "active"
+            },
+            {
+              "name": "before"
+            },
+            {
+              "name": "after"
+            }
+          ],
+          "members": [],
+          "superclass": {
+            "name": "ProgressBar",
+            "module": "/src/base/progressbar.js"
+          },
+          "tagName": "md-linear-progress",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "M3LinearProgress",
+          "declaration": {
+            "name": "M3LinearProgress",
+            "module": "src/m3/progress/linear-progress.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "md-linear-progress",
+          "declaration": {
+            "name": "M3LinearProgress",
+            "module": "src/m3/progress/linear-progress.ts"
           }
         }
       ]
@@ -3686,30 +3840,6 @@
                 "module": "src/m3/select/select.ts"
               }
             }
-          ],
-          "events": [
-            {
-              "type": {
-                "text": "Event"
-              },
-              "description": "Fired when the selected value has changed.",
-              "name": "change",
-              "inheritedFrom": {
-                "name": "M3Select",
-                "module": "src/m3/select/select.ts"
-              }
-            },
-            {
-              "type": {
-                "text": "Event"
-              },
-              "description": "Fired when the selected value has changed.",
-              "name": "input",
-              "inheritedFrom": {
-                "name": "M3Select",
-                "module": "src/m3/select/select.ts"
-              }
-            }
           ]
         }
       ],
@@ -3919,30 +4049,6 @@
                 "module": "src/m3/select/select.ts"
               }
             }
-          ],
-          "events": [
-            {
-              "type": {
-                "text": "Event"
-              },
-              "description": "Fired when the selected value has changed.",
-              "name": "change",
-              "inheritedFrom": {
-                "name": "M3Select",
-                "module": "src/m3/select/select.ts"
-              }
-            },
-            {
-              "type": {
-                "text": "Event"
-              },
-              "description": "Fired when the selected value has changed.",
-              "name": "input",
-              "inheritedFrom": {
-                "name": "M3Select",
-                "module": "src/m3/select/select.ts"
-              }
-            }
           ]
         }
       ],
@@ -4013,22 +4119,6 @@
               "kind": "method",
               "name": "renderMenu",
               "privacy": "protected"
-            }
-          ],
-          "events": [
-            {
-              "type": {
-                "text": "Event"
-              },
-              "description": "Fired when the selected value has changed.",
-              "name": "change"
-            },
-            {
-              "type": {
-                "text": "Event"
-              },
-              "description": "Fired when the selected value has changed.",
-              "name": "input"
             }
           ],
           "attributes": [
@@ -4911,17 +5001,7 @@
           "kind": "class",
           "description": "",
           "name": "M3Tooltip",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_durations",
-              "type": {
-                "text": "object"
-              },
-              "readonly": true,
-              "default": "{ show: 150, hide: 150 }"
-            }
-          ],
+          "members": [],
           "superclass": {
             "name": "Tooltip",
             "module": "/src/base/tooltip.js"

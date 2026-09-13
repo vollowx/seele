@@ -8,6 +8,7 @@ import {
   offset,
   Placement,
   Strategy,
+  shift,
 } from '@floating-ui/dom';
 
 import { getFirstTabbable } from '../core/focus.js';
@@ -17,7 +18,7 @@ import {
   autoAttachToParent,
   handleControlChange,
 } from './mixins/attachable.js';
-import { transformOriginFromArrow } from './controllers/popover-controller.js';
+import { transformOriginFromArrow } from './positioning.js';
 
 import { popupStyles } from './popup-styles.css.js';
 
@@ -243,29 +244,26 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
   #dummyArrow = isServer ? null : document.createElement('div');
   async #reposition(): Promise<void> {
     const trigger = this.$control;
-    if (!trigger) return;
+    if (!trigger) return Promise.resolve();
 
-    const { x, y, placement, middlewareData } = await computePosition(
-      trigger,
-      this,
-      {
-        placement: this.align,
-        strategy: this.strategy,
-        middleware: [
-          offset(this.offset),
-          flip({ padding: this.windowPadding }),
-          arrow({ element: this.#dummyArrow }),
-        ],
-      }
-    );
-
-    Object.assign(this.style, {
-      left: `${x}px`,
-      top: `${y}px`,
-      transformOrigin: transformOriginFromArrow(
-        placement,
-        middlewareData.arrow
-      ),
+    return computePosition(trigger, this, {
+      placement: this.align,
+      strategy: this.strategy,
+      middleware: [
+        offset(this.offset),
+        flip({ padding: this.windowPadding }),
+        shift({ padding: this.windowPadding, crossAxis: true }),
+        arrow({ element: this.#dummyArrow }),
+      ],
+    }).then(({ x, y, placement, middlewareData }) => {
+      Object.assign(this.style, {
+        left: `${x}px`,
+        top: `${y}px`,
+        transformOrigin: transformOriginFromArrow(
+          placement,
+          middlewareData.arrow
+        ),
+      });
     });
   }
   _cleanup() {
