@@ -1,6 +1,7 @@
 /**
  * @license
  * Copyright 2018-2023 Google, Inc.
+ * Modifications Copyright 2026 Lucas X. Zhao
  * SPDX-License-Identifier: Apache-2.0
  */
 
