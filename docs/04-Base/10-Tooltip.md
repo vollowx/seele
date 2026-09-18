@@ -18,6 +18,5 @@ name             | description
 `offset`         | Number; pixel distance from anchor; `4` by default
 `windowPadding`  | Number; minimum distance from viewport edge; `8` by default; `window-padding` as attr
 `forceInvisible` | Reflected boolean; force the tooltip to stay hidden
-`$slot`          | The default slot element
 
 [lit-ele]: https://lit.dev/docs/api/LitElement/

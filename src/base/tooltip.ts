@@ -1,5 +1,9 @@
+// References:
+// - https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/
+// - https://sarahmhigley.com/writing/tooltips-in-wcag-21/#best-practices-summary
+
 import { LitElement, PropertyValues, html, isServer } from 'lit';
-import { property, query } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 
 import {
   autoUpdate,
@@ -41,12 +45,10 @@ export class Tooltip extends Base {
   forceInvisible = false;
   @property({ type: Boolean, reflect: true }) open = false;
 
-  @query('slot') $slot: HTMLSlotElement;
-
   static override styles = [tooltipStyles];
 
   override render() {
-    return html`<slot @slotchange="${this.#handleSlotChange}"></slot>`;
+    return html`<slot></slot>`;
   }
 
   // Used to manage the delay before showing/hiding the tooltip.
@@ -89,14 +91,9 @@ export class Tooltip extends Base {
       next?.addEventListener(key, eventHandlers[key]);
     });
 
-    if (prev) prev.removeAttribute('aria-label');
-    if (next) next.setAttribute('aria-label', this.textContent ?? '');
+    if (prev) prev.ariaDescribedByElements = [];
+    if (next) next.ariaDescribedByElements = [this];
   }
-
-  #handleSlotChange = () => {
-    if (!this.open)
-      this.$control.setAttribute('aria-label', this.textContent ?? '');
-  };
 
   #handleFocusIn = () => {
     if (!focusVisible) return;
