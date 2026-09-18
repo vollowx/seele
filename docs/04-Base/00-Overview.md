@@ -24,7 +24,7 @@ Form controls:
 
 Navigation:
 
-- [Menu](./10-Menu.md), with [MenuItem](./10-MenuItem.md)
+- [ComposedMenu](./10-ComposedMenu.md), with [Menu](./10-Menu.md) and [MenuItem](./10-MenuItem.md)
 - [Tabs](./10-Tabs.md), with [Tab](./10-Tab.md) and [TabPanel](./10-TabPanel.md)
 
 Others:

@@ -36,6 +36,10 @@ md-item div[slot='container'] {
   border-radius: inherit;
 }
 
+md-ripple::before {
+  transition: none;
+}
+
 @media (forced-colors: active) {
   :host {
     forced-color-adjust: none;

@@ -105,9 +105,11 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
   ): void {
     if (prev) {
       prev.removeEventListener('click', this.#handleTriggerClick);
+      prev.removeEventListener('pointerdown', this.#handleTriggerPointerDown);
     }
     if (next) {
       next.addEventListener('click', this.#handleTriggerClick);
+      next.addEventListener('pointerdown', this.#handleTriggerPointerDown);
 
       const ariaNext = this.$ariaControl ? this.$ariaControl : next;
       if (!next.ariaHasPopup) ariaNext.ariaHasPopup = 'true';
@@ -117,6 +119,7 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
 
   #$lastFocused: HTMLElement | null = null;
   #pointerPath: EventTarget[] = [];
+  #triggerPointerType: string | null = null;
 
   #handleRequestHide = () => {
     if (this.open) {
@@ -148,6 +151,23 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
   };
 
   #handleTriggerClick = () => {
+    // Ignore it if the popup is already opened by a mouse or pen.
+    if (this.#triggerPointerType && this.#triggerPointerType !== 'touch') {
+      this.#triggerPointerType = null;
+      return;
+    }
+    this.#triggerPointerType = null;
+    this.toggle();
+  };
+
+  #handleTriggerPointerDown = (e: PointerEvent) => {
+    if (e.pointerType === 'touch') {
+      this.#triggerPointerType = null;
+      return;
+    }
+    if (e.button !== 0) return;
+
+    this.#triggerPointerType = e.pointerType;
     this.toggle();
   };
 
