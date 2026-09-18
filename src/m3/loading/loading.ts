@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright 2026 brahmkshatriya
+ * Modifications Copyright 2026 Lucas X. Zhao
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 // Origin: https://github.com/brahmkshatriya/material-osc/blob/main/assets/loading-shape-morph-demo.html
 
 import { LitElement, html } from 'lit';
