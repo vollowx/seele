@@ -22,6 +22,8 @@ import { transformOriginFromArrow } from './positioning.js';
 import { tooltipStyles } from './tooltip-styles.css.js';
 
 let lastHidingTime = 0;
+let userSelectHolders = { count: 0, prevUserSelect: '' };
+// To prevent text zoom bubbles in Safari. Ignore the `webkitUserSelect`s.
 
 const Base = Attachable(InternalsAttached(LitElement));
 
@@ -54,6 +56,7 @@ export class Tooltip extends Base {
   // Used to manage the delay before showing/hiding the tooltip.
   #openTimer: NodeJS.Timeout = null;
   #closeTimer: NodeJS.Timeout = null;
+  #holdingUserSelect = false;
 
   constructor() {
     super();
@@ -64,6 +67,8 @@ export class Tooltip extends Base {
   override disconnectedCallback() {
     this._cleanup();
     window.removeEventListener('pointerup', this.#handleGlobalPointerUp);
+    window.removeEventListener('keydown', this.#handleGlobalKeyDown);
+    this.#restoreUserSelect();
     super.disconnectedCallback();
   }
 
@@ -117,10 +122,12 @@ export class Tooltip extends Base {
   };
 
   #handleTouchStart = () => {
+    this.#editUserSelect();
     this.#scheduleShow(this._delays.touch.show);
   };
 
   #handleTouchEnd = () => {
+    this.#restoreUserSelect();
     this.#scheduleHide(this._delays.touch.hide);
   };
 
@@ -132,6 +139,10 @@ export class Tooltip extends Base {
     if (path.includes(this)) return;
 
     this.open = false;
+  };
+
+  #handleGlobalKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') this.open = false;
   };
 
   #scheduleShow(delay: number, allowInstantShow = false) {
@@ -163,6 +174,8 @@ export class Tooltip extends Base {
         window.addEventListener('pointerup', this.#handleGlobalPointerUp);
     }, 0);
 
+    window.addEventListener('keydown', this.#handleGlobalKeyDown);
+
     const trigger = this.$control;
 
     if (this.isConnected && !this.matches(':popover-open'))
@@ -177,11 +190,30 @@ export class Tooltip extends Base {
     }
   }
 
-  async #hide() {
+  #hide() {
     window.removeEventListener('pointerup', this.#handleGlobalPointerUp);
+    window.removeEventListener('keydown', this.#handleGlobalKeyDown);
     this._cleanup();
+    this.#restoreUserSelect();
 
     if (this.matches(':popover-open')) this.hidePopover();
+  }
+
+  #editUserSelect() {
+    if (!userSelectHolders.count) {
+      userSelectHolders.prevUserSelect = document.body.style.webkitUserSelect;
+      document.body.style.webkitUserSelect = 'none';
+    }
+    ++userSelectHolders.count;
+    this.#holdingUserSelect = true;
+  }
+
+  #restoreUserSelect() {
+    if (!this.#holdingUserSelect) return;
+    this.#holdingUserSelect = false;
+    userSelectHolders.count = Math.max(0, userSelectHolders.count - 1);
+    if (!userSelectHolders.count)
+      document.body.style.webkitUserSelect = userSelectHolders.prevUserSelect;
   }
 
   #cleanupAutoUpdate?: () => void;
