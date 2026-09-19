@@ -177,9 +177,13 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
     const path = e.composedPath();
     if (path.includes(this) || path.includes(this.$control)) return;
 
-    // When the opening is started by `pointerdown` on the trigger and, and
-    // releasing inside the popup region i.e. gap between items.
-    if (this.$control && this.#pointerPath.includes(this.$control)) return;
+    // 1. A press started inside the popup is released outside of it
+    // 2. A press started on the trigger is released inside the popup
+    if (
+      this.#pointerPath.includes(this) ||
+      this.#pointerPath.includes(this.$control)
+    )
+      return;
 
     this.hide();
   };
