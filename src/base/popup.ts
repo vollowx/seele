@@ -270,7 +270,7 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
     const lastFocused = this.#$lastFocused;
     this.#$lastFocused = null;
 
-    lastFocused?.focus?.();
+    if (!this.noFocusControl) lastFocused?.focus?.();
   }
 
   #cleanupAutoUpdate?: () => void;
