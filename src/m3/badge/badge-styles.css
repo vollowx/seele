@@ -22,15 +22,15 @@
   min-width: 16px;
   height: 16px;
   border-radius: 8px;
-  z-index: 1;
   background-color: var(--md-sys-color-error);
   color: var(--md-sys-color-on-error);
   transform: scale(var(--md-badge-scale)) translate(50%, -50%);
   transform-origin: 100% 0%;
-  transition: transform var(--md-sys-motion-spatial-fast-duration)
-    var(--md-sys-motion-spatial-fast),
+  transition:
+    transform var(--md-sys-motion-spatial-fast-duration)
+      var(--md-sys-motion-spatial-fast),
     color var(--md-sys-motion-effects-fast-duration)
-    var(--md-sys-motion-effects-fast);
+      var(--md-sys-motion-effects-fast);
   pointer-events: none;
 }
 :host([small]) [part~='badge'] {

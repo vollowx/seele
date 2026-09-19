@@ -21,6 +21,7 @@
   cursor: pointer;
   display: inline-grid;
   height: 32px;
+  isolation: isolate;
   outline: 0;
   place-content: center;
   place-items: center;

@@ -14,6 +14,7 @@
   cursor: pointer;
   display: inline-flex;
   height: 40px;
+  isolation: isolate;
   justify-content: center;
   outline: 0;
   position: relative;
