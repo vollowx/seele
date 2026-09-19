@@ -118,8 +118,8 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
   }
 
   #$lastFocused: HTMLElement | null = null;
+  #pointerType: string | null = null;
   #pointerPath: EventTarget[] = [];
-  #triggerPointerType: string | null = null;
 
   #handleRequestHide = () => {
     if (this.open) {
@@ -150,44 +150,6 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
     });
   };
 
-  #handleTriggerClick = () => {
-    // Ignore it if the popup is already opened by a mouse or pen.
-    if (this.#triggerPointerType && this.#triggerPointerType !== 'touch') {
-      this.#triggerPointerType = null;
-      return;
-    }
-    this.#triggerPointerType = null;
-    this.toggle();
-  };
-
-  #handleTriggerPointerDown = (e: PointerEvent) => {
-    if (e.pointerType === 'touch') {
-      this.#triggerPointerType = null;
-      return;
-    }
-    if (e.button !== 0) return;
-
-    this.#triggerPointerType = e.pointerType;
-    this.toggle();
-  };
-
-  #handleGlobalClick = (e: MouseEvent) => {
-    if (!this.open) return;
-
-    const path = e.composedPath();
-    if (path.includes(this) || path.includes(this.$control)) return;
-
-    // 1. A press started inside the popup is released outside of it
-    // 2. A press started on the trigger is released inside the popup
-    if (
-      this.#pointerPath.includes(this) ||
-      this.#pointerPath.includes(this.$control)
-    )
-      return;
-
-    this.hide();
-  };
-
   #handleKeyDown = (e: KeyboardEvent) => {
     this.#pointerPath = [];
     if (e.key !== 'Escape' || !this.open) return;
@@ -199,8 +161,55 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
     this.hide();
   };
 
+  #handleTriggerClick = () => {
+    // Ignore it if the popup is already opened by a mouse or pen.
+    if (this.#pointerType && this.#pointerType !== 'touch') {
+      this.#pointerType = null;
+      return;
+    }
+    this.#pointerType = null;
+    this.toggle();
+  };
+
+  #handleTriggerPointerDown = (e: PointerEvent) => {
+    if (e.pointerType === 'touch') {
+      this.#pointerType = null;
+      return;
+    }
+    if (e.button !== 0) return;
+
+    this.#pointerType = e.pointerType;
+    this.toggle();
+  };
+
+  #handleGlobalClick = (e: MouseEvent) => {
+    if (!this.open) return;
+
+    const path = e.composedPath();
+    if (path.includes(this) || path.includes(this.$control)) return;
+
+    // 1. When a press started inside the popup is released outside of it
+    // 2. When a press started on the trigger is released inside the popup
+    if (
+      this.#pointerPath.includes(this) ||
+      this.#pointerPath.includes(this.$control)
+    )
+      return;
+
+    this.hide();
+  };
+
   #handleGlobalPointerDown = (event: PointerEvent) => {
     this.#pointerPath = event.composedPath();
+
+    if (!this.open || event.pointerType === 'touch') return;
+    if (
+      this.#pointerPath.includes(this) ||
+      this.#pointerPath.includes(this.$control)
+    )
+      return;
+
+    this.hide();
   };
 
   #syncTriggerAria() {

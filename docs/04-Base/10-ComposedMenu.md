@@ -7,20 +7,20 @@ anchored to a button or other control.
 
 ## Slots
 
-| name | description     |
-| ---  | ---             |
+| name | description    |
+| ---  | ---            |
 |      | The menu items |
 
 ## CSS Parts
 
-| name   | description        |
-| ---    | ---                |
-| `menu` | The internal menu |
+| name   | description                         |
+| ---    | ---                                 |
+| `menu` | The internal [`Menu`](./10-Menu.md) |
 
 ## Properties
 
-| name    | description              |
-| ---     | ---                      |
-| `$menu` | The internal `Menu`      |
+| name    | description                         |
+| ---     | ---                                 |
+| `$menu` | The internal [`Menu`](./10-Menu.md) |
 
 Inherits all [`Popup`](./10-Popup.md) properties.
