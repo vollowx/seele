@@ -174,14 +174,14 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
   #handleGlobalClick = (e: MouseEvent) => {
     if (!this.open) return;
 
-    let shouldHide = true;
-    e.composedPath().forEach((el) => {
-      if (el === this || el === this.$control) shouldHide = false;
-    });
+    const path = e.composedPath();
+    if (path.includes(this) || path.includes(this.$control)) return;
 
-    if (shouldHide) {
-      this.hide();
-    }
+    // When the opening is started by `pointerdown` on the trigger and, and
+    // releasing inside the popup region i.e. gap between items.
+    if (this.$control && this.#pointerPath.includes(this.$control)) return;
+
+    this.hide();
   };
 
   #handleKeyDown = (e: KeyboardEvent) => {
