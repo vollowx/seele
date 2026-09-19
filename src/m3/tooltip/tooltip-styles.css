@@ -13,7 +13,6 @@
   top: 0;
   transform: scaleY(0.5);
   width: max-content;
-  z-index: 800;
 
   transition:
     color linear 67ms,
