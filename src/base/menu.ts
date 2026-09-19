@@ -69,6 +69,8 @@ export class Menu extends InternalsAttached(LitElement) {
       this.addEventListener('focusout', this.#handleFocusOut.bind(this));
       this.addEventListener('mouseover', this.#handleMouseOver.bind(this));
       this.addEventListener('click', this.#handleClick.bind(this));
+      this.addEventListener('pointerdown', this.#handlePointerDown.bind(this));
+      this.addEventListener('pointerup', this.#handlePointerUp.bind(this));
     }
   }
 
@@ -176,9 +178,33 @@ export class Menu extends InternalsAttached(LitElement) {
   }
 
   #handleClick(event: MouseEvent) {
+    if (this.#suppressClick) {
+      this.#suppressClick = false;
+      return;
+    }
+
     const item = this.#getItemFromEvent(event);
     if (!item) return;
 
+    item.item.focused = false;
+    this.#dispatchAction({ ...item });
+    if (!this.keepOpenAction) this.#dispatchHide();
+  }
+
+  #suppressClick = false;
+  #handlePointerDown(_event: PointerEvent) {
+    this.#suppressClick = false;
+  }
+
+  #handlePointerUp(event: PointerEvent) {
+    if (event.pointerType === 'touch') return;
+    if (event.button !== 0) return;
+
+    const item = this.#getItemFromEvent(event);
+    if (!item) return;
+
+    // Ignore the `click` that follows a mouse release on an item.
+    this.#suppressClick = true;
     item.item.focused = false;
     this.#dispatchAction({ ...item });
     if (!this.keepOpenAction) this.#dispatchHide();

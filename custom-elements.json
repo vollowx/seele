@@ -2978,7 +2978,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "TODO: consider adding ariaLabel that is passed to the menu",
+          "description": "",
           "name": "M3ComposedMenu",
           "members": [
             {
@@ -2990,44 +2990,6 @@
               "default": "false",
               "attribute": "vibrant",
               "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "$menu",
-              "type": {
-                "text": "M3Menu"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "[handleControlChange]",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "prev",
-                  "type": {
-                    "text": "HTMLElement | null"
-                  }
-                },
-                {
-                  "name": "next",
-                  "type": {
-                    "text": "HTMLElement | null"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "role",
-              "type": {
-                "text": "string"
-              },
-              "default": "'application'"
             }
           ],
           "attributes": [
@@ -3041,8 +3003,8 @@
             }
           ],
           "superclass": {
-            "name": "Popup",
-            "module": "/src/base/popup.js"
+            "name": "ComposedMenu",
+            "module": "/src/base/composed-menu.js"
           },
           "tagName": "md-composed-menu",
           "customElement": true

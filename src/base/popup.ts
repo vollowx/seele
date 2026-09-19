@@ -105,9 +105,11 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
   ): void {
     if (prev) {
       prev.removeEventListener('click', this.#handleTriggerClick);
+      prev.removeEventListener('pointerdown', this.#handleTriggerPointerDown);
     }
     if (next) {
       next.addEventListener('click', this.#handleTriggerClick);
+      next.addEventListener('pointerdown', this.#handleTriggerPointerDown);
 
       const ariaNext = this.$ariaControl ? this.$ariaControl : next;
       if (!next.ariaHasPopup) ariaNext.ariaHasPopup = 'true';
@@ -116,6 +118,7 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
   }
 
   #$lastFocused: HTMLElement | null = null;
+  #pointerType: string | null = null;
   #pointerPath: EventTarget[] = [];
 
   #handleRequestHide = () => {
@@ -147,23 +150,6 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
     });
   };
 
-  #handleTriggerClick = () => {
-    this.toggle();
-  };
-
-  #handleGlobalClick = (e: MouseEvent) => {
-    if (!this.open) return;
-
-    let shouldHide = true;
-    e.composedPath().forEach((el) => {
-      if (el === this || el === this.$control) shouldHide = false;
-    });
-
-    if (shouldHide) {
-      this.hide();
-    }
-  };
-
   #handleKeyDown = (e: KeyboardEvent) => {
     this.#pointerPath = [];
     if (e.key !== 'Escape' || !this.open) return;
@@ -175,8 +161,55 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
     this.hide();
   };
 
+  #handleTriggerClick = () => {
+    // Ignore it if the popup is already opened by a mouse or pen.
+    if (this.#pointerType && this.#pointerType !== 'touch') {
+      this.#pointerType = null;
+      return;
+    }
+    this.#pointerType = null;
+    this.toggle();
+  };
+
+  #handleTriggerPointerDown = (e: PointerEvent) => {
+    if (e.pointerType === 'touch') {
+      this.#pointerType = null;
+      return;
+    }
+    if (e.button !== 0) return;
+
+    this.#pointerType = e.pointerType;
+    this.toggle();
+  };
+
+  #handleGlobalClick = (e: MouseEvent) => {
+    if (!this.open) return;
+
+    const path = e.composedPath();
+    if (path.includes(this) || path.includes(this.$control)) return;
+
+    // 1. When a press started inside the popup is released outside of it
+    // 2. When a press started on the trigger is released inside the popup
+    if (
+      this.#pointerPath.includes(this) ||
+      this.#pointerPath.includes(this.$control)
+    )
+      return;
+
+    this.hide();
+  };
+
   #handleGlobalPointerDown = (event: PointerEvent) => {
     this.#pointerPath = event.composedPath();
+
+    if (!this.open || event.pointerType === 'touch') return;
+    if (
+      this.#pointerPath.includes(this) ||
+      this.#pointerPath.includes(this.$control)
+    )
+      return;
+
+    this.hide();
   };
 
   #syncTriggerAria() {
@@ -237,7 +270,7 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
     const lastFocused = this.#$lastFocused;
     this.#$lastFocused = null;
 
-    lastFocused?.focus?.();
+    if (!this.noFocusControl) lastFocused?.focus?.();
   }
 
   #cleanupAutoUpdate?: () => void;

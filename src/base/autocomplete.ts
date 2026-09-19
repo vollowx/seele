@@ -1,7 +1,7 @@
 import { LitElement, html, PropertyValues, isServer } from 'lit';
 import { property, query, queryAssignedElements } from 'lit/decorators.js';
 
-import { ensureReady } from '../core/ensure-ready.js';
+import { ensureSlottedReady } from '../core/ensure-ready.js';
 import { InternalsAttached } from './mixins/internals-attached.js';
 import { FocusDelegated } from './mixins/focus-delegated.js';
 
@@ -71,13 +71,21 @@ export class Autocomplete extends Base {
     });
   }
 
-  // TODO: handle multiple calls on this function, currently double-call
-  //       disallowed
+  override async firstUpdated() {
+    await this.handleInputSlotChange();
+  }
+
+  /**
+   * To prevent multiple calls.
+   */
+  #inputBound = false;
   private async handleInputSlotChange() {
-    await ensureReady(this.$input);
+    if (this.#inputBound) return;
+
+    await ensureSlottedReady(this, () => this.inputSlotElements);
 
     const input = this.$input;
-    const $realInput = (input as Input).$inputOrTextarea;
+    const $realInput = input?.$inputOrTextarea;
 
     $realInput.role = 'combobox';
     $realInput.ariaHasPopup = 'listbox';
@@ -89,6 +97,8 @@ export class Autocomplete extends Base {
 
     this.$popup.$ariaControl = $realInput;
     this.$popup.attach(input);
+
+    this.#inputBound = true;
   }
 
   protected async handleItemsSlotChange() {

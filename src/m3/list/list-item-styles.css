@@ -36,6 +36,15 @@ md-item div[slot='container'] {
   border-radius: inherit;
 }
 
+md-ripple::before {
+  transition: none;
+}
+
+/* TODO: temporarilyh removed for consistency when dragging */
+md-ripple::part(ripple) {
+  display: none;
+}
+
 @media (forced-colors: active) {
   :host {
     forced-color-adjust: none;

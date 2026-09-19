@@ -1,10 +1,8 @@
 ---
 title: Menu component - seele/m3
 components:
-  - m3/popup/popup
   - m3/menu/composed-menu
   - m3/menu/menu-item
-  - m3/menu/menu
 ---
 
 # Menu
@@ -70,10 +68,10 @@ You can have more precise control on the menu element by not using
 
 ## `M3ComposedMenu`
 
+- Inherits [`ComposedMenu`](../04-Base/10-ComposedMenu.md)
+
 A popup that wraps an `M3Menu` inside a [`Popup`](../04-Base/10-Popup.md). Use
 this for standalone menus anchored to a button or other control.
-
-- Inherits [`Popup`](../04-Base/10-Popup.md)
 
 ### Properties
 
