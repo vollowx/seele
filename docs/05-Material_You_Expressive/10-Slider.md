@@ -15,7 +15,7 @@ import '@vollowx/seele/m3/slider/slider.js';
 <!-- @show -->
 
 ```html
-<md-slider data-aria-label="Brightness" labeled size="l" value="75"></md-slider>
+<md-slider data-aria-label="Brightness" labeled size="l" stop value="75"></md-slider>
 <md-slider
   range
   ticks
@@ -31,8 +31,11 @@ import '@vollowx/seele/m3/slider/slider.js';
 
 ### Properties
 
-|  name  | description                                                    |
-| ---    | ---                                                            |
-| `size` | Reflected string; `xs`, `s`, `m`, `l` or `xl`; `xs` by default |
+|  name     | description                                                          |
+| ---       | ---                                                                  |
+| `size`    | Reflected string; `xs`, `s`, `m`, `l` or `xl`; `xs` by default       |
+| `stop`    | Reflected boolean; show stop mark; conflict with `ticks` and `range` |
+| `ticks`   | Reflected boolean; show tick marks                                   |
+| `labeled` | Boolean; show value label bubble                                     |
 
 [overview]: https://m3.material.io/components/sliders/overview

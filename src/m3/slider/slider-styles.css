@@ -9,6 +9,8 @@
   --_handle-margin: 6px;
 
   --_tick-size: var(--md-slider-tick-size, 4px);
+  --_tick-color: var(--md-sys-color-on-secondary-container);
+  --_tick-active-color: var(--md-sys-color-on-primary);
 
   --_track-shape: var(--md-slider-track-shape, 8px);
   --_track-height: var(--md-slider-track-height, 16px);
@@ -45,7 +47,8 @@ md-focus-ring {
 }
 
 :host([disabled]) {
-  opacity: 0.38;
+  --_tick-color: oklch(from var(--md-sys-color-on-surface) l c h / 0.38);
+  --_tick-active-color: var(--md-sys-color-inverse-on-surface);
 }
 :host([disabled]) input {
   cursor: default;
@@ -115,16 +118,14 @@ md-focus-ring {
 
 :host([disabled]) .track .inactive-before,
 :host([disabled]) .track .inactive-after {
-  background: var(--md-sys-color-on-surface);
-  opacity: calc(0.12 / 0.38);
+  background: oklch(from var(--md-sys-color-on-surface) l c h / 0.12);
 }
 :host([disabled]) .track .active {
-  background: var(--md-sys-color-on-surface);
+  background: oklch(from var(--md-sys-color-on-surface) l c h / 0.38);
 }
 
 /* Tickmarks */
 .tickmarks div {
-  --_tick-color: var(--md-sys-color-on-secondary-container);
   --_clip-offset: calc(var(--_tick-size) / 2);
   inset: 0 calc(var(--_target-width) / 2 - var(--_clip-offset));
   background-size: calc((100% - var(--_tick-size)) / var(--_ticks)) 100%;
@@ -136,13 +137,7 @@ md-focus-ring {
   );
 }
 .tickmarks .active {
-  --_tick-color: var(--md-sys-color-on-primary);
-}
-:host([disabled]) .tickmarks div {
-  --_tick-color: var(--md-sys-color-on-surface);
-}
-:host([disabled]) .tickmarks .active {
-  --_tick-color: var(--md-sys-color-inverse-on-surface);
+  --_tick-color: var(--_tick-active-color);
 }
 
 /* Track and tickmarks clipping */
@@ -196,6 +191,19 @@ md-focus-ring {
   clip-path: inset(0 var(--_clip-1) 0 var(--_clip-2-till-end) round 2px);
 }
 
+/* Stop mark */
+:host([stop]:not(:is([ticks], [range]))) .inactive-after::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  margin-block: auto;
+  inset-inline-end: calc(var(--_clip-offset) - var(--_tick-size) / 2);
+  inline-size: var(--_tick-size);
+  block-size: var(--_tick-size);
+  border-radius: 50%;
+  background: var(--_tick-color);
+}
+
 /* Handle */
 .handles-padded {
   position: absolute;
@@ -246,7 +254,7 @@ md-focus-ring {
 }
 
 :host([disabled]) .nub {
-  background: var(--md-sys-color-on-surface);
+  background: oklch(from var(--md-sys-color-on-surface) l c h / 0.38);
 }
 
 /* Overlap Logic */

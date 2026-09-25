@@ -29,8 +29,6 @@ export class Slider extends Base {
   @property({ attribute: 'aria-label-end' }) ariaLabelEnd = '';
   @property({ attribute: 'aria-valuetext-end' }) ariaValueTextEnd = '';
   @property({ type: Number }) step = 1;
-  @property({ type: Boolean }) ticks = false;
-  @property({ type: Boolean }) labeled = false;
   @property({ type: Boolean }) range = false;
 
   get nameStart() {

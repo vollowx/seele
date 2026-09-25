@@ -17,6 +17,9 @@ import { sliderStyles } from './slider-styles.css.js';
 @customElement('md-slider')
 export class M3Slider extends Slider {
   @property({ reflect: true }) size: 'xs' | 's' | 'm' | 'l' | 'xl' = 'xs';
+  @property({ reflect: true, type: Boolean }) stop = false;
+  @property({ reflect: true, type: Boolean }) ticks = false;
+  @property({ type: Boolean }) labeled = false;
 
   static override styles = [sliderStyles];
 
