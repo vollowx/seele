@@ -1,5 +1,5 @@
 import { html, nothing } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { when } from 'lit/directives/when.js';
@@ -10,13 +10,14 @@ import '../focus-ring/focus-ring.js';
 import { sliderStyles } from './slider-styles.css.js';
 
 /**
- * TODO: Add size variants
  * TODO: Add orientation: vertical
  *
  * @tag md-slider
  */
 @customElement('md-slider')
 export class M3Slider extends Slider {
+  @property({ reflect: true }) size: 'xs' | 's' | 'm' | 'l' | 'xl' = 'xs';
+
   static override styles = [sliderStyles];
 
   override render() {
