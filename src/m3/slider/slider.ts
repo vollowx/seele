@@ -27,8 +27,8 @@ export class M3Slider extends Slider {
       : 0;
     const endFraction = ((this.renderValueEnd ?? this.min) - this.min) / range;
     const containerStyles = {
-      '--_start': String(startFraction),
-      '--_end': String(endFraction),
+      '--_start-value': String(startFraction),
+      '--_end-value': String(endFraction),
       '--_ticks': String(range / step),
     };
     const containerClasses = { ranged: this.range };

@@ -7,7 +7,7 @@
   --_handle-shape: var(--md-slider-handle-shape, 20px);
   --_handle-margin: 6px;
 
-  --_tick-size: var(--md-slider-tick-size, 2px);
+  --_tick-size: var(--md-slider-tick-size, 4px);
 
   --_track-shape: 8px;
   --_track-height: var(--md-slider-track-height, 16px);
@@ -33,20 +33,6 @@ md-focus-ring {
 }
 
 .container {
-  --_start-px: calc(100% * var(--_start));
-  --_end-px: calc(100% * var(--_end));
-  --_inv-start-px: calc(100% * (1 - var(--_start)));
-  --_inv-end-px: calc(100% * (1 - var(--_end)));
-  --_mask-offset-start: calc(
-    var(--_handle-width-start) / 2 + var(--_handle-margin)
-  );
-  --_mask-offset-end: calc(
-    var(--_handle-width-end) / 2 + var(--_handle-margin)
-  );
-  --_cut-start: calc(var(--_start-px) + var(--_mask-offset-start));
-  --_cut-end: calc(var(--_inv-end-px) + var(--_mask-offset-end));
-  --_cut-inv-start: calc(var(--_inv-start-px) + var(--_mask-offset-start));
-  --_cut-inv-end: calc(var(--_end-px) + var(--_mask-offset-end));
   flex: 1;
   display: flex;
   align-items: center;
@@ -69,15 +55,35 @@ md-focus-ring {
 
 .track div,
 .tickmarks div {
+  /* gzipping optimizes this code better than writing more variables */
+  --_clip-1: calc(
+    var(--_clip-offset) + var(--_handle-margin) +
+      (100% - var(--_clip-offset) * 2) * var(--_start-value) +
+      var(--_handle-width-start) / 2
+  );
+  --_clip-1-till-end: calc(
+    var(--_clip-offset) + var(--_handle-margin) +
+      (100% - var(--_clip-offset) * 2) * (1 - var(--_start-value)) +
+      var(--_handle-width-start) / 2
+  );
+  --_clip-2: calc(
+    var(--_clip-offset) + var(--_handle-margin) +
+      (100% - var(--_clip-offset) * 2) * var(--_end-value) +
+      var(--_handle-width-end) / 2
+  );
+  --_clip-2-till-end: calc(
+    var(--_clip-offset) + var(--_handle-margin) +
+      (100% - var(--_clip-offset) * 2) * (1 - var(--_end-value)) +
+      var(--_handle-width-end) / 2
+  );
   position: absolute;
   inset: 0 calc(var(--_target-size) / 2);
 }
 
 .track div {
+  --_clip-offset: 6px; /* Introduced since track is 12px wider than ticks */
+  inset: 0 calc(var(--_target-size) / 2 - var(--_clip-offset));
   border-radius: var(--_track-shape);
-  /* FIXME: Dragging should not use transition */
-  /*transition: clip-path var(--md-sys-motion-std-effects-fast-duration)
-    var(--md-sys-motion-std-effects-fast);*/
 }
 
 .track .inactive-before,
@@ -100,11 +106,11 @@ md-focus-ring {
 /* Tickmarks */
 .tickmarks div {
   --_tick-color: var(--md-sys-color-on-secondary-container);
-  /* TODO: Properly add padding while keeping the input, tick and handle at the same position */
-  /*margin-inline: 6px;*/
-  background-size: calc((100% - var(--_tick-size) * 2) / var(--_ticks)) 100%;
+  --_clip-offset: calc(var(--_tick-size) / 2);
+  inset: 0 calc(var(--_target-size) / 2 - var(--_clip-offset));
+  background-size: calc((100% - var(--_tick-size)) / var(--_ticks)) 100%;
   background-image: radial-gradient(
-    circle at var(--_tick-size) center,
+    circle at calc(var(--_tick-size) / 2) center,
     var(--_tick-color) 0,
     var(--_tick-color) calc(var(--_tick-size) / 2),
     transparent calc(var(--_tick-size) / 2)
@@ -122,29 +128,29 @@ md-focus-ring {
 
 /* Track and tickmarks clipping */
 .inactive-before {
-  clip-path: inset(0 var(--_cut-inv-start) 0 0 round 2px);
+  clip-path: inset(0 var(--_clip-1-till-end) 0 0 round 2px);
 }
 .inactive-after {
-  clip-path: inset(0 0 0 var(--_cut-inv-end) round 2px);
+  clip-path: inset(0 0 0 var(--_clip-2) round 2px);
 }
 .active {
-  clip-path: inset(0 var(--_cut-end) 0 0 round 2px);
+  clip-path: inset(0 var(--_clip-2-till-end) 0 0 round 2px);
 }
 .ranged .active {
-  clip-path: inset(0 var(--_cut-end) 0 var(--_cut-start) round 2px);
+  clip-path: inset(0 var(--_clip-2-till-end) 0 var(--_clip-1) round 2px);
 }
 
 :host(:dir(rtl)) .inactive-before {
-  clip-path: inset(0 0 0 var(--_cut-inv-start) round 2px);
+  clip-path: inset(0 0 0 var(--_clip-1-till-end) round 2px);
 }
 :host(:dir(rtl)) .inactive-after {
-  clip-path: inset(0 var(--_cut-inv-end) 0 0 round 2px);
+  clip-path: inset(0 var(--_clip-2) 0 0 round 2px);
 }
 :host(:dir(rtl)) .active {
-  clip-path: inset(0 0 0 var(--_cut-end) round 2px);
+  clip-path: inset(0 0 0 var(--_clip-2-till-end) round 2px);
 }
 :host(:dir(rtl)) .ranged .active {
-  clip-path: inset(0 var(--_cut-start) 0 var(--_cut-end) round 2px);
+  clip-path: inset(0 var(--_clip-1) 0 var(--_clip-2-till-end) round 2px);
 }
 
 /* Handle */
@@ -162,12 +168,11 @@ md-focus-ring {
   block-size: 100%;
   inline-size: 100%;
   inset-block: 0;
-  inset-inline-start: var(--_start-px);
-  inline-size: calc(var(--_end-px) - var(--_start-px));
+  inset-inline-start: calc(100% * var(--_start-value));
+  inline-size: calc(100% * (var(--_end-value) - var(--_start-value)));
 }
 
 .handle {
-  --md-ripple-color: var(--md-sys-color-primary);
   position: absolute;
   block-size: var(--_target-size);
   inline-size: var(--_target-size);
@@ -281,22 +286,26 @@ input[type='range']:focus {
 }
 
 .ranged input {
-  --track-len: calc(100% - var(--_target-size));
-  --mid-frac: calc(var(--_start) + ((var(--_end) - var(--_start)) / 2));
-  --clip-px: calc(var(--_half-target) + var(--track-len) * var(--mid-frac));
+  --_track-len: calc(100% - var(--_target-size));
+  --_mid-frac: calc(
+    var(--_start-value) + ((var(--_end-value) - var(--_start-value)) / 2)
+  );
+  --_clip-input: calc(
+    var(--_half-target) + var(--_track-len) * var(--_mid-frac)
+  );
 }
 
 .ranged input.start {
-  clip-path: inset(0 calc(100% - var(--clip-px)) 0 0);
+  clip-path: inset(0 calc(100% - var(--_clip-input)) 0 0);
 }
 .ranged input.end {
-  clip-path: inset(0 0 0 var(--clip-px));
+  clip-path: inset(0 0 0 var(--_clip-input));
 }
 .ranged input.start:dir(rtl) {
-  clip-path: inset(0 0 0 calc(100% - var(--clip-px)));
+  clip-path: inset(0 0 0 calc(100% - var(--_clip-input)));
 }
 .ranged input.end:dir(rtl) {
-  clip-path: inset(0 var(--clip-px) 0 0);
+  clip-path: inset(0 var(--_clip-input) 0 0);
 }
 
 .onTop {
