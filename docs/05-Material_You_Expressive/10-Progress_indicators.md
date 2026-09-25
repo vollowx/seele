@@ -18,7 +18,7 @@ import '@vollowx/seele/m3/progress/linear-progress.js';
 <div class="demo">
   <md-circular-progress aria-label="Loading pictures" value="25"></md-circular-progress>
   <md-circular-progress aria-label="Loading pictures" style="
-    --md-circular-progress-thickness: 8px;
+    --md-circular-progress-thickness: 6px;
     --md-circular-progress-gap: 8px;
   "></md-circular-progress>
   <md-circular-progress aria-label="Loading pictures" indeterminate></md-circular-progress>
@@ -45,7 +45,7 @@ import '@vollowx/seele/m3/progress/linear-progress.js';
 ```html
 <md-circular-progress aria-label="Loading pictures" value="25"></md-circular-progress>
 <md-circular-progress aria-label="Loading pictures" style="
-  --md-circular-progress-thickness: 8px;
+  --md-circular-progress-thickness: 6px;
   --md-circular-progress-gap: 8px;
 "></md-circular-progress>
 <md-circular-progress aria-label="Loading pictures" indeterminate></md-circular-progress>

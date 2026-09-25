@@ -24,7 +24,7 @@ export class M3CircularProgress extends ProgressBar {
     };
 
     return html`
-      <div part="container" style=${styleMap(style)}>
+      <div part="container" aria-hidden="true" style=${styleMap(style)}>
         <svg xmlns="http://www.w3.org/2000/svg">
           <circle part="track"></circle>
           <circle part="active"></circle>
