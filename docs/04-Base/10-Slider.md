@@ -23,6 +23,4 @@ name                 | description
 `ariaValueTextEnd`   | String; `aria-valuetext-end` as an attribute
 `nameStart`          | String; form name for start value; `name-start` as an attribute
 `nameEnd`            | String; form name for end value; `name-end` as an attribute
-`labeled`            | Boolean; show value label bubble
-`ticks`              | Boolean; show tick marks
 `range`              | Boolean; two-handle range mode

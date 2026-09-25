@@ -1,15 +1,18 @@
 :host {
-  --_target-size: 48px;
-  --_half-target: calc(var(--_target-size) / 2);
+  --_target-width: 48px;
+  --_half-target: calc(var(--_target-width) / 2);
+
   --_handle-width-start: var(--md-slider-handle-width, 4px);
   --_handle-width-end: var(--md-slider-handle-width, 4px);
   --_handle-height: var(--md-slider-handle-height, 44px);
   --_handle-shape: var(--md-slider-handle-shape, 20px);
   --_handle-margin: 6px;
 
-  --_tick-size: var(--md-slider-tick-size, 2px);
+  --_tick-size: var(--md-slider-tick-size, 4px);
+  --_tick-color: var(--md-sys-color-on-secondary-container);
+  --_tick-active-color: var(--md-sys-color-on-primary);
 
-  --_track-shape: 8px;
+  --_track-shape: var(--md-slider-track-shape, 8px);
   --_track-height: var(--md-slider-track-height, 16px);
 
   display: inline-flex;
@@ -18,14 +21,34 @@
   min-inline-size: 200px;
 }
 
+:host([size='s']) {
+  --md-slider-track-height: 24px; /* Assuming that you will not use [size] and set such variable at the same time */
+}
+:host([size='m']) {
+  --md-slider-handle-height: 52px;
+  --md-slider-track-height: 40px;
+  --md-slider-track-shape: 12px;
+}
+:host([size='l']) {
+  --md-slider-handle-height: 68px;
+  --md-slider-track-height: 56px;
+  --md-slider-track-shape: 16px;
+}
+:host([size='xl']) {
+  --md-slider-handle-height: 108px;
+  --md-slider-track-height: 96px;
+  --md-slider-track-shape: 28px;
+}
+
 md-focus-ring {
-  height: 56px;
+  height: calc(var(--_handle-height) + 12px);
   width: 16px;
   inset: unset;
 }
 
 :host([disabled]) {
-  opacity: 0.38;
+  --_tick-color: oklch(from var(--md-sys-color-on-surface) l c h / 0.38);
+  --_tick-active-color: var(--md-sys-color-inverse-on-surface);
 }
 :host([disabled]) input {
   cursor: default;
@@ -33,25 +56,11 @@ md-focus-ring {
 }
 
 .container {
-  --_start-px: calc(100% * var(--_start));
-  --_end-px: calc(100% * var(--_end));
-  --_inv-start-px: calc(100% * (1 - var(--_start)));
-  --_inv-end-px: calc(100% * (1 - var(--_end)));
-  --_mask-offset-start: calc(
-    var(--_handle-width-start) / 2 + var(--_handle-margin)
-  );
-  --_mask-offset-end: calc(
-    var(--_handle-width-end) / 2 + var(--_handle-margin)
-  );
-  --_cut-start: calc(var(--_start-px) + var(--_mask-offset-start));
-  --_cut-end: calc(var(--_inv-end-px) + var(--_mask-offset-end));
-  --_cut-inv-start: calc(var(--_inv-start-px) + var(--_mask-offset-start));
-  --_cut-inv-end: calc(var(--_end-px) + var(--_mask-offset-end));
   flex: 1;
   display: flex;
   align-items: center;
   position: relative;
-  block-size: var(--_target-size);
+  block-size: var(--_handle-height);
   pointer-events: none;
   touch-action: none;
   user-select: none;
@@ -69,15 +78,34 @@ md-focus-ring {
 
 .track div,
 .tickmarks div {
+  /* gzipping optimizes this code better than writing more variables */
+  --_clip-1: calc(
+    var(--_clip-offset) + var(--_handle-margin) +
+      (100% - var(--_clip-offset) * 2) * var(--_start-value) +
+      var(--_handle-width-start) / 2
+  );
+  --_clip-1-till-end: calc(
+    var(--_clip-offset) + var(--_handle-margin) +
+      (100% - var(--_clip-offset) * 2) * (1 - var(--_start-value)) +
+      var(--_handle-width-start) / 2
+  );
+  --_clip-2: calc(
+    var(--_clip-offset) + var(--_handle-margin) +
+      (100% - var(--_clip-offset) * 2) * var(--_end-value) +
+      var(--_handle-width-end) / 2
+  );
+  --_clip-2-till-end: calc(
+    var(--_clip-offset) + var(--_handle-margin) +
+      (100% - var(--_clip-offset) * 2) * (1 - var(--_end-value)) +
+      var(--_handle-width-end) / 2
+  );
   position: absolute;
-  inset: 0 calc(var(--_target-size) / 2);
+  inset: 0 calc(var(--_target-width) / 2);
 }
 
 .track div {
-  border-radius: var(--_track-shape);
-  /* FIXME: Dragging should not use transition */
-  /*transition: clip-path var(--md-sys-motion-std-effects-fast-duration)
-    var(--md-sys-motion-std-effects-fast);*/
+  --_clip-offset: 6px; /* Introduced since track is 12px wider than ticks */
+  inset: 0 calc(var(--_target-width) / 2 - var(--_clip-offset));
 }
 
 .track .inactive-before,
@@ -90,61 +118,90 @@ md-focus-ring {
 
 :host([disabled]) .track .inactive-before,
 :host([disabled]) .track .inactive-after {
-  background: var(--md-sys-color-on-surface);
-  opacity: calc(0.12 / 0.38);
+  background: oklch(from var(--md-sys-color-on-surface) l c h / 0.12);
 }
 :host([disabled]) .track .active {
-  background: var(--md-sys-color-on-surface);
+  background: oklch(from var(--md-sys-color-on-surface) l c h / 0.38);
 }
 
 /* Tickmarks */
 .tickmarks div {
-  --_tick-color: var(--md-sys-color-on-secondary-container);
-  /* TODO: Properly add padding while keeping the input, tick and handle at the same position */
-  /*margin-inline: 6px;*/
-  background-size: calc((100% - var(--_tick-size) * 2) / var(--_ticks)) 100%;
+  --_clip-offset: calc(var(--_tick-size) / 2);
+  inset: 0 calc(var(--_target-width) / 2 - var(--_clip-offset));
+  background-size: calc((100% - var(--_tick-size)) / var(--_ticks)) 100%;
   background-image: radial-gradient(
-    circle at var(--_tick-size) center,
+    circle at calc(var(--_tick-size) / 2) center,
     var(--_tick-color) 0,
     var(--_tick-color) calc(var(--_tick-size) / 2),
     transparent calc(var(--_tick-size) / 2)
   );
 }
 .tickmarks .active {
-  --_tick-color: var(--md-sys-color-on-primary);
-}
-:host([disabled]) .tickmarks div {
-  --_tick-color: var(--md-sys-color-on-surface);
-}
-:host([disabled]) .tickmarks .active {
-  --_tick-color: var(--md-sys-color-inverse-on-surface);
+  --_tick-color: var(--_tick-active-color);
 }
 
 /* Track and tickmarks clipping */
 .inactive-before {
-  clip-path: inset(0 var(--_cut-inv-start) 0 0 round 2px);
+  /* prettier-ignore */
+  clip-path: inset(
+    0 var(--_clip-1-till-end) 0 0 round
+    var(--_track-shape) 2px 2px var(--_track-shape)
+  );
 }
 .inactive-after {
-  clip-path: inset(0 0 0 var(--_cut-inv-end) round 2px);
+  /* prettier-ignore */
+  clip-path: inset(
+    0 0 0 var(--_clip-2) round
+    2px var(--_track-shape) var(--_track-shape) 2px
+  );
 }
 .active {
-  clip-path: inset(0 var(--_cut-end) 0 0 round 2px);
+  /* prettier-ignore */
+  clip-path: inset(
+    0 var(--_clip-2-till-end) 0 0 round
+    var(--_track-shape) 2px 2px var(--_track-shape)
+  );
 }
 .ranged .active {
-  clip-path: inset(0 var(--_cut-end) 0 var(--_cut-start) round 2px);
+  clip-path: inset(0 var(--_clip-2-till-end) 0 var(--_clip-1) round 2px);
 }
 
 :host(:dir(rtl)) .inactive-before {
-  clip-path: inset(0 0 0 var(--_cut-inv-start) round 2px);
+  /* prettier-ignore */
+  clip-path: inset(
+    0 0 0 var(--_clip-1-till-end) round
+    2px var(--_track-shape) var(--_track-shape) 2px
+  );
 }
 :host(:dir(rtl)) .inactive-after {
-  clip-path: inset(0 var(--_cut-inv-end) 0 0 round 2px);
+  /* prettier-ignore */
+  clip-path: inset(
+    0 var(--_clip-2) 0 0 round
+    var(--_track-shape) 2px 2px var(--_track-shape)
+  );
 }
 :host(:dir(rtl)) .active {
-  clip-path: inset(0 0 0 var(--_cut-end) round 2px);
+  /* prettier-ignore */
+  clip-path: inset(
+    0 0 0 var(--_clip-2-till-end) round
+    2px var(--_track-shape) var(--_track-shape) 2px
+  );
 }
 :host(:dir(rtl)) .ranged .active {
-  clip-path: inset(0 var(--_cut-start) 0 var(--_cut-end) round 2px);
+  clip-path: inset(0 var(--_clip-1) 0 var(--_clip-2-till-end) round 2px);
+}
+
+/* Stop mark */
+:host([stop]:not(:is([ticks], [range]))) .inactive-after::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  margin-block: auto;
+  inset-inline-end: calc(var(--_clip-offset) - var(--_tick-size) / 2);
+  inline-size: var(--_tick-size);
+  block-size: var(--_tick-size);
+  border-radius: 50%;
+  background: var(--_tick-color);
 }
 
 /* Handle */
@@ -153,7 +210,7 @@ md-focus-ring {
   block-size: 100%;
   inline-size: 100%;
   inset: 0;
-  padding-inline: calc(var(--_target-size) / 2);
+  padding-inline: calc(var(--_target-width) / 2);
   box-sizing: border-box;
 }
 
@@ -162,16 +219,14 @@ md-focus-ring {
   block-size: 100%;
   inline-size: 100%;
   inset-block: 0;
-  inset-inline-start: var(--_start-px);
-  inline-size: calc(var(--_end-px) - var(--_start-px));
+  inset-inline-start: calc(100% * var(--_start-value));
+  inline-size: calc(100% * (var(--_end-value) - var(--_start-value)));
 }
 
 .handle {
-  --md-ripple-color: var(--md-sys-color-primary);
   position: absolute;
-  block-size: var(--_target-size);
-  inline-size: var(--_target-size);
-  border-radius: var(--_handle-shape);
+  block-size: var(--_handle-height);
+  inline-size: var(--_target-width);
   display: flex;
   place-content: center;
   place-items: center;
@@ -199,7 +254,7 @@ md-focus-ring {
 }
 
 :host([disabled]) .nub {
-  background: var(--md-sys-color-on-surface);
+  background: oklch(from var(--md-sys-color-on-surface) l c h / 0.38);
 }
 
 /* Overlap Logic */
@@ -266,37 +321,41 @@ input[type='range']:focus {
 ::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  block-size: var(--_target-size);
-  inline-size: var(--_target-size);
+  block-size: var(--_handle-height);
+  inline-size: var(--_target-width);
   opacity: 0;
   z-index: 2;
 }
 ::-moz-range-thumb {
   appearance: none;
-  block-size: var(--_target-size);
-  inline-size: var(--_target-size);
+  block-size: var(--_handle-height);
+  inline-size: var(--_target-width);
   opacity: 0;
   z-index: 2;
   transform: scaleX(0);
 }
 
 .ranged input {
-  --track-len: calc(100% - var(--_target-size));
-  --mid-frac: calc(var(--_start) + ((var(--_end) - var(--_start)) / 2));
-  --clip-px: calc(var(--_half-target) + var(--track-len) * var(--mid-frac));
+  --_track-len: calc(100% - var(--_target-width));
+  --_mid-frac: calc(
+    var(--_start-value) + ((var(--_end-value) - var(--_start-value)) / 2)
+  );
+  --_clip-input: calc(
+    var(--_half-target) + var(--_track-len) * var(--_mid-frac)
+  );
 }
 
 .ranged input.start {
-  clip-path: inset(0 calc(100% - var(--clip-px)) 0 0);
+  clip-path: inset(0 calc(100% - var(--_clip-input)) 0 0);
 }
 .ranged input.end {
-  clip-path: inset(0 0 0 var(--clip-px));
+  clip-path: inset(0 0 0 var(--_clip-input));
 }
 .ranged input.start:dir(rtl) {
-  clip-path: inset(0 0 0 calc(100% - var(--clip-px)));
+  clip-path: inset(0 0 0 calc(100% - var(--_clip-input)));
 }
 .ranged input.end:dir(rtl) {
-  clip-path: inset(0 var(--clip-px) 0 0);
+  clip-path: inset(0 var(--_clip-input) 0 0);
 }
 
 .onTop {

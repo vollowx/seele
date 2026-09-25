@@ -1,5 +1,5 @@
 import { html, nothing } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { when } from 'lit/directives/when.js';
@@ -10,13 +10,17 @@ import '../focus-ring/focus-ring.js';
 import { sliderStyles } from './slider-styles.css.js';
 
 /**
- * TODO: Add size variants
  * TODO: Add orientation: vertical
  *
  * @tag md-slider
  */
 @customElement('md-slider')
 export class M3Slider extends Slider {
+  @property({ reflect: true }) size: 'xs' | 's' | 'm' | 'l' | 'xl' = 'xs';
+  @property({ reflect: true, type: Boolean }) stop = false;
+  @property({ reflect: true, type: Boolean }) ticks = false;
+  @property({ type: Boolean }) labeled = false;
+
   static override styles = [sliderStyles];
 
   override render() {
@@ -27,8 +31,8 @@ export class M3Slider extends Slider {
       : 0;
     const endFraction = ((this.renderValueEnd ?? this.min) - this.min) / range;
     const containerStyles = {
-      '--_start': String(startFraction),
-      '--_end': String(endFraction),
+      '--_start-value': String(startFraction),
+      '--_end-value': String(endFraction),
       '--_ticks': String(range / step),
     };
     const containerClasses = { ranged: this.range };
