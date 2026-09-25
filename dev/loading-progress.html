@@ -23,6 +23,10 @@
     <md-loading aria-label="Loading episodes" style="width: 100px"></md-loading>
     <md-loading aria-label="Loading episodes" contained></md-loading>
 
+    <md-circular-progress indeterminate></md-circular-progress>
+    <md-circular-progress id="notBar" value="50"></md-circular-progress>
+    <br />
+
     <md-linear-progress
       value="50"
       style="width: 300px"
@@ -46,6 +50,7 @@
 
     <script>
       slider.addEventListener('input', (e) => {
+        notBar.value = e.target.value;
         bar.value = e.target.value;
         thickBar.value = e.target.value;
       });

@@ -1,0 +1,231 @@
+:host {
+  --_size: var(--md-circular-progress-size, 40px);
+  --_thickness: var(--md-circular-progress-thickness, 4px);
+  --_gap: var(--md-circular-progress-gap, 4px);
+  --_value: 0;
+  display: inline-flex;
+  height: var(--_size);
+  overflow: hidden;
+  position: relative;
+  width: var(--_size);
+}
+
+[part='container'] {
+  height: 100%;
+  position: absolute;
+  transform: rotate(-90deg);
+  width: 100%;
+}
+
+svg {
+  fill: transparent;
+  height: 100%;
+  width: 100%;
+}
+
+[part~='track'] {
+  stroke: var(--md-sys-color-secondary-container);
+  stroke-width: var(--_thickness);
+  stroke-linecap: round;
+
+  transition:
+    stroke-dasharray 0.5s cubic-bezier(0, 0, 0.2, 1) 0s,
+    stroke-dashoffset 0.5s cubic-bezier(0, 0, 0.2, 1) 0s,
+    stroke-width 0.25s cubic-bezier(0.4, 0, 0.6, 1) 0s;
+  cx: calc(var(--_size) / 2);
+  cy: calc(var(--_size) / 2);
+  r: calc((var(--_size) - var(--_thickness)) / 2);
+  stroke-dasharray: min(
+      (1 - var(--_value)) *
+        (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) -
+        var(--_gap) - var(--_thickness),
+      6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap) -
+        var(--_gap) - 2 * var(--_thickness)
+    )
+    calc(
+      6.2831852 * (var(--_size) - var(--_thickness)) / 2 -
+        min(
+          (1 - var(--_value)) *
+            (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) -
+            var(--_gap) - var(--_thickness),
+          6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap) -
+            var(--_gap) - 2 * var(--_thickness)
+        )
+    );
+  stroke-dashoffset: calc(
+    min(
+        (1 - var(--_value)) *
+          (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) -
+          var(--_gap) - var(--_thickness),
+        6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap) -
+          var(--_gap) - 2 * var(--_thickness)
+      ) +
+      var(--_gap) + var(--_thickness)
+  );
+}
+
+[part='active'] {
+  stroke: var(--md-sys-color-primary);
+  stroke-width: var(--_thickness);
+  stroke-linecap: round;
+
+  transition:
+    stroke-dasharray 0.5s cubic-bezier(0, 0, 0.2, 1) 0s,
+    stroke-width 0.25s cubic-bezier(0.4, 0, 0.6, 1) 0s;
+  cx: calc(var(--_size) / 2);
+  cy: calc(var(--_size) / 2);
+  r: calc((var(--_size) - var(--_thickness)) / 2);
+  stroke-dasharray: calc(
+      var(--_value) *
+        (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) -
+        var(--_thickness)
+    )
+    calc(
+      (var(--_size) - var(--_thickness)) * 6.2831852 / 2 - var(--_value) *
+        (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) +
+        var(--_thickness)
+    );
+}
+
+:host([indeterminate]) {
+  animation: rotate 6s linear infinite;
+  [part='container'] {
+    animation: container-rotate 6s ease infinite;
+  }
+  [part='track'] {
+    animation: track-grow 6s ease infinite;
+  }
+  [part='active'] {
+    animation: active-grow 6s ease infinite;
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(-90deg);
+  }
+  100% {
+    transform: rotate(990deg);
+  }
+}
+
+@keyframes container-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  8.33333% {
+    transform: rotate(90deg);
+  }
+  25% {
+    transform: rotate(90deg);
+  }
+  33.3333% {
+    transform: rotate(180deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  58.3333% {
+    transform: rotate(270deg);
+  }
+  75% {
+    transform: rotate(270deg);
+  }
+  83.3333% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes track-grow {
+  0% {
+    stroke-dasharray:
+      calc(
+        (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) *
+          0.84 - var(--_gap) - var(--_thickness)
+      ),
+      calc(
+        (var(--_size) - var(--_thickness)) * 6.2831852 / 2 -
+          (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) *
+          0.84 + var(--_gap) + var(--_thickness)
+      );
+    stroke-dashoffset: calc(
+      (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) *
+        0.84 - var(--_gap) - var(--_thickness) + var(--_gap) + var(--_thickness)
+    );
+  }
+  50% {
+    stroke-dasharray:
+      calc(
+        (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) *
+          0.13 - var(--_gap) - var(--_thickness)
+      ),
+      calc(
+        (var(--_size) - var(--_thickness)) * 6.2831852 / 2 -
+          (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) *
+          0.13 + var(--_gap) + var(--_thickness)
+      );
+    stroke-dashoffset: calc(
+      (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) *
+        0.13 - var(--_gap) - var(--_thickness) + var(--_gap) + var(--_thickness)
+    );
+  }
+  100% {
+    stroke-dasharray:
+      calc(
+        (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) *
+          0.84 - var(--_gap) - var(--_thickness)
+      ),
+      calc(
+        (var(--_size) - var(--_thickness)) * 6.2831852 / 2 -
+          (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) *
+          0.84 + var(--_gap) + var(--_thickness)
+      );
+    stroke-dashoffset: calc(
+      (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) *
+        0.84 - var(--_gap) - var(--_thickness) + var(--_gap) + var(--_thickness)
+    );
+  }
+}
+
+@keyframes active-grow {
+  0% {
+    stroke-dasharray:
+      calc(
+        (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) *
+          0.16 - var(--_thickness)
+      ),
+      calc(
+        (var(--_size) - var(--_thickness)) * 6.2831852 / 2 -
+          (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) *
+          0.16 + var(--_thickness)
+      );
+  }
+
+  50% {
+    stroke-dasharray:
+      calc(
+        (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) *
+          0.87 - var(--_thickness)
+      ),
+      calc(
+        (var(--_size) - var(--_thickness)) * 6.2831852 / 2 -
+          (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) *
+          0.87 + var(--_thickness)
+      );
+  }
+  100% {
+    stroke-dasharray:
+      calc(
+        (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) *
+          0.16 - var(--_thickness)
+      ),
+      calc(
+        (var(--_size) - var(--_thickness)) * 6.2831852 / 2 -
+          (6.2831852 * (var(--_size) - var(--_thickness)) / 2 - var(--_gap)) *
+          0.16 + var(--_thickness)
+      );
+  }
+}
