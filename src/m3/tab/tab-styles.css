@@ -27,7 +27,7 @@
 }
 :host([disabled]) {
   pointer-events: none;
-  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+  color: oklch(from var(--md-sys-color-on-surface) l c h / 38%);
 }
 
 [part='content'] {
