@@ -153,19 +153,11 @@
 }
 
 :host([disabled]) .ring {
-  stroke: color-mix(
-    in srgb,
-    var(--md-sys-color-on-surface) 38%,
-    transparent
-  );
+  stroke: oklch(from var(--md-sys-color-on-surface) l c h / 38%);
 }
 
 :host([disabled]) .dot {
-  fill: color-mix(
-    in srgb,
-    var(--md-sys-color-on-surface) 38%,
-    transparent
-  );
+  fill: oklch(from var(--md-sys-color-on-surface) l c h / 38%);
 }
 
 @media (forced-colors: active) {
