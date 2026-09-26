@@ -17,8 +17,8 @@
     --_rs: 12px; /* square radius */
     --_rp: 8px; /* pressed radius */
 
-    --_text-color: var(--_on-color);
-    --_background-color: var(--_color);
+    color: var(--_on-color);
+    background-color: var(--_color);
 
     border-start-start-radius: var(--_inner-left-radius, calc(var(--_h) / 2));
     border-end-start-radius: var(--_inner-left-radius, calc(var(--_h) / 2));
@@ -77,18 +77,14 @@
   }
 
   :host([variant='tonal']) {
-    --_background-color: var(--md-sys-color-secondary-container);
-    --_text-color: var(--md-sys-color-on-secondary-container);
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
   }
   :host([variant='outlined']) {
-    --_background-color: transparent;
-    --_text-color: var(--md-sys-color-on-surface-variant);
     --md-focus-ring-offset: 3px;
-    border-color: color-mix(
-      in srgb,
-      var(--md-sys-color-outline-variant) 100%,
-      transparent
-    );
+    background-color: transparent;
+    color: var(--md-sys-color-on-surface-variant);
+    border-color: var(--md-sys-color-outline-variant);
     border-style: solid;
     border-width: 1px;
 
@@ -97,8 +93,8 @@
     }
   }
   :host([variant='text']) {
-    --_background-color: transparent !important;
-    --_text-color: var(--_color);
+    background-color: transparent;
+    color: var(--_color);
   }
 
   :host([square]) {
@@ -126,20 +122,14 @@
 
 @layer disabled {
   :host([variant='outlined']:disabled) {
-    --_background-color: var(--md-sys-color-outline);
+    background-color: oklch(from var(--md-sys-color-outline) l c h / 10%);
   }
 
   :host(:disabled),
   :host([variant='outlined']:state(checked):disabled) {
-    --_background-color: var(--md-sys-color-on-surface);
-    --_background-opacity: 10%;
-    --_text-color: var(--md-sys-color-on-surface);
-    --_text-opacity: 38%;
-    border-color: color-mix(
-      in srgb,
-      var(--md-sys-color-on-surface) 10%,
-      transparent
-    );
+    background-color: oklch(from var(--md-sys-color-on-surface) l c h / 10%);
+    color: oklch(from var(--md-sys-color-on-surface) l c h / 38%);
+    border-color: oklch(from var(--md-sys-color-on-surface) l c h / 10%);
     box-shadow: none;
     pointer-events: none;
   }
