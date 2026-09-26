@@ -1,24 +1,14 @@
 :host {
   --md-focus-ring-shape: var(--_border-radius);
-  --_text-color: var(--md-sys-color-on-primary);
-  --_background-color: var(--md-sys-color-primary);
   --_size: 56px;
   --_border-radius: 16px;
   --_icon-size: 24px;
   align-items: center;
-  background-color: color-mix(
-    in srgb,
-    var(--_background-color) var(--_background-opacity, 100%),
-    transparent
-  );
+  background-color: var(--md-sys-color-primary);
   border-radius: var(--_border-radius);
   box-shadow: var(--md-sys-elevation-shadow-3);
   box-sizing: border-box;
-  color: color-mix(
-    in srgb,
-    var(--_text-color) var(--_text-opacity, 100%),
-    transparent
-  );
+  color: var(--md-sys-color-on-primary);
   cursor: pointer;
   display: inline-flex;
   font: var(--md-sys-typography-label-large);
@@ -55,35 +45,38 @@ md-focus-ring {
 }
 
 :host([color='primary-container']) {
-  --_text-color: var(--md-sys-color-on-primary-container);
-  --_background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  background-color: var(--md-sys-color-primary-container);
 }
 :host([color='secondary-container']) {
-  --_text-color: var(--md-sys-color-on-secondary-container);
-  --_background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  background-color: var(--md-sys-color-secondary-container);
 }
 :host([color='tertiary-container']) {
-  --_text-color: var(--md-sys-color-on-tertiary-container);
-  --_background-color: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
+  background-color: var(--md-sys-color-tertiary-container);
 }
 :host([color='secondary']) {
-  --_text-color: var(--md-sys-color-on-secondary);
-  --_background-color: var(--md-sys-color-secondary);
+  color: var(--md-sys-color-on-secondary);
+  background-color: var(--md-sys-color-secondary);
 }
 :host([color='tertiary']) {
-  --_text-color: var(--md-sys-color-on-tertiary);
-  --_background-color: var(--md-sys-color-tertiary);
+  color: var(--md-sys-color-on-tertiary);
+  background-color: var(--md-sys-color-tertiary);
 }
 :host([color='surface']) {
-  --_text-color: var(--md-sys-color-primary);
-  --_background-color: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-primary);
+  background-color: var(--md-sys-color-surface-container-high);
 }
 
+/*
+ * > Don't disable the FAB.
+ * https://m3.material.io/components/floating-action-button/accessibility#bb9f2370-4020-4c9b-9d71-64ca5150ff10
+ * But anyway, they follow the disabled button styles here.
+ */
 :host(:disabled) {
-  --_background-color: var(--md-sys-color-on-surface);
-  --_background-opacity: 12%;
-  --_text-color: var(--md-sys-color-on-surface);
-  --_text-opacity: 38%;
+  background-color: oklch(from var(--md-sys-color-on-surface) l c h / 10%);
+  color: oklch(from var(--md-sys-color-on-surface) l c h / 38%);
   box-shadow: none;
   pointer-events: none;
 }

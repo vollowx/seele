@@ -40,12 +40,12 @@
   --_inner-right-radius: 20px;
 }
 
-::slotted(:first-child:state(checked):not(:active, [square])) {
+::slotted(:first-child:not([square])) {
   border-start-start-radius: calc(var(--_h) / 2);
   border-end-start-radius: calc(var(--_h) / 2);
 }
 
-::slotted(:last-child:state(checked):not(:active, [square])) {
+::slotted(:last-child:not([square])) {
   border-start-end-radius: calc(var(--_h) / 2);
   border-end-end-radius: calc(var(--_h) / 2);
 }

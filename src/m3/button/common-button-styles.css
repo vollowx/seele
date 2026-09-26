@@ -3,16 +3,6 @@
     --_padding: 16px;
     --md-focus-ring-shape: calc(var(--_h) / 2);
     align-items: center;
-    background-color: color-mix(
-      in srgb,
-      var(--_background-color) var(--_background-opacity, 100%),
-      transparent
-    );
-    color: color-mix(
-      in srgb,
-      var(--_text-color) var(--_text-opacity, 100%),
-      transparent
-    );
     display: inline-flex;
     font: var(--md-sys-typography-label-large);
     gap: 8px;
@@ -68,8 +58,8 @@
 
 @layer override {
   :host([variant='elevated']) {
-    --_background-color: var(--md-sys-color-surface-container-low);
-    --_text-color: var(--_color);
+    background-color: var(--md-sys-color-surface-container-low);
+    color: var(--_color);
     box-shadow: var(--md-sys-elevation-shadow-1);
   }
 
