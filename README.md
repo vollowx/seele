@@ -74,10 +74,11 @@ It is 2026 now, so you don't really need to worry about this. However, in the
 future, the following web features might be used and require higher browser
 versions:
 
-| feature              | benefits                             | baseline | Chromium | Firefox | Safari |
-| ---                  | ---                                  | :---:    | :---:    | :---:   | :---:  |
-| [`anchor()`][anchor] | remove the dependency `floating-dom` | 2026     | -        | 147     | 26     |
-| [`alpha()`][alpha]   | replace `color-mix()`                | 2026     | 151      | 155     | 27     |
+| feature                  | benefits                             | baseline | Chromium | Firefox | Safari  |
+| ---                      | ---                                  | :---:    | :---:    | :---:   | :---:   |
+| [`anchor()`][anchor]     | remove the dependency `floating-dom` | 2026     | -        | 147     | 26      |
+| [`alpha()`][alpha]       | replace `oklch()`                    | 2026     | 151      | 155     | 27      |
+| [focusgroup][focusgroup] | replace roving focus code            | not yet  | 150      | not yet | not yet |
 
 _* omitting a specific browser version means using that standard does not raise
 the minimum required version of seele_
@@ -101,3 +102,4 @@ the minimum required version of seele_
 [starting-style]: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@starting-style
 [anchor]: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/anchor
 [alpha]: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/alpha
+[focusgroup]: https://open-ui.org/components/focusgroup-v2.explainer/
