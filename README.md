@@ -2,7 +2,6 @@
 
 [![npm package](https://img.shields.io/npm/v/%40vollowx%2Fseele)](https://www.npmjs.com/package/@vollowx/seele)
 [![builds.sr.ht status](https://builds.sr.ht/~lucaz/seele.svg)](https://builds.sr.ht/~lucaz/seele?)
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/@vollowx/seele)
 
 [https://tideover.cc/seele/](https://tideover.cc/seele/)
 [docs/](https://tideover.cc/seele/docs/)
