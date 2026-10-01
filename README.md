@@ -2,7 +2,6 @@
 
 [![npm package](https://img.shields.io/npm/v/%40vollowx%2Fseele)](https://www.npmjs.com/package/@vollowx/seele)
 [![builds.sr.ht status](https://builds.sr.ht/~lucaz/seele.svg)](https://builds.sr.ht/~lucaz/seele?)
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/@vollowx/seele)
 
 [https://tideover.cc/seele/](https://tideover.cc/seele/)
 [docs/](https://tideover.cc/seele/docs/)
@@ -74,10 +73,11 @@ It is 2026 now, so you don't really need to worry about this. However, in the
 future, the following web features might be used and require higher browser
 versions:
 
-| feature              | benefits                             | baseline | Chromium | Firefox | Safari |
-| ---                  | ---                                  | :---:    | :---:    | :---:   | :---:  |
-| [`anchor()`][anchor] | remove the dependency `floating-dom` | 2026     | -        | 147     | 26     |
-| [`alpha()`][alpha]   | replace `color-mix()`                | 2026     | 151      | 155     | 27     |
+| feature                  | benefits                             | baseline | Chromium | Firefox | Safari  |
+| ---                      | ---                                  | :---:    | :---:    | :---:   | :---:   |
+| [`anchor()`][anchor]     | remove the dependency `floating-dom` | 2026     | -        | 147     | 26      |
+| [`alpha()`][alpha]       | replace `oklch()`                    | 2026     | 151      | 155     | 27      |
+| [focusgroup][focusgroup] | replace roving focus code            | not yet  | 150      | not yet | not yet |
 
 _* omitting a specific browser version means using that standard does not raise
 the minimum required version of seele_
@@ -101,3 +101,4 @@ the minimum required version of seele_
 [starting-style]: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@starting-style
 [anchor]: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/anchor
 [alpha]: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/alpha
+[focusgroup]: https://open-ui.org/components/focusgroup-v2.explainer/

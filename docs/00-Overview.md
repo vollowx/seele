@@ -125,15 +125,6 @@ See [Roadmap](./01-Roadmap.md).
 1. If a component gets some properties or parts by extending or mixing, the
    properties and parts are only shown at the super class or mixins.
 
-2. The order you import components matters for now, for example `<md-menu>` looks
-   for `<md-menu-item>`s in its slot at `connectedCallback()`, and if they are not
-   registered at that moment, they will miss the chance of getting the events
-   added. Such case happens for autocomplete and tabs, and is solved for dialog,
-   menu and radio.
-
-   The easiest solution is to do things like loading menu items before menu, and
-   such cases will be handled more flexibly in the future.
-
 This documentation is also available at:
 
 - as a website with demos rendered
