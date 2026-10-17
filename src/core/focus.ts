@@ -23,7 +23,8 @@ const isTabbable = (element: Element): element is HTMLElement =>
   element.getAttribute('tabindex') !== '-1';
 
 /**
- * If callback returns true, stop walking.
+ * @param callback - If callback returns true, stop walking.
+ * @returns Found or not
  */
 const walkTabbable = (
   root: Element | DocumentFragment,
