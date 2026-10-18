@@ -66,7 +66,7 @@ You can have more precise control on the menu element by not using
 </md-popup>
 ```
 
-You should set the `aria-roledescription` accoeding to the language of your
+You should set the `aria-roledescription` according to the language of your
 webpage.
 
 ## `M3ComposedMenu`
