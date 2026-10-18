@@ -85,6 +85,7 @@ export class M3Ripple extends Attachable(InternalsAttached(LitElement)) {
   handlePointerDown = (e: PointerEvent) => {
     if (e.pointerType === 'mouse') this.#pointerDown = true;
     document.addEventListener('pointerup', this.handlePointerUp);
+    document.addEventListener('pointercancel', this.handlePointerUp);
     document.addEventListener('touchcancel', this.handlePointerUp);
     document.addEventListener('touchend', this.handlePointerUp);
     document.addEventListener('touchmove', this.handlePointerUp);
@@ -96,6 +97,7 @@ export class M3Ripple extends Attachable(InternalsAttached(LitElement)) {
   handlePointerUp = () => {
     this.#pointerDown = false;
     document.removeEventListener('pointerup', this.handlePointerUp);
+    document.removeEventListener('pointercancel', this.handlePointerUp);
     document.removeEventListener('touchcancel', this.handlePointerUp);
     document.removeEventListener('touchend', this.handlePointerUp);
     document.removeEventListener('touchmove', this.handlePointerUp);
@@ -113,6 +115,7 @@ export class M3Ripple extends Attachable(InternalsAttached(LitElement)) {
       pointerenter: { fn: this.handlePointerEnter, kbd: false },
       pointerleave: { fn: this.handlePointerLeave, kbd: false },
       pointerdown: { fn: this.handlePointerDown, kbd: false },
+      pointercancel: { fn: this.handlePointerUp, kbd: false },
     };
 
     Object.entries(eventHandlers).forEach(([eventName, { fn, kbd }]) => {

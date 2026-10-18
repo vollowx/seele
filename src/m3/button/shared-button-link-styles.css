@@ -1,5 +1,5 @@
 @layer main {
-  a[part~='anchor'] {
+  a {
     all: inherit;
     display: inline-flex;
     justify-content: center;
