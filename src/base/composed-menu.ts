@@ -25,6 +25,8 @@ export class ComposedMenu extends Popup {
   constructor() {
     super();
     this[internals].role = 'application';
+    this[internals].ariaRoleDescription = 'Menu';
+    // You should set this to "Menu" in the language of your webpage
   }
 
   override [handleControlChange](
