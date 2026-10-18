@@ -34,11 +34,13 @@ import '@vollowx/seele/m3/button/common-button-link.js';
   <span slot="checked">Selected</span>
 </md-button-toggle>
 
+<br /><br />
 <md-button size="m" variant="outlined">Round</md-button>
 <md-button square size="m" variant="outlined">Square</md-button>
 
+<br /><br />
 <md-button-link href="https://m3.material.io/" target="_blank">
-  <md-icon slot="icon">open-in-new</md-icon>
+  <iconify-icon icon="material-symbols:open-in-new" slot="icon"></iconify-icon>
   Material Design
 </md-button-link>
 ```
