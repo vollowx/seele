@@ -49,7 +49,7 @@ You can have more precise control on the menu element by not using
 >
   Settings
 </md-button>
-<md-popup for="anotherButton" role="application" vibrant>
+<md-popup for="anotherButton" role="application" aria-roledescription="Menu">
   <md-menu id="anotherMenu" aria-label="Labeled menu" style="width: 200px">
     <md-menu-item>Alphabet</md-menu-item>
     <md-menu-item>Apple</md-menu-item>
@@ -65,6 +65,9 @@ You can have more precise control on the menu element by not using
   </md-menu>
 </md-popup>
 ```
+
+You should set the `aria-roledescription` accoeding to the language of your
+webpage.
 
 ## `M3ComposedMenu`
 
