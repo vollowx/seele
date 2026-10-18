@@ -1,0 +1,13 @@
+@layer main {
+  a {
+    all: inherit;
+    display: inline-flex;
+    justify-content: center;
+  }
+}
+
+@layer override {
+  :host {
+    display: contents;
+  }
+}

@@ -29,6 +29,7 @@ Navigation:
 
 Others:
 
+- [Anchor](./10-Anchor.md)
 - [Button](./10-Button.md)
 - [Dialog](./10-Dialog.md)
 - [List](./10-List.md), with [ListItem](./10-ListItem.md)
