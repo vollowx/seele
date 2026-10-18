@@ -11,16 +11,15 @@ seele (**S**tandard **E**xtensible **Ele**ments) is an extensible
 keyboard navigation.
 
 <!-- @uncomment
-<md-button size="xl" style="width: 100%; margin-block-start: 8px" onclick="navigation.navigate('./m3/playground/')">
+<md-button-link size="xl" style="width: 100%; margin-block-start: 8px" href="./m3/playground/">
   <iconify-icon slot="icon" icon="material-symbols:category-outline"></iconify-icon>
   Playground
-</md-button>
-<md-button variant="tonal" size="l" style="width: 100%; margin-block-start: 8px" onclick="navigation.navigate('https://vollowx.github.io/timor/')">
+</md-button-link>
+<md-button-link variant="tonal" size="l" style="width: 100%; margin-block-start: 8px" href="https://vollowx.github.io/timor/">
   <iconify-icon slot="icon" icon="material-symbols:globe-clock"></iconify-icon>
   Demo app - Timor
-</md-button>
-<p><i>* As per experience from the Eleventy website, yes, this is probably necessary.</i></p>
-<p><i>* And yes, this button requires Firefox 147 and Safari 26.2 to be a working link.</i></p>
+</md-button-link>
+<p><i>* As per experience from the Eleventy website, yes, this size of buttons is probably necessary.</i></p>
 -->
 
 To try seele without installing it, you can use [importmap](importmap) like

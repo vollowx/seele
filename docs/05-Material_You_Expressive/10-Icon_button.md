@@ -3,6 +3,7 @@ title: Icon button component - seele/m3
 components:
   - m3/button/icon-button
   - m3/button/icon-button-toggle
+  - m3/button/icon-button-link
 ---
 
 # Icon button
@@ -12,6 +13,7 @@ components:
 ```typescript
 import '@vollowx/seele/m3/button/icon-button.js';
 import '@vollowx/seele/m3/button/icon-button-toggle.js';
+import '@vollowx/seele/m3/button/icon-button-link.js';
 ```
 
 <!-- @show -->
@@ -34,14 +36,29 @@ import '@vollowx/seele/m3/button/icon-button-toggle.js';
 <md-icon-button width="narrow" size="m" variant="outlined">
   <iconify-icon icon="material-symbols:delete-outline"></iconify-icon>
 </md-icon-button>
+
+<md-icon-button-link
+  href="https://github.com/vollowx/seele"
+  target="_blank"
+  variant="outlined"
+>
+  <iconify-icon
+    icon="material-symbols:code"
+    aria-label="vollowx/seele on GitHub"
+  ></iconify-icon>
+</md-icon-button-link>
 ```
 
+## Link
 
-## `M3IconButton` and `M3IconButtonToggle`
+See [Native or JavaScript link](./10-Button.md#native-or-javascript-link).
+
+## `M3IconButton`, `M3IconButtonToggle` and `M3IconButtonLink`
 
 - `M3IconButton` inherits [`Button`](../04-Base/10-Button.md)
 - `M3IconButtonToggle` inherits `M3IconButton`
 - `M3IconButtonToggle` mixes [`ButtonToggleMixin`](../04-Base/20-ButtonToggleMixin.md)
+- `M3IconButtonLink` inherits [`Anchor`](../04-Base/10-Anchor.md)
 
 ### Slots
 
@@ -57,6 +74,7 @@ name        | description
 `icon`      | All icons
 `checked`   | (only for `M3IconButtonToggle`)
 `unchecked` | (only for `M3IconButtonToggle`)
+`anchor`    | The `<a>` element (only for `M3IconButtonLink`) |
 
 ### Properties
 
