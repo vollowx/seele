@@ -35,7 +35,7 @@ export class ListController<
     this.getPossibleItems = getPossibleItems;
     this.blurItem = blurItem;
     this.focusItem = focusItem;
-    this.wrapNavigation = wrapNavigation;
+    this.wrapNavigation = wrapNavigation ?? (() => false);
   }
   hostConnected(): void {}
   hostDisconnected(): void {}

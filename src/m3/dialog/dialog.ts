@@ -37,12 +37,12 @@ export class M3Dialog extends Dialog {
   };
 
   @state() private hasIcon = false;
-  @query('[part=container]') $container: HTMLDivElement;
-  @query('[part=body]') $body: HTMLDivElement;
-  @query('[name=icon]') $icon: HTMLSlotElement;
-  @query('[part=actions]') $actions: HTMLDivElement;
-  @query('.actions-placeholder') $actionsPlaceholder: HTMLDivElement;
-  @query('[part=scrim]') $scrim: HTMLDivElement;
+  @query('[part=container]') $container!: HTMLDivElement | null;
+  @query('[part=body]') $body!: HTMLDivElement | null;
+  @query('[name=icon]') $icon!: HTMLSlotElement | null;
+  @query('[part=actions]') $actions!: HTMLDivElement | null;
+  @query('.actions-placeholder') $actionsPlaceholder!: HTMLDivElement | null;
+  @query('[part=scrim]') $scrim!: HTMLDivElement | null;
 
   static override styles = [dialogStyles];
   override render() {
@@ -89,40 +89,41 @@ export class M3Dialog extends Dialog {
 
   #handleClick = (e: MouseEvent) => {
     const target = e.target as HTMLElement;
-    if (!this.$container.contains(target) && !this.contains(target))
+    if (!this.$container!.contains(target) && !this.contains(target))
       this.close();
   };
   #handleIconSlotChange = () => {
-    this.hasIcon = this.$icon.assignedElements({ flatten: true }).length > 0;
+    this.hasIcon = this.$icon!.assignedElements({ flatten: true }).length > 0;
   };
 
   #opening = false;
   override async show() {
     if (this.#opening) return;
+    await this.updateComplete;
 
     this.#clearAnimations();
     this.#opening = true;
 
     // Reset margins to allow browser centering
-    this.$dialog.style.marginTop = 'auto';
-    this.$dialog.style.marginBottom = 'auto';
+    this.$dialog!.style.marginTop = 'auto';
+    this.$dialog!.style.marginBottom = 'auto';
 
     super.show();
 
-    const actionsHeight = this.$actions.offsetHeight;
-    this.$actionsPlaceholder.style.height = `${actionsHeight}px`;
+    const actionsHeight = this.$actions!.offsetHeight;
+    this.$actionsPlaceholder!.style.height = `${actionsHeight}px`;
 
-    this.$container.style.height = 'auto';
+    this.$container!.style.height = 'auto';
     const startHeight = 0;
-    const endHeight = this.$container.offsetHeight;
+    const endHeight = this.$container!.offsetHeight;
 
     // Lock the position to prevent auto-centering during animation
-    const rect = this.$container.getBoundingClientRect();
-    this.$dialog.style.marginTop = `${rect.top}px`;
-    this.$dialog.style.marginBottom = 'auto';
+    const rect = this.$container!.getBoundingClientRect();
+    this.$dialog!.style.marginTop = `${rect.top}px`;
+    this.$dialog!.style.marginBottom = 'auto';
 
-    this.$container.style.minHeight = '0px';
-    const container = this.$container.animate(
+    this.$container!.style.minHeight = '0px';
+    const container = this.$container!.animate(
       [
         {
           height: `${startHeight}px`,
@@ -136,19 +137,19 @@ export class M3Dialog extends Dialog {
       { duration: this._config.openDur, easing: this._config.openEase }
     );
 
-    const scrim = this.$scrim.animate([{ opacity: 0 }, { opacity: 0.32 }], {
+    const scrim = this.$scrim!.animate([{ opacity: 0 }, { opacity: 0.32 }], {
       duration: this._config.openDur,
       easing: this._config.openEase,
       fill: 'forwards',
     });
 
-    const body = this.$body.animate([{ opacity: 0.2 }, { opacity: 1 }], {
+    const body = this.$body!.animate([{ opacity: 0.2 }, { opacity: 1 }], {
       duration: this._config.bodyFadeInDur,
       easing: 'linear',
       fill: 'forwards',
     });
 
-    const actions = this.$actions.animate([{ opacity: 0.5 }, { opacity: 1 }], {
+    const actions = this.$actions!.animate([{ opacity: 0.5 }, { opacity: 1 }], {
       duration: this._config.bodyFadeInDur,
       easing: 'linear',
       fill: 'forwards',
@@ -157,7 +158,7 @@ export class M3Dialog extends Dialog {
     this.#activeAnimations.push(container, scrim, body, actions);
 
     container.onfinish = () => {
-      this.$container.style.minHeight = '';
+      this.$container!.style.minHeight = '';
       this.#clearAnimations();
     };
   }
@@ -165,14 +166,15 @@ export class M3Dialog extends Dialog {
   #closing = false;
   override async close() {
     if (this.#closing) return;
+    await this.updateComplete;
     this.#clearAnimations();
     this.#closing = true;
 
-    const startHeight = this.$container.offsetHeight;
+    const startHeight = this.$container!.offsetHeight;
     const endHeight = startHeight * 0.35;
 
-    this.$container.style.minHeight = '0px';
-    const containerSpatial = this.$container.animate(
+    this.$container!.style.minHeight = '0px';
+    const containerSpatial = this.$container!.animate(
       [
         { height: `${startHeight}px`, transform: 'translateY(0px)' },
         {
@@ -186,7 +188,7 @@ export class M3Dialog extends Dialog {
       }
     );
 
-    const containerEffects = this.$container.animate(
+    const containerEffects = this.$container!.animate(
       [{ opacity: 1 }, { opacity: 0 }],
       {
         duration: this._config.closeDur - this._config.bodyFadeOutDur,
@@ -196,19 +198,19 @@ export class M3Dialog extends Dialog {
       }
     );
 
-    const scrim = this.$scrim.animate([{ opacity: 0.32 }, { opacity: 0 }], {
+    const scrim = this.$scrim!.animate([{ opacity: 0.32 }, { opacity: 0 }], {
       duration: this._config.closeDur,
       easing: this._config.closeEase,
       fill: 'forwards',
     });
 
-    const body = this.$body.animate([{ opacity: 1 }, { opacity: 0 }], {
+    const body = this.$body!.animate([{ opacity: 1 }, { opacity: 0 }], {
       duration: this._config.bodyFadeOutDur,
       easing: 'linear',
       fill: 'forwards',
     });
 
-    const actions = this.$actions.animate([{ opacity: 1 }, { opacity: 0 }], {
+    const actions = this.$actions!.animate([{ opacity: 1 }, { opacity: 0 }], {
       duration: this._config.bodyFadeOutDur,
       easing: 'linear',
       fill: 'forwards',
@@ -223,7 +225,7 @@ export class M3Dialog extends Dialog {
     );
 
     containerSpatial.onfinish = () => {
-      this.$container.style.minHeight = '';
+      this.$container!.style.minHeight = '';
       super.close();
       this.#clearAnimations();
     };

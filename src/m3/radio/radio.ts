@@ -15,7 +15,7 @@ import { radioStyles } from './radio-styles.css.js';
  */
 @customElement('md-radio')
 export class M3Radio extends Radio {
-  @query('md-ripple') $ripple!: M3Ripple;
+  @query('md-ripple') $ripple!: M3Ripple | null;
 
   static override styles = [targetStyles, radioStyles];
   override render() {
@@ -32,7 +32,7 @@ export class M3Radio extends Radio {
 
   override firstUpdated() {
     // SSR'd <md-radio> components don't have their labels set up on time
-    this.$ripple.attach(this, true);
+    this.$ripple!.attach(this, true);
   }
   override updated(changedProperties: PropertyValues<this>) {
     super.updated(changedProperties);

@@ -66,8 +66,9 @@ export class M3FocusRing extends Attachable(InternalsAttached(LitElement)) {
     };
 
     Object.keys(eventHandlers).forEach((eventName) => {
-      prev?.removeEventListener(eventName, eventHandlers[eventName]);
-      next?.addEventListener(eventName, eventHandlers[eventName]);
+      const handler = eventHandlers[eventName as keyof typeof eventHandlers];
+      prev?.removeEventListener(eventName, handler);
+      next?.addEventListener(eventName, handler);
     });
   }
 }

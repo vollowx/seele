@@ -54,8 +54,8 @@ export class Tooltip extends Base {
   }
 
   // Used to manage the delay before showing/hiding the tooltip.
-  #openTimer: number = null;
-  #closeTimer: number = null;
+  #openTimer: number | undefined;
+  #closeTimer: number | undefined;
   #holdingUserSelect = false;
 
   constructor() {
@@ -92,8 +92,9 @@ export class Tooltip extends Base {
     };
 
     Object.keys(eventHandlers).forEach((key) => {
-      prev?.removeEventListener(key, eventHandlers[key]);
-      next?.addEventListener(key, eventHandlers[key]);
+      const handler = eventHandlers[key as keyof typeof eventHandlers];
+      prev?.removeEventListener(key, handler);
+      next?.addEventListener(key, handler);
     });
 
     if (prev) prev.ariaDescribedByElements = [];
@@ -229,7 +230,7 @@ export class Tooltip extends Base {
         offset(this.offset),
         flip({ padding: this.windowPadding }),
         shift({ padding: this.windowPadding, crossAxis: true }),
-        arrow({ element: this.#dummyArrow }),
+        arrow({ element: this.#dummyArrow! }),
       ],
     }).then(({ x, y, placement, middlewareData }) => {
       Object.assign(this.style, {
