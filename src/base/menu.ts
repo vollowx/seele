@@ -105,7 +105,8 @@ export class Menu extends InternalsAttached(LitElement) {
   }
 
   #handleFocusOut() {
-    this.listController._blurItem(this.listController._focusedItem);
+    if (this.listController._focusedItem)
+      this.listController._blurItem(this.listController._focusedItem);
   }
 
   handleKeyDown(event: KeyboardEvent) {

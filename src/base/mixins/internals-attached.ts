@@ -9,7 +9,7 @@ export const replaceStates = Symbol('replaceStates');
 export declare class InternalsAttachedInterface {
   [internals]: ElementInternals;
   [updateInternals]?(): void;
-  [replaceStates](del: Array<string>, add: Array<string>): void;
+  [replaceStates](del: Array<string>, add: Array<string | null>): void;
 }
 
 export const InternalsAttached = <T extends Constructor<LitElement>>(
@@ -24,9 +24,11 @@ export const InternalsAttached = <T extends Constructor<LitElement>>(
     }
     declare [privateInternals]?: ElementInternals;
 
-    [replaceStates](del: Array<string>, add: Array<string>): void {
+    [replaceStates](del: Array<string>, add: Array<string | null>): void {
       del.forEach((state) => this[internals].states.delete(state));
-      add.forEach((state) => this[internals].states.add(state));
+      add.forEach((state) => {
+        if (state) this[internals].states.add(state);
+      });
     }
   }
   return InternalsAttachedElement as Constructor<InternalsAttachedInterface> &

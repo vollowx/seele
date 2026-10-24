@@ -16,7 +16,7 @@ import type { Menu } from './menu.js';
  * @csspart menu - the internal menu part
  */
 export class ComposedMenu extends Popup {
-  @query('md-menu') $menu!: Menu;
+  @query('md-menu') $menu!: Menu | null;
 
   override render() {
     return html`<md-menu part="menu"><slot></slot></md-menu>`;
@@ -35,9 +35,10 @@ export class ComposedMenu extends Popup {
   ): void {
     if (next) {
       next.ariaHasPopup = 'menu';
-      ensureReady(this.$menu).then(() => {
-        next.ariaControlsElements = [this.$menu];
-        this.$menu[internals].ariaLabelledByElements = [next];
+      const menu = this.$menu!;
+      ensureReady(menu).then(() => {
+        next.ariaControlsElements = [menu];
+        menu[internals].ariaLabelledByElements = [next];
       });
     }
     super[handleControlChange](prev, next);

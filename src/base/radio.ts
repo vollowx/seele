@@ -14,7 +14,7 @@ export class Radio extends FormAssociated(InternalsAttached(LitElement)) {
   #currentScope: Node | null = null;
   #currentName = '';
 
-  @property({ type: String }) value: string;
+  @property({ type: String }) value!: string;
   @property({ type: Boolean }) checked = false;
 
   constructor() {
