@@ -18,15 +18,10 @@ code follows the styling specification.
 
 For every component, the class should follow the structure below:
 
-- `_config`s
 - `@property`s, `@query`s and other element getters, etc
 - `styles`
 - `render()`
 - Any other things
-
-`_config`s are those properties that are supposed to be overridden by classes
-inheriting. For example for an animated menu base component, there could be
-`_durations = { in: 100, out: 100 }`.
 
 All `@query`s and other element getters should be named like `$something`.
 

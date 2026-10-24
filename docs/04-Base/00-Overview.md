@@ -15,26 +15,22 @@ Form controls:
 
 - [Autocomplete](./10-Autocomplete.md)
 - [Checkbox](./10-Checkbox.md)
-- [Field](./10-Field.md)
 - [Input](./10-Input.md)
 - [Radio](./10-Radio.md)
 - [Select](./10-Select.md), with [Option](./10-Option.md)
 - [Slider](./10-Slider.md)
 - [Toggle button](./10-ToggleButton.md)
 
-Navigation:
-
-- [ComposedMenu](./10-ComposedMenu.md), with [Menu](./10-Menu.md) and [MenuItem](./10-MenuItem.md)
-- [Tabs](./10-Tabs.md), with [Tab](./10-Tab.md) and [TabPanel](./10-TabPanel.md)
-
 Others:
 
 - [Anchor](./10-Anchor.md)
 - [Button](./10-Button.md)
+- [ComposedMenu](./10-ComposedMenu.md), with [Menu](./10-Menu.md) and [MenuItem](./10-MenuItem.md)
 - [Dialog](./10-Dialog.md)
 - [List](./10-List.md), with [ListItem](./10-ListItem.md)
 - [Popup](./10-Popup.md)
 - [ProgressBar](./10-ProgressBar.md)
+- [Tabs](./10-Tabs.md), with [Tab](./10-Tab.md) and [TabPanel](./10-TabPanel.md)
 - [Tooltip](./10-Tooltip.md)
 
 ## Mixins

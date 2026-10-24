@@ -10,7 +10,7 @@ import { filledFieldStyles } from './filled-field-styles.css.js';
 export class M3FilledField extends M3Field {
   static override styles = [...super.styles, filledFieldStyles];
 
-  protected override renderContainerContent() {
+  renderContainerContent() {
     return html`
       <md-ripple
         click-behavior="none"

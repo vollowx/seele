@@ -9,7 +9,7 @@ import { outlinedFieldStyles } from './outlined-field-styles.css.js';
 export class M3OutlinedField extends M3Field {
   static override styles = [...super.styles, outlinedFieldStyles];
 
-  protected override renderContainerContent() {
+  renderContainerContent() {
     return html`
       ${this.renderOutline()} ${this.renderStart()}
       <div class="middle">
@@ -21,7 +21,7 @@ export class M3OutlinedField extends M3Field {
     `;
   }
 
-  protected renderOutline() {
+  renderOutline() {
     return html`
       <div class="outline">
         <div class="outline-start"></div>

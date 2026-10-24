@@ -5,7 +5,6 @@ import { InternalsAttached } from './mixins/internals-attached.js';
 import { FocusDelegated } from './mixins/focus-delegated.js';
 import { FormAssociated } from './mixins/form-associated.js';
 
-import type { Field } from './field.js';
 import type { Option } from './option.js';
 import type { Popup } from './popup.js';
 import type {
@@ -73,7 +72,7 @@ export class Select extends Base {
     return (this.getSelectedOptions() ?? []).map(([option]) => option);
   }
 
-  @query('[part=field]') $field!: Field;
+  @query('[part=field]') $field!: any;
   @query('[part=popup]') $popup!: Popup;
   @query('[part=menu]') $menu!: Menu;
 

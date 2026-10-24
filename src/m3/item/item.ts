@@ -1,7 +1,5 @@
-import { html } from 'lit';
+import { html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-
-import { Item } from '../../base/item.js';
 
 import { itemStyles } from './item-styles.css.js';
 
@@ -26,7 +24,7 @@ import { itemStyles } from './item-styles.css.js';
  * @slot end - end content
  */
 @customElement('md-item')
-export class M3Item extends Item {
+export class M3Item extends LitElement {
   @property({ type: Boolean, reflect: true }) multiline = false;
 
   static override styles = [itemStyles];

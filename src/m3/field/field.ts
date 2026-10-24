@@ -1,14 +1,9 @@
-import { html, PropertyValues, TemplateResult } from 'lit';
+import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { property, state } from 'lit/decorators.js';
-import { Field } from '../../base/field.js';
 
 import { fieldStyles } from './field-styles.css.js';
 
-/**
- * @fires {Event} change - Fired when the selected value has changed.
- * @fires {Event} input - Fired when the selected value has changed.
- */
-export abstract class M3Field extends Field {
+export abstract class M3Field extends LitElement {
   @property({ type: String, reflect: true }) label = '';
   @property({ type: String, reflect: true, attribute: 'supporting-text' })
   supportingText = '';
@@ -35,9 +30,9 @@ export abstract class M3Field extends Field {
   /**
    * Should be implemented by subclasses.
    */
-  protected abstract renderContainerContent(): TemplateResult;
+  abstract renderContainerContent(): TemplateResult;
 
-  protected renderSupportingText() {
+  renderSupportingText() {
     if (!this.supportingText) {
       return '';
     }
@@ -45,21 +40,21 @@ export abstract class M3Field extends Field {
     return html`<div class="supporting-text">${this.supportingText}</div>`;
   }
 
-  protected renderStart() {
+  renderStart() {
     return html`<slot
       name="start"
       class="start"
       ?hidden=${!this.hasStart}
-      @slotchange=${this.handleSlotChange}
+      @slotchange=${this.#handleSlotChange}
     ></slot>`;
   }
 
-  protected renderEnd() {
+  renderEnd() {
     return html`<slot
       name="end"
       class="end"
       ?hidden=${!this.hasEnd}
-      @slotchange=${this.handleSlotChange}
+      @slotchange=${this.#handleSlotChange}
     ></slot>`;
   }
 
@@ -70,7 +65,7 @@ export abstract class M3Field extends Field {
     super.update(changedProperties);
   }
 
-  protected handleSlotChange(e: Event) {
+  #handleSlotChange(e: Event) {
     const slot = e.target as HTMLSlotElement;
     const hasContent = slot.assignedNodes({ flatten: true }).length > 0;
     if (slot.name === 'start') this.hasStart = hasContent;
