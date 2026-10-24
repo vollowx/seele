@@ -42,11 +42,11 @@
     "note": "echo 'tsc must be called after build:css since it completes missing *-styles.css.js'",
 
     "dev": "web-dev-server",
-    "dev:css": "bun scripts/convert-css.ts --watch",
-    "build": "bun run build:css && tsc && bun scripts/minify-html-literals.ts",
-    "build:css": "bun scripts/convert-css.ts --minify",
+    "dev:css": "node scripts/convert-css.ts --watch",
+    "build": "pnpm run build:css && tsc && node scripts/minify-html-literals.ts",
+    "build:css": "node scripts/convert-css.ts --minify",
     "clean": "./scripts/clean.sh",
-    "prepublishOnly": "bun clean && bun run build",
+    "prepublishOnly": "pnpm clean && pnpm run build",
     "format": "prettier . --check",
     "format:write": "prettier . --check --write",
     "cem": "cem analyze --litelement --globs './src/m3/**/*.ts'"

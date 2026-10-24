@@ -37,9 +37,9 @@ export class M3Tab extends Tab {
     `;
   }
 
-  animateIndicator(previousTab: M3Tab) {
-    const indicator = this.$indicator;
-    if (!indicator) return;
+  async animateIndicator(previousTab: M3Tab) {
+    await this.updateComplete;
+    const indicator = this.$indicator!;
 
     indicator.getAnimations().forEach((a) => a.cancel());
     const prevIndicator = previousTab.$indicator;

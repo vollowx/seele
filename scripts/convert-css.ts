@@ -50,7 +50,7 @@ async function convertFile(cssPath: string, minify = false) {
   try {
     const raw = await readFile(cssPath, 'utf-8');
     const converted = await convertCSS(raw, cssPath, minify);
-    const outPath = `${cssPath}.ts`;
+    const outPath = `${cssPath}.js`;
     await writeFile(outPath, converted, 'utf-8');
     console.log(`converted: ${path.basename(cssPath)}`);
   } catch (err: any) {
@@ -78,7 +78,7 @@ async function run() {
         convertFile(path.join(workingDir, file), isMinify)
       )
       .on('unlink', (file) => {
-        const generatedJsPath = path.join(workingDir, `${file}.ts`);
+        const generatedJsPath = path.join(workingDir, `${file}.js`);
         if (existsSync(generatedJsPath)) {
           unlinkSync(generatedJsPath);
           console.log(`deleted: ${path.basename(generatedJsPath)}`);
