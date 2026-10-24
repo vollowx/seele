@@ -6,13 +6,13 @@ import { badgeStyles } from './badge-styles.css.js';
 // TODO: integrate with md-tab
 @customElement('md-badge')
 export class M3Badge extends LitElement {
-  @property({ type: Number }) value: number;
-  @property({ type: Number }) max: number;
+  @property({ type: Number }) value!: number;
+  @property({ type: Number }) max!: number;
   @property({ type: Boolean, reflect: true, attribute: 'show-zero' }) showZero = false;
   @property({ type: Boolean, reflect: true }) small = false;
   @property({ type: Boolean, reflect: true }) left = false;
   @property({ type: Boolean, reflect: true }) bottom = false;
-  @query('[part~="badge"]') $badge: HTMLSpanElement;
+  @query('[part~="badge"]') $badge!: HTMLSpanElement | null;
 
   static override styles = [badgeStyles];
   override render() {
