@@ -19,8 +19,7 @@ const KEYFRAMES = 20;
  */
 @customElement('md-tab')
 export class M3Tab extends Tab {
-  @query('[part="content"]') $content: HTMLDivElement;
-  @query('[part="indicator"]') $indicator: HTMLElement;
+  @query('[part="indicator"]') $indicator!: HTMLElement | null;
   @state() protected _isSecondary = false;
 
   static override styles = [targetStyles, tabStyles];
@@ -40,8 +39,9 @@ export class M3Tab extends Tab {
 
   animateIndicator(previousTab: M3Tab) {
     const indicator = this.$indicator;
-    indicator.getAnimations().forEach((a) => a.cancel());
+    if (!indicator) return;
 
+    indicator.getAnimations().forEach((a) => a.cancel());
     const prevIndicator = previousTab.$indicator;
     if (
       prevIndicator &&

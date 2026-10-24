@@ -54,8 +54,8 @@ export class Tooltip extends Base {
   }
 
   // Used to manage the delay before showing/hiding the tooltip.
-  #openTimer: NodeJS.Timeout = null;
-  #closeTimer: NodeJS.Timeout = null;
+  #openTimer: number = null;
+  #closeTimer: number = null;
   #holdingUserSelect = false;
 
   constructor() {

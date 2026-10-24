@@ -1,22 +1,20 @@
 {
   "compilerOptions": {
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "isolatedModules": true,
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "target": "ESNext",
+    "module": "ESNext",
     "moduleResolution": "bundler",
-    "noImplicitAny": false,
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+
+    "strict": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
-    "noImplicitThis": true,
-    // "noUnusedLocals": true,
-    "strict": true,
-    "strictNullChecks": false,
-    "target": "ESNext",
-    "useDefineForClassFields": false,
-    "declaration": true,
-    "types": ["node"]
+    "noUnusedLocals": true,
+
+    "importHelpers": true,
+    "declaration": true
   },
-  "include": ["src/**/*.ts"],
-  "exclude": []
+  "include": ["src/**/*.ts"]
 }
