@@ -18,8 +18,8 @@ import { listItemStyles } from './list-item-styles.css.js';
  */
 @customElement('md-list-item')
 export class M3ListItem extends ListItem {
-  @query('md-ripple') $ripple!: M3Ripple;
-  @query('md-focus-ring') $focusRing!: M3FocusRing;
+  @query('md-ripple') $ripple!: M3Ripple | null;
+  @query('md-focus-ring') $focusRing!: M3FocusRing | null;
 
   static override styles = [...super.styles, listItemStyles];
   override render() {
@@ -46,8 +46,8 @@ export class M3ListItem extends ListItem {
   constructor() {
     super();
     this.updateComplete.then(() => {
-      this.$ripple.$control = this;
-      this.$focusRing.$control = this;
+      this.$ripple!.attach(this);
+      this.$focusRing!.attach(this);
     });
   }
 
@@ -55,9 +55,9 @@ export class M3ListItem extends ListItem {
     super.updated(changed);
     if (changed.has('focused')) {
       if (this.focused) {
-        this.$focusRing.visualFocus();
+        this.$focusRing!.visualFocus();
       } else {
-        this.$focusRing.visualBlur();
+        this.$focusRing!.visualBlur();
       }
     }
   }

@@ -26,7 +26,7 @@ export class M3ButtonLink extends Anchor {
   @property({ reflect: true })
   size: 'xs' | 's' | 'm' | 'l' | 'xl' = 's';
   @property({ reflect: true, type: Boolean })
-  square: false;
+  square = false;
   @property({ reflect: true })
   color: 'primary' | 'secondary' | 'tertiary' = 'primary';
   @property({ reflect: true })

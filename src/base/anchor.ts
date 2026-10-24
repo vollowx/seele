@@ -27,7 +27,7 @@ export class Anchor extends Base {
     },
   })
   ping: Array<string> = [];
-  @query('a') $anchor: HTMLAnchorElement;
+  @query('a') $anchor!: HTMLAnchorElement | null;
 
   static override styles = [hiddenStyles];
   _renderAnchor(content: unknown) {

@@ -52,7 +52,7 @@ export const ButtonToggleMixin = <T extends Constructor<Button>>(
       this[internals].ariaPressed = this.checked ? 'true' : 'false';
       this[replaceStates](
         ['unchecked', 'checked'],
-        [PROPERTY_FROM_ARIA_PRESSED[this[internals].ariaPressed]]
+        [PROPERTY_FROM_ARIA_PRESSED[this[internals].ariaPressed as 'true' | 'false']]
       );
 
       this[internals].setFormValue(this.checked ? 'on' : null);

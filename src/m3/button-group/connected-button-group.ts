@@ -12,7 +12,7 @@ import { connectedButtonGroupStyles } from './connected-button-group-styles.css.
 @customElement('md-connected-button-group')
 export class M3ConnectedButtonGroup extends LitElement {
   @property({ type: Boolean }) multiple = false;
-  @queryAssignedElements() $buttons: Array<ToggleButton>;
+  @queryAssignedElements() $buttons!: Array<ToggleButton>;
 
   static override styles = [connectedButtonGroupStyles];
   override render() {

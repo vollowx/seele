@@ -31,7 +31,7 @@ const CENTER = CANVAS_SIZE / 2;
 @customElement('md-loading')
 export class M3Loading extends InternalsAttached(LitElement) {
   @property({ type: Boolean, reflect: true }) contained = false;
-  @query('canvas') $canvas!: HTMLCanvasElement;
+  @query('canvas') $canvas!: HTMLCanvasElement | null;
 
   static override styles = [loadingStyles];
   override render() {
@@ -56,7 +56,7 @@ export class M3Loading extends InternalsAttached(LitElement) {
   }
 
   override firstUpdated() {
-    this.#ctx = this.$canvas.getContext('2d');
+    this.#ctx = this.$canvas!.getContext('2d');
     this.#cacheColors();
     setInterval(this.#cacheColors.bind(this), 1000);
     this.#animationFrame = requestAnimationFrame(this.#animate);
@@ -88,10 +88,10 @@ export class M3Loading extends InternalsAttached(LitElement) {
     rotation: number,
     scale: number
   ) {
-    if (!this.#ctx || !this.$canvas) return;
+    if (!this.#ctx) return;
     const ctx = this.#ctx;
 
-    ctx.clearRect(0, 0, this.$canvas.width, this.$canvas.height);
+    ctx.clearRect(0, 0, this.$canvas!.width, this.$canvas!.height);
     ctx.save();
     ctx.translate(CENTER, CENTER);
     ctx.scale(scale, scale);

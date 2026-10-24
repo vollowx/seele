@@ -8,6 +8,7 @@ import { standardButtonGroupStyles } from './standard-button-group-styles.css.js
 const EXPAND_FACTOR = 1.15;
 
 const shapeAnimation = Symbol('shapeAnimation');
+type ShapeAnimatedElement = HTMLElement & { [shapeAnimation]?: Animation };
 
 /**
  * @tag md-button-group
@@ -19,7 +20,7 @@ export class M3StandardButtonGroup extends LitElement {
   @property({ reflect: true })
   size: 'xs' | 's' | '' = '';
   @queryAssignedElements()
-  $buttons: Array<HTMLElement>;
+  $buttons!: Array<ShapeAnimatedElement>;
 
   static override styles = [standardButtonGroupStyles];
   override render() {
@@ -49,7 +50,7 @@ export class M3StandardButtonGroup extends LitElement {
 
       entries.forEach((entry) => {
         const target = entry.target as HTMLElement;
-        const index = this.$buttons.indexOf(target);
+        const index = this.$buttons.indexOf(target as ShapeAnimatedElement);
         if (index !== -1) { // TODO: support for vertical languages?
           const currentWidth = target.style.width;
           target.style.width = '';
@@ -71,7 +72,7 @@ export class M3StandardButtonGroup extends LitElement {
 
   #abortController!: AbortController;
   #activeIndex = -1;
-  #resizeObserver: ResizeObserver;
+  #resizeObserver!: ResizeObserver;
   #baseWidths: Array<number> = [];
 
   #handleSlotChange = () => {
@@ -102,7 +103,9 @@ export class M3StandardButtonGroup extends LitElement {
    * Passing no element resets all shape changes
    */
   updateLayout(target: HTMLElement | null = null) {
-    const pressedIndex = target ? this.$buttons.indexOf(target) : -1;
+    const pressedIndex = target
+      ? this.$buttons.indexOf(target as ShapeAnimatedElement)
+      : -1;
     this.#activeIndex = pressedIndex;
     const pressedBaseWidth =
       pressedIndex !== -1 ? this.#baseWidths[pressedIndex] : 0;

@@ -58,7 +58,7 @@ export const Attachable = <T extends Constructor<LitElement>>(
       }
     }
 
-    @property({ attribute: 'for', type: String }) htmlFor: string | null;
+    @property({ attribute: 'for', type: String }) htmlFor!: string | null;
 
     override connectedCallback() {
       super.connectedCallback();

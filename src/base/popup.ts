@@ -57,7 +57,7 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
   @property({ type: Number }) offset = 0;
   @property({ type: Number, attribute: 'window-padding' }) windowPadding = 8;
 
-  $ariaControl: HTMLElement | null;
+  $ariaControl!: HTMLElement | null;
 
   static override styles = [popupStyles];
   override render() {
@@ -131,7 +131,7 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
     if (
       this.noFocusControl ||
       !this.open ||
-      this.#pointerPath.includes(this.$control)
+      this.#pointerPath.includes(this.$control!)
     )
       return;
 
@@ -186,13 +186,13 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
     if (!this.open) return;
 
     const path = e.composedPath();
-    if (path.includes(this) || path.includes(this.$control)) return;
+    if (path.includes(this) || path.includes(this.$control!)) return;
 
     // 1. When a press started inside the popup is released outside of it
     // 2. When a press started on the trigger is released inside the popup
     if (
       this.#pointerPath.includes(this) ||
-      this.#pointerPath.includes(this.$control)
+      this.#pointerPath.includes(this.$control!)
     )
       return;
 
@@ -205,7 +205,7 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
     if (!this.open || event.pointerType === 'touch') return;
     if (
       this.#pointerPath.includes(this) ||
-      this.#pointerPath.includes(this.$control)
+      this.#pointerPath.includes(this.$control!)
     )
       return;
 
@@ -286,7 +286,7 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
         offset(this.offset),
         flip({ padding: this.windowPadding }),
         shift({ padding: this.windowPadding, crossAxis: true }),
-        arrow({ element: this.#dummyArrow }),
+        arrow({ element: this.#dummyArrow! }),
       ],
     }).then(({ x, y, placement, middlewareData }) => {
       Object.assign(this.style, {

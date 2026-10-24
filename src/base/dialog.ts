@@ -16,7 +16,7 @@ import { getFirstTabbable } from '../core/focus.js';
  * ```
  */
 export class Dialog extends LitElement {
-  @query('dialog') $dialog: HTMLDialogElement;
+  @query('dialog') $dialog!: HTMLDialogElement | null;
 
   _handleCancel = (e: Event) => {
     e.preventDefault();
@@ -24,7 +24,8 @@ export class Dialog extends LitElement {
   };
 
   async show() {
-    this.$dialog.showModal();
+    await this.updateComplete;
+    this.$dialog!.showModal();
     const autoFocus = this.querySelector<HTMLElement>('[autofocus]');
     if (autoFocus) {
       autoFocus.focus();
@@ -35,6 +36,7 @@ export class Dialog extends LitElement {
   }
 
   async close() {
-    this.$dialog.close();
+    await this.updateComplete;
+    this.$dialog!.close();
   }
 }

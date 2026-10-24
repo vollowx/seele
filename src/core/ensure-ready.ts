@@ -2,7 +2,7 @@ export async function ensureReady(
   element: HTMLElement | null,
   useAnimationFrame = false
 ): Promise<void> {
-  if (!element) return null;
+  if (!element) return;
 
   if (element.matches(':not(:defined)'))
     await customElements.whenDefined(element.tagName.toLowerCase());

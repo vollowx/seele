@@ -26,8 +26,8 @@ export class M3Switch extends ToggleButton {
   @property({ type: Boolean, reflect: true, attribute: 'checked-icon-only' })
   checkedIconOnly = false;
 
-  @query('md-ripple') $ripple!: M3Ripple;
-  @query('[part~="thumb"]') $thumb!: HTMLSpanElement;
+  @query('md-ripple') $ripple!: M3Ripple | null;
+  @query('[part~="thumb"]') $thumb!: HTMLSpanElement | null;
 
   static override styles = [targetStyles, switchStyles];
   override render() {
@@ -72,7 +72,7 @@ export class M3Switch extends ToggleButton {
   }
   override firstUpdated() {
     // SSR'd <md-switch> components don't have their labels set up on time
-    this.$ripple.attach(this, true);
+    this.$ripple!.attach(this, true);
   }
 
   #pointerDownX = 0;
@@ -94,13 +94,13 @@ export class M3Switch extends ToggleButton {
     const limitedDiff = this.checked
       ? Math.min(0, Math.max(-20, diff))
       : Math.min(20, Math.max(0, diff));
-    this.$thumb.style.setProperty(
+    this.$thumb!.style.setProperty(
       '--_thumb-diff-pointer',
       `${2 * limitedDiff}px`
     );
     // Thumb loses its `:active` status before pointer up event
-    this.$thumb.style.setProperty('--_thumb-diameter', '28px');
-    this.$thumb.style.transitionDuration = '0s';
+    this.$thumb!.style.setProperty('--_thumb-diameter', '28px');
+    this.$thumb!.style.transitionDuration = '0s';
   };
 
   #handlePointerUp = (e: PointerEvent) => {
@@ -108,7 +108,7 @@ export class M3Switch extends ToggleButton {
     this.releasePointerCapture(e.pointerId);
 
     const trackRect = this.getBoundingClientRect();
-    const thumbRect = this.$thumb.getBoundingClientRect();
+    const thumbRect = this.$thumb!.getBoundingClientRect();
     const diff =
       thumbRect.left +
       thumbRect.width / 2 -
@@ -116,9 +116,9 @@ export class M3Switch extends ToggleButton {
       trackRect.width / 2;
     const shouldBeChecked = (diff >= 0 && !isRTL()) || (diff < 0 && isRTL());
 
-    this.$thumb.style.setProperty('--_thumb-diff-pointer', '');
-    this.$thumb.style.setProperty('--_thumb-diameter', '');
-    this.$thumb.style.transitionDuration = '';
+    this.$thumb!.style.setProperty('--_thumb-diff-pointer', '');
+    this.$thumb!.style.setProperty('--_thumb-diameter', '');
+    this.$thumb!.style.transitionDuration = '';
 
     if (this.checked != shouldBeChecked) this._toggle();
   };

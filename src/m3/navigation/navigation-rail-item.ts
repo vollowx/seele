@@ -11,11 +11,11 @@ import { navigationRailItemStyles } from './navigation-rail-item-styles.css.js';
 
 @customElement('md-nav-rail-item')
 export class M3NavigationRailItem extends Button {
-  @property({ reflect: true }) label: string;
+  @property() label = '';
   @property({ type: Boolean, reflect: true }) active = false;
 
-  @query('md-focus-ring') $focusRing: M3FocusRing;
-  @query('md-ripple') $ripple: M3Ripple;
+  @query('md-focus-ring') $focusRing!: M3FocusRing | null;
+  @query('md-ripple') $ripple!: M3Ripple | null;
 
   static override styles = [navigationRailItemStyles];
   override render() {
@@ -40,8 +40,8 @@ export class M3NavigationRailItem extends Button {
   }
 
   override firstUpdated() {
-    this.$focusRing.attach(this);
-    this.$ripple.attach(this);
+    this.$focusRing!.attach(this);
+    this.$ripple!.attach(this);
   }
 }
 
