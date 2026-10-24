@@ -1,14 +1,140 @@
 import { html } from 'lit';
 import { query, state, customElement } from 'lit/decorators.js';
+
 import { ensureSlottedReady } from '../../core/ensure-ready.js';
 import { Dialog } from '../../base/dialog.js';
+
+import { getSpring } from '../styles/motion.js';
 import { dialogStyles } from './dialog-styles.css.js';
+
+// Was based on https://m3.material.io/styles/motion/easing-and-duration/applying-easing-and-duration#e5b958f0-435d-4e84-aed4-8d1ea395fa5c
+// TODO: use curves and durations from motion physics
+const options = {
+  openEase: 'cubic-bezier(0, 0, 0, 1)',
+  closeEase: 'cubic-bezier(0.3, 0, 1, 1)',
+  vertSlide: 40,
+  openDur: 500,
+  closeDur: 200,
+  bodyFadeInDur: 200,
+  bodyFadeOutDur: 100,
+};
+
+type AnimationPart = 'container' | 'effects' | 'scrim' | 'body' | 'actions';
+type AnimationRecipe = {
+  keyframes: Keyframe[];
+  options: KeyframeAnimationOptions;
+};
+type DialogAnimations = {
+  open: Partial<Record<AnimationPart, AnimationRecipe>>;
+  close: Partial<Record<AnimationPart, AnimationRecipe>>;
+};
+
+const opacity = (
+  from: string,
+  to: string,
+  options: KeyframeAnimationOptions
+): AnimationRecipe => ({
+  keyframes: [{ opacity: from }, { opacity: to }],
+  options,
+});
+
+export const getFadeAnimations = (host: M3Dialog): DialogAnimations => {
+  const effectsFast = getSpring(host, 'effects', 'fast');
+  const fade = (from: string, to: string) =>
+    opacity(from, to, { ...effectsFast, fill: 'forwards' });
+  const container = getComputedStyle(host.$container!),
+    scrim = getComputedStyle(host.$scrim!);
+
+  return {
+    open: {
+      container: fade('0', '1'),
+      scrim: fade('0', '0.32'),
+    },
+    close: {
+      container: fade(container.opacity, '0'),
+      scrim: fade(scrim.opacity, '0'),
+    },
+  };
+};
+
+export const getDefaultAnimations = (host: M3Dialog): DialogAnimations => {
+  const container = getComputedStyle(host.$container!),
+    scrim = getComputedStyle(host.$scrim!),
+    body = getComputedStyle(host.$body!),
+    actions = getComputedStyle(host.$actions!);
+
+  return {
+    open: {
+      container: {
+        keyframes: [
+          {
+            height: '0px',
+            minHeight: '0px',
+            transform: `translateY(-${options.vertSlide}px)`,
+          },
+          {
+            height: `${host._fullHeight}px`,
+            minHeight: '0px',
+            transform: 'translateY(0px)',
+          },
+        ],
+        options: { duration: options.openDur, easing: options.openEase },
+      },
+      scrim: opacity('0', '0.32', {
+        duration: options.openDur,
+        easing: options.openEase,
+        fill: 'forwards',
+      }),
+      body: opacity('0.2', '1', {
+        duration: options.bodyFadeInDur,
+        fill: 'forwards',
+      }),
+      actions: opacity('0.5', '1', {
+        duration: options.bodyFadeInDur,
+        fill: 'forwards',
+      }),
+    },
+    close: {
+      container: {
+        keyframes: [
+          {
+            height: container.height,
+            minHeight: '0px',
+            transform: container.transform,
+          },
+          {
+            height: `${host._fullHeight * 0.35}px`,
+            minHeight: '0px',
+            transform: `translateY(-${options.vertSlide}px)`,
+          },
+        ],
+        options: { duration: options.closeDur, easing: options.closeEase },
+      },
+      effects: opacity(container.opacity, '0', {
+        duration: options.closeDur - options.bodyFadeOutDur,
+        delay: options.bodyFadeOutDur,
+        fill: 'forwards',
+      }),
+      scrim: opacity(scrim.opacity, '0', {
+        duration: options.closeDur,
+        easing: options.closeEase,
+        fill: 'forwards',
+      }),
+      body: opacity(body.opacity, '0', {
+        duration: options.bodyFadeOutDur,
+        fill: 'forwards',
+      }),
+      actions: opacity(actions.opacity, '0', {
+        duration: options.bodyFadeOutDur,
+        fill: 'forwards',
+      }),
+    },
+  };
+};
 
 /**
  * TODO: test if form actions `cancel` and other things related work - no,
  *       event listener needed
- * FIXME: on Firefox, the focus is not autoatically set to the first tabbable
- *        element
  *
  * @tag md-dialog
  *
@@ -24,19 +150,8 @@ import { dialogStyles } from './dialog-styles.css.js';
  */
 @customElement('md-dialog')
 export class M3Dialog extends Dialog {
-  // Was based on https://m3.material.io/styles/motion/easing-and-duration/applying-easing-and-duration#e5b958f0-435d-4e84-aed4-8d1ea395fa5c
-  // TODO: use curves and durations from motion physics
-  _config = {
-    openEase: 'cubic-bezier(0, 0, 0, 1)',
-    closeEase: 'cubic-bezier(0.3, 0, 1, 1)',
-    vertSlide: 40,
-    openDur: 500,
-    closeDur: 200,
-    bodyFadeInDur: 200,
-    bodyFadeOutDur: 100,
-  };
-
   @state() private hasIcon = false;
+
   @query('[part=container]') $container!: HTMLDivElement | null;
   @query('[part=body]') $body!: HTMLDivElement | null;
   @query('[name=icon]') $icon!: HTMLSlotElement | null;
@@ -87,6 +202,39 @@ export class M3Dialog extends Dialog {
     this.#opening = this.#closing = false;
   }
 
+  _fullHeight = 0;
+  #animate(recipes: Partial<Record<AnimationPart, AnimationRecipe>>) {
+    const targets: Record<AnimationPart, HTMLElement> = {
+      container: this.$container!,
+      effects: this.$container!,
+      scrim: this.$scrim!,
+      body: this.$body!,
+      actions: this.$actions!,
+    };
+
+    const animations: Record<string, Animation> = {};
+    for (const [name, recipe] of Object.entries(recipes) as [
+      AnimationPart,
+      AnimationRecipe,
+    ][]) {
+      animations[name] = targets[name].animate(
+        recipe.keyframes,
+        recipe.options
+      );
+      this.#activeAnimations.push(animations[name]);
+    }
+    return animations;
+  }
+
+  get #fade() {
+    return (
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      getComputedStyle(this)
+        .getPropertyValue('--md-dialog-animation')
+        .trim() === 'fade'
+    );
+  }
+
   #handleClick = (e: MouseEvent) => {
     const target = e.target as HTMLElement;
     if (!this.$container!.contains(target) && !this.contains(target))
@@ -108,125 +256,40 @@ export class M3Dialog extends Dialog {
     this.$dialog!.style.marginTop = 'auto';
     this.$dialog!.style.marginBottom = 'auto';
 
-    super.show();
+    await super.show();
 
     const actionsHeight = this.$actions!.offsetHeight;
     this.$actionsPlaceholder!.style.height = `${actionsHeight}px`;
 
     this.$container!.style.height = 'auto';
-    const startHeight = 0;
-    const endHeight = this.$container!.offsetHeight;
+    this._fullHeight = this.$container!.offsetHeight;
 
     // Lock the position to prevent auto-centering during animation
     const rect = this.$container!.getBoundingClientRect();
     this.$dialog!.style.marginTop = `${rect.top}px`;
     this.$dialog!.style.marginBottom = 'auto';
 
-    this.$container!.style.minHeight = '0px';
-    const container = this.$container!.animate(
-      [
-        {
-          height: `${startHeight}px`,
-          transform: `translateY(-${this._config.vertSlide}px)`,
-        },
-        {
-          height: `${endHeight}px`,
-          transform: 'translateY(0px)',
-        },
-      ],
-      { duration: this._config.openDur, easing: this._config.openEase }
-    );
+    const getAnimations = this.#fade ? getFadeAnimations : getDefaultAnimations;
+    const animations = this.#animate(getAnimations(this).open);
 
-    const scrim = this.$scrim!.animate([{ opacity: 0 }, { opacity: 0.32 }], {
-      duration: this._config.openDur,
-      easing: this._config.openEase,
-      fill: 'forwards',
-    });
-
-    const body = this.$body!.animate([{ opacity: 0.2 }, { opacity: 1 }], {
-      duration: this._config.bodyFadeInDur,
-      easing: 'linear',
-      fill: 'forwards',
-    });
-
-    const actions = this.$actions!.animate([{ opacity: 0.5 }, { opacity: 1 }], {
-      duration: this._config.bodyFadeInDur,
-      easing: 'linear',
-      fill: 'forwards',
-    });
-
-    this.#activeAnimations.push(container, scrim, body, actions);
-
-    container.onfinish = () => {
-      this.$container!.style.minHeight = '';
-      this.#clearAnimations();
-    };
+    animations.container.onfinish = () => this.#clearAnimations();
   }
 
   #closing = false;
   override async close() {
     if (this.#closing) return;
     await this.updateComplete;
+
+    const getAnimations = this.#fade ? getFadeAnimations : getDefaultAnimations;
+    const recipes = getAnimations(this).close;
+
     this.#clearAnimations();
     this.#closing = true;
 
-    const startHeight = this.$container!.offsetHeight;
-    const endHeight = startHeight * 0.35;
+    const animations = this.#animate(recipes);
 
-    this.$container!.style.minHeight = '0px';
-    const containerSpatial = this.$container!.animate(
-      [
-        { height: `${startHeight}px`, transform: 'translateY(0px)' },
-        {
-          height: `${endHeight}px`,
-          transform: `translateY(-${this._config.vertSlide}px)`,
-        },
-      ],
-      {
-        duration: this._config.closeDur,
-        easing: this._config.closeEase,
-      }
-    );
-
-    const containerEffects = this.$container!.animate(
-      [{ opacity: 1 }, { opacity: 0 }],
-      {
-        duration: this._config.closeDur - this._config.bodyFadeOutDur,
-        delay: this._config.bodyFadeOutDur,
-        easing: 'linear',
-        fill: 'forwards',
-      }
-    );
-
-    const scrim = this.$scrim!.animate([{ opacity: 0.32 }, { opacity: 0 }], {
-      duration: this._config.closeDur,
-      easing: this._config.closeEase,
-      fill: 'forwards',
-    });
-
-    const body = this.$body!.animate([{ opacity: 1 }, { opacity: 0 }], {
-      duration: this._config.bodyFadeOutDur,
-      easing: 'linear',
-      fill: 'forwards',
-    });
-
-    const actions = this.$actions!.animate([{ opacity: 1 }, { opacity: 0 }], {
-      duration: this._config.bodyFadeOutDur,
-      easing: 'linear',
-      fill: 'forwards',
-    });
-
-    this.#activeAnimations.push(
-      containerSpatial,
-      containerEffects,
-      scrim,
-      body,
-      actions
-    );
-
-    containerSpatial.onfinish = () => {
-      this.$container!.style.minHeight = '';
-      super.close();
+    animations.container.onfinish = async () => {
+      await super.close();
       this.#clearAnimations();
     };
   }

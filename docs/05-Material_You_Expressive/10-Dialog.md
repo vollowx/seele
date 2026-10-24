@@ -90,6 +90,12 @@ import '@vollowx/seele/m3/dialog/dialog.js';
 | `content`   |             |
 | `actions`   |             |
 
+### CSS Custom Properties
+
+name                    | description
+---                     | ---
+`--md-dialog-animation` | `fade` to replace the default one
+
 ### Properties
 
 | name                  | description                                        |

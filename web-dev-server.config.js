@@ -8,7 +8,7 @@ if (!['dev', 'prod'].includes(mode)) {
 
 export default {
   nodeResolve: { exportConditions: mode === 'dev' ? ['development'] : [] },
-  preserveSymlinks: true,
+  preserveSymlinks: false,
   watch: true,
   port: 22330,
   open: '/dev/', // Not intented to be this rude, just wanted to give new
