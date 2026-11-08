@@ -15,7 +15,7 @@ import type { Menu } from './menu.js';
  * @slot - menu items
  * @csspart menu - the internal menu part
  */
-export class ComposedMenu extends Popup {
+export class MenuList extends Popup {
   @query('md-menu') $menu!: Menu | null;
 
   override render() {
@@ -42,5 +42,9 @@ export class ComposedMenu extends Popup {
       });
     }
     super[handleControlChange](prev, next);
+  }
+
+  override _focusFirstInteractiveElement() {
+    this.$menu!.focusFirstItem();
   }
 }

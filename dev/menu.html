@@ -15,42 +15,42 @@
     <h2>menu</h2>
 
     <md-menu style="max-width: 250px">
-      <md-menu-item>Menu Item 1</md-menu-item>
-      <md-menu-item>Menu Item 2</md-menu-item>
-      <md-menu-item selected>Menu Item 3</md-menu-item>
-      <md-menu-item disabled>Menu Item 4</md-menu-item>
+      <md-menuitem>Menu Item 1</md-menuitem>
+      <md-menuitem>Menu Item 2</md-menuitem>
+      <md-menuitem selected>Menu Item 3</md-menuitem>
+      <md-menuitem disabled>Menu Item 4</md-menuitem>
     </md-menu>
 
     <md-button id="bn1">Vibrant menu</md-button>
-    <md-composed-menu for="bn1" vibrant>
-      <md-menu-item id="item-new-text-file">New Text File</md-menu-item>
-      <md-menu-item id="item-new-file">
+    <md-menulist for="bn1" vibrant>
+      <md-menuitem id="item-new-text-file">New Text File</md-menuitem>
+      <md-menuitem id="item-new-file">
         New File...
         <span slot="supporting-text">wowowowo</span>
-      </md-menu-item>
-      <md-menu-item id="item-new-window">
+      </md-menuitem>
+      <md-menuitem id="item-new-window">
         <span slot="overline">hey boy</span>
         New Window
         <md-icon slot="end">window</md-icon>
-      </md-menu-item>
+      </md-menuitem>
       <md-divider inset></md-divider>
-      <md-menu-item id="item-open-file">Open File...</md-menu-item>
-      <md-menu-item id="item-open-folder">Open Folder...</md-menu-item>
+      <md-menuitem id="item-open-file">Open File...</md-menuitem>
+      <md-menuitem id="item-open-folder">Open Folder...</md-menuitem>
       <md-divider inset></md-divider>
-      <md-menu-item id="item-save" selected>Save</md-menu-item>
-      <md-menu-item id="item-save-as">Save As...</md-menu-item>
-    </md-composed-menu>
+      <md-menuitem id="item-save" selected>Save</md-menuitem>
+      <md-menuitem id="item-save-as">Save As...</md-menuitem>
+    </md-menulist>
 
     <md-button variant="tonal" id="bn2">strategy=fixed</md-button>
-    <md-composed-menu for="bn2" strategy="fixed">
-      <md-menu-item>Menu Item 1</md-menu-item>
-      <md-menu-item>Menu Item 2</md-menu-item>
-      <md-menu-item selected>Menu Item 3</md-menu-item>
-      <md-menu-item disabled>Menu Item 4</md-menu-item>
-    </md-composed-menu>
+    <md-menulist for="bn2" strategy="fixed">
+      <md-menuitem>Menu Item 1</md-menuitem>
+      <md-menuitem>Menu Item 2</md-menuitem>
+      <md-menuitem selected>Menu Item 3</md-menuitem>
+      <md-menuitem disabled>Menu Item 4</md-menuitem>
+    </md-menulist>
 
     <button id="bn3" popovertarget="menu3">Native popover</button>
-    <md-composed-menu
+    <md-menulist
       style="
         position-area: block-end span-inline-end;
         position-try-fallbacks: block-end span-inline-start;
@@ -58,11 +58,11 @@
       "
       id="menu3"
     >
-      <md-menu-item>Menu Item 1</md-menu-item>
-      <md-menu-item>Menu Item 2</md-menu-item>
-      <md-menu-item selected>Menu Item 3</md-menu-item>
-      <md-menu-item disabled>Menu Item 4</md-menu-item>
-    </md-composed-menu>
+      <md-menuitem>Menu Item 1</md-menuitem>
+      <md-menuitem>Menu Item 2</md-menuitem>
+      <md-menuitem selected>Menu Item 3</md-menuitem>
+      <md-menuitem disabled>Menu Item 4</md-menuitem>
+    </md-menulist>
 
     <h2>select</h2>
 

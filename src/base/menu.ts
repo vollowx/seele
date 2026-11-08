@@ -5,7 +5,7 @@ import { focusVisible, setFocusVisible } from '../core/focus.js';
 import { internals, InternalsAttached } from './mixins/internals-attached.js';
 import { ListController } from './controllers/list-controller.js';
 
-import type { MenuItem } from './menu-item.js';
+import type { MenuItem } from './menuitem.js';
 
 export interface MenuEventDetail {
   item: MenuItem;
@@ -60,9 +60,6 @@ export class Menu extends InternalsAttached(LitElement) {
   constructor() {
     super();
     this[internals].role = 'menu';
-    if (!this.hasAttribute('tabindex')) {
-      this.setAttribute('tabindex', '0');
-    }
     if (!isServer) {
       this.addEventListener('keydown', this.handleKeyDown.bind(this));
       this.addEventListener('focusin', this.#handleFocusIn.bind(this));
@@ -76,16 +73,17 @@ export class Menu extends InternalsAttached(LitElement) {
 
   private readonly listController = new ListController<MenuItem>(this, {
     isItem: (item: HTMLElement): item is MenuItem =>
-      item.getAttribute('seele-base') === 'option' &&
+      item.getAttribute('base') === 'menuitem' &&
       !item.hasAttribute('disabled') &&
       !item.hidden,
     getPossibleItems: () => this.slotItems,
     blurItem: (item: MenuItem) => {
-      item.focused = false;
+      item.blur();
+      item.tabIndex = -1;
     },
     focusItem: (item: MenuItem) => {
-      item.focused = true;
-      if (!this.bare) this[internals].ariaActiveDescendantElement = item;
+      item.tabIndex = 0;
+      item.focus();
       if (focusVisible) item.scrollIntoView({ block: 'nearest' });
       this.dispatchEvent(
         new CustomEvent('item-focus', {
@@ -156,7 +154,7 @@ export class Menu extends InternalsAttached(LitElement) {
       case MenuAction.CloseSelect:
         event.preventDefault();
         if (currentIndex >= 0) {
-          items[currentIndex].focused = false;
+          items[currentIndex].blur();
           this.#dispatchAction({
             item: items[currentIndex],
             index: currentIndex,
@@ -187,7 +185,7 @@ export class Menu extends InternalsAttached(LitElement) {
     const item = this.#getItemFromEvent(event);
     if (!item) return;
 
-    item.item.focused = false;
+    item.item.blur();
     this.#dispatchAction({ ...item });
     if (!this.keepOpenAction) this.#dispatchHide();
   }
@@ -206,14 +204,14 @@ export class Menu extends InternalsAttached(LitElement) {
 
     // Ignore the `click` that follows a mouse release on an item.
     this.#suppressClick = true;
-    item.item.focused = false;
+    item.item.blur();
     this.#dispatchAction({ ...item });
     if (!this.keepOpenAction) this.#dispatchHide();
   }
 
   #getItemFromEvent(event: Event) {
     const item = (event.target as HTMLElement).closest<MenuItem>(
-      '[seele-base=option]'
+      '[base=menuitem]'
     );
     if (!item || !this.$items.includes(item)) return null;
     return { item, index: this.$items.indexOf(item) };

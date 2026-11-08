@@ -1,8 +1,3 @@
-/**
- * TODO: currently list and menu has too much in common, should be split into
- *       menu, listbox and a LinearFocusController for tabs/toolbars
- */
-
 import { LitElement, html, isServer } from 'lit';
 import { property, queryAssignedElements } from 'lit/decorators.js';
 import type { ListItem } from './list-item.js';
@@ -30,7 +25,7 @@ export type ListItemFocusEvent = CustomEvent<ItemFocusDetail>;
  * @fires {ListboxSelectEvent} select - Fires when an item is selected.
  * @fires {ListItemFocusEvent} item-focus - Fires when an item is focused
  */
-export class List extends InternalsAttached(LitElement) {
+export class ListBox extends InternalsAttached(LitElement) {
   @property({ type: Boolean, attribute: 'no-focus-control' })
   noFocusControl = false;
 

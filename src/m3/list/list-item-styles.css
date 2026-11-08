@@ -41,9 +41,9 @@ md-ripple::before {
 }
 
 /* TODO: temporarilyh removed for consistency when dragging */
-md-ripple::part(ripple) {
-  display: none;
-}
+/* md-ripple::part(ripple) { */
+/*   display: none; */
+/* } */
 
 @media (forced-colors: active) {
   :host {
