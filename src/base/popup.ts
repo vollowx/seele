@@ -216,7 +216,7 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
     if (this.$ariaControl) this.$ariaControl.ariaExpanded = String(this.open);
     else if (this.$control) this.$control.ariaExpanded = String(this.open);
   }
-  #focusFirstInteractiveElement() {
+  _focusFirstInteractiveElement() {
     if (this.noFocusControl) return;
 
     const autoFocus = this.querySelector<HTMLElement>('[autofocus]');
@@ -259,7 +259,7 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
     }
 
     requestAnimationFrame(() => {
-      if (this.open) this.#focusFirstInteractiveElement();
+      if (this.open) this._focusFirstInteractiveElement();
     });
   }
   #hide() {

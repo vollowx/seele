@@ -1,8 +1,3 @@
-/**
- * TODO: currently list and menu has too much in common, should be split into
- *       menu, listbox and a LinearFocusController for tabs/toolbars
- */
-
 import { LitElement, html, isServer } from 'lit';
 import { property, queryAssignedElements } from 'lit/decorators.js';
 import type { ListItem } from './list-item.js';
@@ -30,7 +25,7 @@ export type ListItemFocusEvent = CustomEvent<ItemFocusDetail>;
  * @fires {ListboxSelectEvent} select - Fires when an item is selected.
  * @fires {ListItemFocusEvent} item-focus - Fires when an item is focused
  */
-export class List extends InternalsAttached(LitElement) {
+export class ListBox extends InternalsAttached(LitElement) {
   @property({ type: Boolean, attribute: 'no-focus-control' })
   noFocusControl = false;
 
@@ -53,7 +48,7 @@ export class List extends InternalsAttached(LitElement) {
   }
 
   focusItem(item: ListItem) {
-    this.listController._focusItem(item);
+    this.listController.focusItem(item);
   }
 
   override render() {
@@ -106,13 +101,13 @@ export class List extends InternalsAttached(LitElement) {
     if (this.currentIndex === -1) {
       this.listController.focusFirstItem();
     } else {
-      this.listController._focusItem(this.$items[this.currentIndex]);
+      this.listController.focusItem(this.$items[this.currentIndex]);
     }
   }
 
   #handleFocusOut() {
     if (this.listController._focusedItem) {
-      this.listController._blurItem(this.listController._focusedItem);
+      this.listController.blurItem(this.listController._focusedItem);
     }
   }
 
@@ -144,7 +139,7 @@ export class List extends InternalsAttached(LitElement) {
           : currentIndex <= first;
         const step = isDown ? pageSize : -pageSize;
         const nextIndex = atBoundary ? currentIndex + step : boundary;
-        this.listController._focusItem(
+        this.listController.focusItem(
           items[Math.max(0, Math.min(maxIndex, nextIndex))]
         );
         return;
@@ -176,7 +171,7 @@ export class List extends InternalsAttached(LitElement) {
     setFocusVisible(false);
     const item = this.#getItemFromEvent(event);
     if (item && this.currentIndex !== item.index) {
-      this.listController._focusItem(item.item);
+      this.listController.focusItem(item.item);
     }
   }
 
