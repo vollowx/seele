@@ -1,8 +1,6 @@
 import { ReactiveController, ReactiveControllerHost } from 'lit';
 
-import type { ListItem } from '../list-item.js';
-
-export interface ListControllerConfig<Item extends ListItem> {
+export interface ListControllerConfig<Item extends HTMLElement> {
   isItem: (item: HTMLElement) => item is Item;
   getPossibleItems: () => HTMLElement[];
   blurItem: (item: Item) => void;
@@ -12,15 +10,15 @@ export interface ListControllerConfig<Item extends ListItem> {
 }
 
 export class ListController<
-  Item extends ListItem,
+  Item extends HTMLElement,
 > implements ReactiveController {
   host: ReactiveControllerHost;
 
-  isItem: (item: HTMLElement) => item is Item;
-  private readonly getPossibleItems: () => HTMLElement[];
-  private readonly blurItem: (item: Item) => void;
-  private readonly focusItem: (item: Item) => void;
-  private readonly wrapNavigation: () => boolean;
+  private readonly __isItem: (item: HTMLElement) => item is Item;
+  private readonly __getPossibleItems: () => HTMLElement[];
+  private readonly __blurItem: (item: Item) => void;
+  private readonly __focusItem: (item: Item) => void;
+  private readonly __wrapNavigation: () => boolean;
 
   constructor(
     host: ReactiveControllerHost,
@@ -31,17 +29,17 @@ export class ListController<
 
     (this.host = host).addController(this);
 
-    this.isItem = isItem;
-    this.getPossibleItems = getPossibleItems;
-    this.blurItem = blurItem;
-    this.focusItem = focusItem;
-    this.wrapNavigation = wrapNavigation ?? (() => false);
+    this.__isItem = isItem;
+    this.__getPossibleItems = getPossibleItems;
+    this.__blurItem = blurItem;
+    this.__focusItem = focusItem;
+    this.__wrapNavigation = wrapNavigation ?? (() => false);
   }
   hostConnected(): void {}
   hostDisconnected(): void {}
 
   get items(): Item[] {
-    return this.getPossibleItems().filter(this.isItem);
+    return this.__getPossibleItems().filter(this.__isItem);
   }
   get currentIndex(): number {
     if (!this._focusedItem) return -1;
@@ -63,7 +61,7 @@ export class ListController<
     );
 
     if (searchIndex >= 0) {
-      this._focusItem(items[searchIndex]);
+      this.focusItem(items[searchIndex]);
       return true;
     } else {
       if (this.searchTimeout) window.clearTimeout(this.searchTimeout);
@@ -91,23 +89,23 @@ export class ListController<
     }
   }
 
-  _focusItem(item: Item) {
-    if (this._focusedItem !== null) this._blurItem(this._focusedItem);
-    this.focusItem(item);
+  focusItem(item: Item) {
+    if (this._focusedItem !== null) this.blurItem(this._focusedItem);
+    this.__focusItem(item);
     this._focusedItem = item;
   }
 
-  _blurItem(item: Item) {
-    this.blurItem(item);
+  blurItem(item: Item) {
+    this.__blurItem(item);
     this._focusedItem = null;
   }
 
   focusFirstItem() {
-    this._focusItem(this.items[0]);
+    this.focusItem(this.items[0]);
   }
 
   focusLastItem() {
-    this._focusItem(this.items[this.items.length - 1]);
+    this.focusItem(this.items[this.items.length - 1]);
   }
 
   focusNextItem() {
@@ -117,10 +115,10 @@ export class ListController<
 
     let nextIndex = this.currentIndex + 1;
     if (nextIndex >= count) {
-      nextIndex = this.wrapNavigation() ? 0 : count - 1;
+      nextIndex = this.__wrapNavigation() ? 0 : count - 1;
     }
 
-    this._focusItem(items[nextIndex]);
+    this.focusItem(items[nextIndex]);
   }
 
   focusPreviousItem() {
@@ -130,10 +128,10 @@ export class ListController<
 
     let prevIndex = this.currentIndex - 1;
     if (prevIndex < 0) {
-      prevIndex = this.wrapNavigation() ? count - 1 : 0;
+      prevIndex = this.__wrapNavigation() ? count - 1 : 0;
     }
 
-    this._focusItem(items[prevIndex]);
+    this.focusItem(items[prevIndex]);
   }
 
   handleSlotChange() {

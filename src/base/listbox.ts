@@ -48,7 +48,7 @@ export class ListBox extends InternalsAttached(LitElement) {
   }
 
   focusItem(item: ListItem) {
-    this.listController._focusItem(item);
+    this.listController.focusItem(item);
   }
 
   override render() {
@@ -101,13 +101,13 @@ export class ListBox extends InternalsAttached(LitElement) {
     if (this.currentIndex === -1) {
       this.listController.focusFirstItem();
     } else {
-      this.listController._focusItem(this.$items[this.currentIndex]);
+      this.listController.focusItem(this.$items[this.currentIndex]);
     }
   }
 
   #handleFocusOut() {
     if (this.listController._focusedItem) {
-      this.listController._blurItem(this.listController._focusedItem);
+      this.listController.blurItem(this.listController._focusedItem);
     }
   }
 
@@ -139,7 +139,7 @@ export class ListBox extends InternalsAttached(LitElement) {
           : currentIndex <= first;
         const step = isDown ? pageSize : -pageSize;
         const nextIndex = atBoundary ? currentIndex + step : boundary;
-        this.listController._focusItem(
+        this.listController.focusItem(
           items[Math.max(0, Math.min(maxIndex, nextIndex))]
         );
         return;
@@ -171,7 +171,7 @@ export class ListBox extends InternalsAttached(LitElement) {
     setFocusVisible(false);
     const item = this.#getItemFromEvent(event);
     if (item && this.currentIndex !== item.index) {
-      this.listController._focusItem(item.item);
+      this.listController.focusItem(item.item);
     }
   }
 

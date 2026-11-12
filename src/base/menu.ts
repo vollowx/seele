@@ -50,7 +50,7 @@ export class Menu extends InternalsAttached(LitElement) {
     this.listController.focusLastItem();
   }
   focusItem(item: MenuItem) {
-    this.listController._focusItem(item);
+    this.listController.focusItem(item);
   }
 
   override render() {
@@ -104,7 +104,7 @@ export class Menu extends InternalsAttached(LitElement) {
 
   #handleFocusOut() {
     if (this.listController._focusedItem)
-      this.listController._blurItem(this.listController._focusedItem);
+      this.listController.blurItem(this.listController._focusedItem);
   }
 
   handleKeyDown(event: KeyboardEvent) {
@@ -138,7 +138,7 @@ export class Menu extends InternalsAttached(LitElement) {
 
         const nextIndex = atBoundary ? currentIndex + step : boundary;
 
-        this.listController._focusItem(
+        this.listController.focusItem(
           items[Math.max(0, Math.min(maxIndex, nextIndex))]
         );
         return;
@@ -173,7 +173,7 @@ export class Menu extends InternalsAttached(LitElement) {
     setFocusVisible(false);
     const item = this.#getItemFromEvent(event);
     if (item && this.currentIndex !== item.index)
-      this.listController._focusItem(item.item);
+      this.listController.focusItem(item.item);
   }
 
   #handleClick(event: MouseEvent) {
