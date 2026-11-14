@@ -23,7 +23,7 @@
   cursor: pointer;
   display: inline-grid;
   height: var(--_checkbox-size);
-  margin: 15px;
+  margin: calc((40px - var(--_checkbox-size)) / 2);
   outline: 0;
   place-content: center;
   place-items: center;

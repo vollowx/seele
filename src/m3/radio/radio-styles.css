@@ -9,19 +9,18 @@
   --_default: var(--_d) var(--md-sys-motion-effects-default);
   --_slow: var(--md-sys-motion-effects-slow-duration)
     var(--md-sys-motion-effects-slow);
-  align-items: center;
-  border-radius: 20px;
   cursor: pointer;
-  display: inline-flex;
-  height: 40px;
+  display: inline-grid;
   isolation: isolate;
-  justify-content: center;
   outline: 0;
+  place-content: center;
+  place-items: center;
   position: relative;
   -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none;
   user-select: none;
-  width: 40px;
+
+  margin: calc((40px - 20px) / 2);
 }
 
 .icon {
@@ -39,8 +38,11 @@
   will-change: r, stroke-width;
 }
 
-:host(:state(checked)) .ring {
-  stroke: var(--md-sys-color-primary);
+:host(:state(checked)) {
+  --_ripple-color: var(--md-sys-color-primary);
+  .ring {
+    stroke: var(--md-sys-color-primary);
+  }
 }
 
 .dot {
@@ -158,6 +160,19 @@
 
 :host([disabled]) .dot {
   fill: oklch(from var(--md-sys-color-on-surface) l c h / 38%);
+}
+
+md-focus-ring {
+  height: 44px;
+  inset: unset;
+  width: 44px;
+}
+md-ripple {
+  --md-ripple-color: var(--_ripple-color);
+  border-radius: 9999px;
+  height: 40px;
+  inset: unset;
+  width: 40px;
 }
 
 @media (forced-colors: active) {
