@@ -6,9 +6,12 @@ components:
 
 # seele
 
-seele (**S**tandard **E**xtensible **Ele**ments) is an extensible
+seele is an extensible
 [Web Components][web-comps] library with a focus on accessibility and
-keyboard navigation.
+keyboard-control.
+
+seele is an abbrev for "Standard Extensible Elements". Though having nothing to
+do with "souls", seele is pronounced /ˈzeːlə/, as it is in German.
 
 <!-- @uncomment
 <md-button-link size="xl" style="width: 100%; margin-block-start: 8px" href="./m3/playground/">
@@ -23,7 +26,8 @@ keyboard navigation.
 -->
 
 To try seele without installing it, you can use [importmap](importmap) like
-below.
+below. (There are lots of stylesheets because they are meant to be bundled with
+the stylesheet of your webpage.)
 
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@vollowx/seele/src/m3/styles/base.css" />
@@ -51,8 +55,9 @@ below.
 ## Design systems
 
 seele has component behaviors in `base` and visuals in design systems that
-extend it. Most users only need to pick one design system below and import from
-it, `base` and `core` are lower-level parts the design systems rely on.
+extend it. You can choose one design system below and use components inside;
+when you are writing your own ones, `base` and `core` are lower-level parts you
+will import from and design systems depend on.
 
 | overview page                                                          | path prefix | origin                                |
 | ---------------------------------------------------------------------- | ----------- | ------------------------------------- |
@@ -65,9 +70,8 @@ component list.
 
 ### Foundations
 
-- [`base`](./04-Base/00-Overview.md) implements behavior and accessibility
-  without visuals, and design systems extend it. Import from it directly if you
-  are writing components in your own design system.
+- [`base`](./04-Base/00-Overview.md) or "primitives" if you'd like to call.
+  Import from it if you are writing your own components.
 - `core` includes decorators and utilities like focus control. It has no
   components of its own.
 
