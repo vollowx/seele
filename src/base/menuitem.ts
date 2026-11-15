@@ -1,6 +1,10 @@
-import { isServer, LitElement } from 'lit';
+import { LitElement } from 'lit';
 
-import { InternalsAttached, internals } from './mixins/internals-attached.js';
+import {
+  InternalsAttached,
+  internals,
+  updateInternals,
+} from './mixins/internals-attached.js';
 import { Disableable } from './mixins/disableable.js';
 
 import { hiddenStyles } from './hidden-styles.css.js';
@@ -19,8 +23,12 @@ export class MenuItem extends Disableable(InternalsAttached(LitElement)) {
   constructor() {
     super();
     this[internals].role = 'menuitem';
-    this.setAttribute('tabindex', '-1');
-    this.setAttribute('base', 'menuitem');
+    this[updateInternals]?.();
     // if (!isServer) this.addEventListener('click', this.#handleDummy);
+  }
+
+  override connectedCallback() {
+    super.connectedCallback();
+    if (!this.hasAttribute('base')) this.setAttribute('base', 'menuitem');
   }
 }

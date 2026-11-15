@@ -34,7 +34,7 @@ export class M3OutlinedSelect extends M3Select {
         tabindex=${this.disabled ? '-1' : '0'}
         role="combobox"
         aria-haspopup="listbox"
-        aria-controls="menu"
+        aria-controls="listbox"
         aria-disabled=${this.disabled}
         aria-required=${this.required}
       >

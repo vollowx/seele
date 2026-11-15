@@ -9,6 +9,9 @@ import {
 
 export declare class DisableableInterface {
   disabled: boolean;
+  overriddenTabIndex: number | null;
+  _syncTabIndex(): void;
+  [updateInternals](): void;
 }
 
 /**
@@ -25,6 +28,26 @@ export const Disableable = <
   superClass: T
 ) => {
   class DisableableElement extends superClass {
+    #overriddenTabIndex: number | null = null;
+
+    // Setting tabIndex from outside always creates an overriddenTabIndex; to
+    // cancel the overridding, call `.removeAttribute('tabindex')`.
+    get overriddenTabIndex(): number | null {
+      return this.#overriddenTabIndex;
+    }
+
+    override get tabIndex() {
+      return super.tabIndex;
+    }
+    override set tabIndex(value: number) {
+      this.#overriddenTabIndex = value;
+      super.tabIndex = this.disabled ? -1 : value;
+    }
+
+    _syncTabIndex() {
+      super.tabIndex = this.disabled ? -1 : (this.#overriddenTabIndex ?? 0);
+    }
+
     @property({ type: Boolean, noAccessor: true })
     get disabled() {
       return this.hasAttribute('disabled');
@@ -38,7 +61,11 @@ export const Disableable = <
       old: string | null,
       value: string | null
     ) {
-      if (name === 'disabled') {
+      if (name === 'tabindex' && value === null) {
+        // removeAttribute
+        this.#overriddenTabIndex = null;
+        this._syncTabIndex();
+      } else if (name === 'disabled') {
         this.requestUpdate('disabled', old !== null);
         this[updateInternals]();
       }
@@ -47,6 +74,7 @@ export const Disableable = <
 
     override [updateInternals]() {
       super[updateInternals]?.();
+      this._syncTabIndex();
       this[internals].ariaDisabled = String(this.disabled);
       this[replaceStates](
         ['disabled', 'enabled'],

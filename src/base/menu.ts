@@ -1,4 +1,4 @@
-import { LitElement, html, isServer } from 'lit';
+import { LitElement, PropertyValues, html, isServer } from 'lit';
 import { property, queryAssignedElements } from 'lit/decorators.js';
 
 import { focusVisible, setFocusVisible } from '../core/focus.js';
@@ -37,7 +37,7 @@ export class Menu extends InternalsAttached(LitElement) {
 
   @queryAssignedElements({ flatten: true }) slotItems!: Array<MenuItem>;
   get $items() {
-    return this.listController.items || [];
+    return this.listController.items;
   }
 
   get currentIndex() {
@@ -54,7 +54,17 @@ export class Menu extends InternalsAttached(LitElement) {
   }
 
   override render() {
-    return html`<slot part="items"></slot>`;
+    return html`<slot
+      part="items"
+      @slotchange=${this.#handleSlotChange}
+    ></slot>`;
+  }
+
+  protected override updated(changed: PropertyValues<this>) {
+    super.updated(changed);
+    if (changed.has('bare') && !this.bare) {
+      this.listController.requestReconcile();
+    }
   }
 
   constructor() {
@@ -62,8 +72,6 @@ export class Menu extends InternalsAttached(LitElement) {
     this[internals].role = 'menu';
     if (!isServer) {
       this.addEventListener('keydown', this.handleKeyDown.bind(this));
-      this.addEventListener('focusin', this.#handleFocusIn.bind(this));
-      this.addEventListener('focusout', this.#handleFocusOut.bind(this));
       this.addEventListener('mouseover', this.#handleMouseOver.bind(this));
       this.addEventListener('click', this.#handleClick.bind(this));
       this.addEventListener('pointerdown', this.#handlePointerDown.bind(this));
@@ -77,13 +85,8 @@ export class Menu extends InternalsAttached(LitElement) {
       !item.hasAttribute('disabled') &&
       !item.hidden,
     getPossibleItems: () => this.slotItems,
-    blurItem: (item: MenuItem) => {
-      item.blur();
-      item.tabIndex = -1;
-    },
     focusItem: (item: MenuItem) => {
-      item.tabIndex = 0;
-      item.focus();
+      item.focus({ preventScroll: true });
       if (focusVisible) item.scrollIntoView({ block: 'nearest' });
       this.dispatchEvent(
         new CustomEvent('item-focus', {
@@ -94,21 +97,15 @@ export class Menu extends InternalsAttached(LitElement) {
       );
     },
     wrapNavigation: () => false,
+    isDisabled: () => this.bare,
   });
 
-  #handleFocusIn() {
-    if (this.bare) return;
-    // TODO: support focusing first selected
-    this.listController.focusFirstItem();
-  }
-
-  #handleFocusOut() {
-    if (this.listController._focusedItem)
-      this.listController.blurItem(this.listController._focusedItem);
+  #handleSlotChange() {
+    this.listController.handleSlotChange();
   }
 
   handleKeyDown(event: KeyboardEvent) {
-    if (event.defaultPrevented) return;
+    if (event.defaultPrevented || this.bare) return;
 
     const action = getActionFromKey(event);
     const items = this.$items;
@@ -170,6 +167,7 @@ export class Menu extends InternalsAttached(LitElement) {
   }
 
   #handleMouseOver(event: MouseEvent) {
+    if (this.bare) return;
     setFocusVisible(false);
     const item = this.#getItemFromEvent(event);
     if (item && this.currentIndex !== item.index)

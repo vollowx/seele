@@ -53,8 +53,10 @@ export class Radio extends FormAssociated(InternalsAttached(LitElement)) {
       this.#updateGroupTabIndices();
     }
 
-    if (changedProperties.has('disabled') || changedProperties.has('checked'))
+    if (changedProperties.has('disabled') || changedProperties.has('checked')) {
+      if (changedProperties.has('disabled')) this.#updateGroupTabIndices();
       this[updateInternals]();
+    }
   }
 
   #handleClick(): void {

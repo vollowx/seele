@@ -1,42 +1,33 @@
-import { ReactiveController, ReactiveControllerHost } from 'lit';
+import { ReactiveController, ReactiveControllerHost, isServer } from 'lit';
 
 export interface ListControllerConfig<Item extends HTMLElement> {
-  isItem: (item: HTMLElement) => item is Item;
   getPossibleItems: () => HTMLElement[];
-  blurItem: (item: Item) => void;
+  isItem: (item: HTMLElement) => item is Item;
+  isDisabled?: () => boolean;
+  blurItem?: (item: Item) => void;
   focusItem: (item: Item) => void;
   isActivatable?: (item: Item) => boolean;
   wrapNavigation?: () => boolean;
+  onFocusin?: () => void;
 }
 
 export class ListController<
   Item extends HTMLElement,
 > implements ReactiveController {
-  host: ReactiveControllerHost;
+  host: ReactiveControllerHost & HTMLElement;
 
-  private readonly __isItem: (item: HTMLElement) => item is Item;
   private readonly __getPossibleItems: () => HTMLElement[];
+  private readonly __isItem: (item: HTMLElement) => item is Item;
+  private readonly __isDisabled: () => boolean;
   private readonly __blurItem: (item: Item) => void;
   private readonly __focusItem: (item: Item) => void;
   private readonly __wrapNavigation: () => boolean;
+  private readonly __onFocusin: () => void;
 
-  constructor(
-    host: ReactiveControllerHost,
-    config: ListControllerConfig<Item>
-  ) {
-    const { isItem, getPossibleItems, blurItem, focusItem, wrapNavigation } =
-      config;
-
-    (this.host = host).addController(this);
-
-    this.__isItem = isItem;
-    this.__getPossibleItems = getPossibleItems;
-    this.__blurItem = blurItem;
-    this.__focusItem = focusItem;
-    this.__wrapNavigation = wrapNavigation ?? (() => false);
-  }
-  hostConnected(): void {}
-  hostDisconnected(): void {}
+  private __observer: MutationObserver | null = null;
+  private __reconcilePending = false;
+  private __hasFocusWithin = false;
+  private __lastKnownIndex = -1;
 
   get items(): Item[] {
     return this.__getPossibleItems().filter(this.__isItem);
@@ -46,6 +37,72 @@ export class ListController<
     return this.items.indexOf(this._focusedItem);
   }
   _focusedItem: Item | null = null;
+
+  constructor(
+    host: ReactiveControllerHost & HTMLElement,
+    config: ListControllerConfig<Item>
+  ) {
+    const {
+      getPossibleItems,
+      isItem,
+      isDisabled,
+      blurItem,
+      focusItem,
+      wrapNavigation,
+      onFocusin,
+    } = config;
+
+    (this.host = host).addController(this);
+
+    this.__getPossibleItems = getPossibleItems;
+    this.__isItem = isItem;
+    this.__isDisabled = isDisabled ?? (() => false);
+    this.__blurItem = blurItem ?? (() => {});
+    this.__focusItem = focusItem;
+    this.__wrapNavigation = wrapNavigation ?? (() => false);
+    this.__onFocusin = onFocusin ?? (() => {});
+  }
+
+  hostConnected(): void {
+    if (isServer) return;
+    this.host.addEventListener('focusin', this.#handleFocusIn);
+    this.host.addEventListener('focusout', this.#handleFocusOut);
+    if (typeof MutationObserver !== 'undefined') {
+      this.__observer = new MutationObserver(() => this.requestReconcile());
+    }
+    this.requestReconcile();
+  }
+
+  hostDisconnected(): void {
+    if (isServer) return;
+    this.host.removeEventListener('focusin', this.#handleFocusIn);
+    this.host.removeEventListener('focusout', this.#handleFocusOut);
+    this.__observer?.disconnect();
+    this.__observer = null;
+  }
+
+  #handleFocusIn = (event: FocusEvent) => {
+    if (this.__isDisabled()) return;
+    this.__hasFocusWithin = true;
+    const target = event.target as HTMLElement;
+    if (this.__isItem(target) && this._focusedItem !== target) {
+      if (this._focusedItem) this.__blurItem(this._focusedItem);
+      this._focusedItem = target;
+      this.__lastKnownIndex = this.items.indexOf(target);
+    }
+    this.__onFocusin();
+  };
+
+  #handleFocusOut = (event: FocusEvent) => {
+    const next = event.relatedTarget as Node | null;
+    if (!next || !this.host.contains(next)) {
+      this.__hasFocusWithin = false;
+    }
+  };
+
+  handleSlotChange() {
+    this.reconcile();
+  }
 
   private searchString = '';
   private searchTimeout: number | null = null;
@@ -90,22 +147,31 @@ export class ListController<
   }
 
   focusItem(item: Item) {
-    if (this._focusedItem !== null) this.blurItem(this._focusedItem);
-    this.__focusItem(item);
+    if (!item || this.__isDisabled()) return;
+    if (this._focusedItem && this._focusedItem !== item) {
+      this.__blurItem(this._focusedItem);
+    }
     this._focusedItem = item;
+    this.__lastKnownIndex = this.items.indexOf(item);
+    this.__focusItem(item);
   }
 
   blurItem(item: Item) {
     this.__blurItem(item);
-    this._focusedItem = null;
+    if (this._focusedItem === item) {
+      this._focusedItem = null;
+    }
   }
 
   focusFirstItem() {
-    this.focusItem(this.items[0]);
+    const first = this.items[0];
+    if (first) this.focusItem(first);
   }
 
   focusLastItem() {
-    this.focusItem(this.items[this.items.length - 1]);
+    const items = this.items;
+    const last = items[items.length - 1];
+    if (last) this.focusItem(last);
   }
 
   focusNextItem() {
@@ -134,29 +200,81 @@ export class ListController<
     this.focusItem(items[prevIndex]);
   }
 
-  handleSlotChange() {
-    const items = this.items;
-    const index = this.currentIndex;
-    this._focusedItem = index >= 0 ? items[index] : null;
+  requestReconcile() {
+    if (this.__reconcilePending) return;
+    this.__reconcilePending = true;
+    queueMicrotask(() => {
+      this.__reconcilePending = false;
+      if (this.host.isConnected) {
+        this.reconcile();
+      }
+    });
+  }
+
+  reconcile() {
+    if (this.__isDisabled()) return;
+
+    const possibleItems = this.__getPossibleItems();
+    const enabledItems = possibleItems.filter(this.__isItem);
+
+    if (this.__observer) {
+      this.__observer.disconnect();
+      for (const el of possibleItems) {
+        this.__observer.observe(el, {
+          attributes: true,
+          attributeFilter: ['disabled', 'hidden', 'base'],
+        });
+      }
+    }
+
+    // `__hasFocusWithin` stays true even when the focused item is removed from
+    // the DOM (document.activeElement then falls back to `body` without firing
+    // `focusout`), so focus can still be restored to a neighbour.
+    const menuHadFocus =
+      this.__hasFocusWithin || this.host.contains(document.activeElement);
+
+    const prevItem = this._focusedItem;
+    let nextItem: Item | null = null;
+    if (this._focusedItem && enabledItems.includes(this._focusedItem)) {
+      nextItem = this._focusedItem;
+    } else if (enabledItems.length > 0) {
+      const fallbackIndex = Math.min(
+        Math.max(this.__lastKnownIndex, 0),
+        enabledItems.length - 1
+      );
+      nextItem = enabledItems[fallbackIndex];
+    }
+    this._focusedItem = nextItem;
+    this.__lastKnownIndex = nextItem ? enabledItems.indexOf(nextItem) : -1;
+
+    if (menuHadFocus && nextItem !== prevItem) {
+      if (prevItem) this.__blurItem(prevItem);
+      if (nextItem) {
+        this.__focusItem(nextItem);
+      } else {
+        this.host.tabIndex = -1;
+        this.host.focus();
+      }
+    }
   }
 }
 
-export function filterOptions(
+export const filterOptions = (
   options: string[] = [],
   filter: string,
   exclude: string[] = []
-) {
+) => {
   return options.filter((option) => {
     const matches = option.toLowerCase().indexOf(filter.toLowerCase()) === 0;
     return matches && exclude.indexOf(option) < 0;
   });
-}
+};
 
-export function getIndexByLetter(
+export const getIndexByLetter = (
   options: string[],
   filter: string,
   startIndex = 0
-) {
+) => {
   const orderedOptions = [
     ...options.slice(startIndex),
     ...options.slice(0, startIndex),
@@ -173,4 +291,4 @@ export function getIndexByLetter(
   } else {
     return -1;
   }
-}
+};

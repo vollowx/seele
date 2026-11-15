@@ -8,6 +8,7 @@ export declare class OptionInterface {
 
 export const OptionMixin = <T extends Constructor<ListItem>>(superClass: T) => {
   class OptionElement extends superClass {
+    override _role = 'option';
     @property({ reflect: true }) value: string = '';
   }
   return OptionElement as Constructor<OptionInterface> & T;

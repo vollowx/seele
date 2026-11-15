@@ -34,6 +34,10 @@
   min-width: 48px;
 }
 
+.end {
+  margin-inline-end: -16px;
+}
+
 .start[hidden],
 .end[hidden] {
   display: none;
