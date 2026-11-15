@@ -38,7 +38,7 @@ export class M3FilledSelect extends M3Select {
         aria-disabled=${this.disabled}
         aria-required=${this.required}
       >
-        ${this.renderFieldContent()}
+        ${this.renderFieldContent()} ${this.renderExpandIcon()}
       </md-filled-field>
     `;
   }

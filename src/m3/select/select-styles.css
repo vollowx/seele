@@ -24,3 +24,12 @@
 [part='menu'] {
   max-height: 400px;
 }
+
+[part='expand-icon'] {
+  transition: transform var(--md-sys-motion-effects-fast-duration)
+    var(--md-sys-motion-effects-fast);
+}
+
+[part='expand-icon'].open {
+  transform: rotate(180deg);
+}

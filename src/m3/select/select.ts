@@ -39,4 +39,24 @@ export abstract class M3Select extends Select {
       </md-popup>
     `;
   }
+
+  protected renderExpandIcon() {
+    return html`
+      <svg
+        slot="end"
+        part="expand-icon"
+        class="${this.open ? ' open' : ''}"
+        height="5"
+        viewBox="7 10 10 5"
+        aria-hidden="true"
+      >
+        <polygon
+          fill="currentColor"
+          stroke="none"
+          fill-rule="evenodd"
+          points="7 10 12 15 17 10"
+        ></polygon>
+      </svg>
+    `;
+  }
 }
