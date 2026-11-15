@@ -67,6 +67,10 @@ export class Menu extends InternalsAttached(LitElement) {
     }
   }
 
+  protected override firstUpdated() {
+    this.#rearrangeTabIndices();
+  }
+
   constructor() {
     super();
     this[internals].role = 'menu';
@@ -85,7 +89,11 @@ export class Menu extends InternalsAttached(LitElement) {
       !item.hasAttribute('disabled') &&
       !item.hidden,
     getPossibleItems: () => this.slotItems,
+    blurItem: (item: MenuItem) => {
+      item.tabIndex = -1;
+    },
     focusItem: (item: MenuItem) => {
+      item.tabIndex = 0;
       item.focus({ preventScroll: true });
       if (focusVisible) item.scrollIntoView({ block: 'nearest' });
       this.dispatchEvent(
@@ -98,10 +106,23 @@ export class Menu extends InternalsAttached(LitElement) {
     },
     wrapNavigation: () => false,
     isDisabled: () => this.bare,
+    onFocusin: () => this.#rearrangeTabIndices(),
   });
 
   #handleSlotChange() {
     this.listController.handleSlotChange();
+    this.#rearrangeTabIndices();
+  }
+
+  // Roving tabIndex: keep exactly one item tabbable so `Tab` enters the menu at
+  // a single item and arrow keys move focus between them.
+  #rearrangeTabIndices() {
+    const items = this.listController.items;
+    const focused = this.listController._focusedItem;
+    const active = focused && items.includes(focused) ? focused : items[0];
+    for (const item of items) {
+      item.tabIndex = item === active ? 0 : -1;
+    }
   }
 
   handleKeyDown(event: KeyboardEvent) {
