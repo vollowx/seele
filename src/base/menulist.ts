@@ -35,10 +35,12 @@ export class MenuList extends Popup {
   ): void {
     if (next) {
       next.ariaHasPopup = 'menu';
-      const menu = this.$menu!;
-      ensureReady(menu).then(() => {
-        next.ariaControlsElements = [menu];
-        menu[internals].ariaLabelledByElements = [next];
+      this.updateComplete.then(() => {
+        const menu = this.$menu!;
+        ensureReady(menu).then(() => {
+          next.ariaControlsElements = [menu];
+          menu[internals].ariaLabelledByElements = [next];
+        });
       });
     }
     super[handleControlChange](prev, next);

@@ -25,17 +25,16 @@ export abstract class M3Select extends Select {
         .open="${this.open}"
         @toggle=${(e: ToggleEvent) => (this.open = e.newState === 'open')}
       >
-        <md-menu
-          id="menu"
-          part="menu"
-          role="listbox"
+        <md-listbox
+          id="listbox"
+          part="listbox"
           tabindex="-1"
           bare
-          @item-focus="${this._handleMenuItemFocus}"
-          @action="${this._handleMenuAction}"
+          @item-focus="${this._handleListItemFocus}"
+          @select="${this._handleListboxSelect}"
         >
           <slot @slotchange=${this._handleSlotChange}></slot>
-        </md-menu>
+        </md-listbox>
       </md-popup>
     `;
   }

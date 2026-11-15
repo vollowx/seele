@@ -7,7 +7,11 @@ import { FormAssociated } from './mixins/form-associated.js';
 
 import type { Option } from './option.js';
 import type { Popup } from './popup.js';
-import type { ListBox, ListboxSelectEvent } from './listbox.js';
+import type {
+  ListBox,
+  ListItemFocusEvent,
+  ListboxSelectEvent,
+} from './listbox.js';
 import { getActionFromKey, MenuAction } from './menu.js';
 
 const VALUE = Symbol('value');
@@ -138,8 +142,12 @@ export class Select extends Base {
   protected override updated(changed: PropertyValues) {
     super.updated(changed);
 
-    if (changed.has('open') && this.open) {
-      this.#focusSelectedItemOrFirst();
+    if (changed.has('open')) {
+      if (this.open) {
+        this.#focusSelectedItemOrFirst();
+      } else {
+        this.$field.ariaActiveDescendantElement = null;
+      }
     }
   }
 
@@ -168,6 +176,10 @@ export class Select extends Base {
       this.#dispatchChangeEvent();
       this.$field.focus();
     }
+  }
+
+  protected _handleListItemFocus(event: ListItemFocusEvent) {
+    this.$field.ariaActiveDescendantElement = event.detail.item;
   }
 
   #handleFocusOut(event: FocusEvent) {

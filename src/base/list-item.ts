@@ -24,9 +24,6 @@ export class ListItem extends FormAssociated(InternalsAttached(LitElement)) {
 
   constructor() {
     super();
-    // Activedescendant: items stay out of the tab order (focus lives on the
-    // host); the `focused` property drives the focus ring instead.
-    this.tabIndex = -1;
     this[updateInternals]();
   }
 
@@ -53,6 +50,10 @@ export class ListItem extends FormAssociated(InternalsAttached(LitElement)) {
       ? this[internals].states.add('selected')
       : this[internals].states.delete('selected');
   }
+
+  // Activedescendant items are never focusable — the list host owns focus, so
+  // `Disableable`'s tabindex management must not make them tabbable.
+  override _syncTabIndex(): void {}
 
   override focus(): void {
     this.focused = true;

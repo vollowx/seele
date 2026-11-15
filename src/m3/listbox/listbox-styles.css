@@ -1,0 +1,24 @@
+:host {
+  box-sizing: border-box;
+  display: block;
+  height: inherit;
+  min-width: inherit;
+  width: inherit;
+  outline: 0;
+  overflow-y: auto;
+  padding: 4px;
+  scroll-padding-block: 4px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+[part='items'] {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+::slotted(md-divider) {
+  /* Which makes the gap between item and divider 8px */
+  margin-block: 6px;
+}
