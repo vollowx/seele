@@ -8,7 +8,7 @@ import { popupStyles } from '../popup/popup-styles.css.js';
 /**
  * @tag md-composed-menu
  */
-@customElement('md-menulist')
+@customElement('md-menu-list')
 export class M3MenuList extends MenuList {
   @property({ type: Boolean, reflect: true }) vibrant = false;
 
@@ -17,6 +17,6 @@ export class M3MenuList extends MenuList {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'md-menulist': M3MenuList;
+    'md-menu-list': M3MenuList;
   }
 }

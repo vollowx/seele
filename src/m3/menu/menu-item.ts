@@ -4,11 +4,11 @@ import { MenuItem } from '../../base/menuitem.js';
 import { M3ListItemLookalike } from '../list/list-item.js';
 
 /**
- * @tag md-menuitem
+ * @tag md-menu-item
  *
  * @slot - contents in md-item
  */
-@customElement('md-menuitem')
+@customElement('md-menu-item')
 export class M3MenuItem extends M3ListItemLookalike(MenuItem) {
   override render() {
     return this.renderM3ListItem();
@@ -17,6 +17,6 @@ export class M3MenuItem extends M3ListItemLookalike(MenuItem) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'md-menuitem': M3MenuItem;
+    'md-menu-item': M3MenuItem;
   }
 }

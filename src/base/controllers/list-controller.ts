@@ -222,7 +222,7 @@ export class ListController<
       for (const el of possibleItems) {
         this.__observer.observe(el, {
           attributes: true,
-          attributeFilter: ['disabled', 'hidden', 'base'],
+          attributeFilter: ['disabled', 'hidden', 'seele-base'],
         });
       }
     }

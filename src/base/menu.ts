@@ -85,7 +85,7 @@ export class Menu extends InternalsAttached(LitElement) {
 
   private readonly listController = new ListController<MenuItem>(this, {
     isItem: (item: HTMLElement): item is MenuItem =>
-      item.getAttribute('base') === 'menuitem' &&
+      item.getAttribute('seele-base') === 'menuitem' &&
       !item.hasAttribute('disabled') &&
       !item.hidden,
     getPossibleItems: () => this.slotItems,
@@ -230,7 +230,7 @@ export class Menu extends InternalsAttached(LitElement) {
 
   #getItemFromEvent(event: Event) {
     const item = (event.target as HTMLElement).closest<MenuItem>(
-      '[base=menuitem]'
+      '[seele-base=menuitem]'
     );
     if (!item || !this.$items.includes(item)) return null;
     return { item, index: this.$items.indexOf(item) };

@@ -1,7 +1,7 @@
 import { html, LitElement, TemplateResult } from 'lit';
 import { customElement, query } from 'lit/decorators.js';
 
-import { ListItem } from '../../base/list-item.js';
+import { ListItem } from '../../base/listitem.js';
 
 import '../item/item.js';
 import '../ripple/ripple.js';

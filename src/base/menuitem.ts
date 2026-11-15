@@ -29,6 +29,8 @@ export class MenuItem extends Disableable(InternalsAttached(LitElement)) {
 
   override connectedCallback() {
     super.connectedCallback();
-    if (!this.hasAttribute('base')) this.setAttribute('base', 'menuitem');
+    if (!this.hasAttribute('seele-base')) {
+      this.setAttribute('seele-base', 'menuitem');
+    }
   }
 }

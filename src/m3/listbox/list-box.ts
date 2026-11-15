@@ -2,20 +2,20 @@ import { customElement } from 'lit/decorators.js';
 
 import { ListBox } from '../../base/listbox.js';
 
-import { listboxStyles } from './listbox-styles.css.js';
+import { listBoxStyles } from './list-box-styles.css.js';
 
 /**
- * @tag md-listbox
+ * @tag md-list-box
  *
  * @slot - options
  */
-@customElement('md-listbox')
+@customElement('md-list-box')
 export class M3ListBox extends ListBox {
-  static override styles = [listboxStyles];
+  static override styles = [listBoxStyles];
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'md-listbox': M3ListBox;
+    'md-list-box': M3ListBox;
   }
 }

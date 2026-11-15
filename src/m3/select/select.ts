@@ -2,7 +2,7 @@ import { html } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 
 import '../popup/popup.js';
-import '../listbox/listbox.js';
+import '../listbox/list-box.js';
 
 import { Select } from '../../base/select.js';
 import type { M3Field } from '../field/field.js';
@@ -25,7 +25,7 @@ export abstract class M3Select extends Select {
         .open="${this.open}"
         @toggle=${(e: ToggleEvent) => (this.open = e.newState === 'open')}
       >
-        <md-listbox
+        <md-list-box
           id="listbox"
           part="listbox"
           tabindex="-1"
@@ -34,7 +34,7 @@ export abstract class M3Select extends Select {
           @select="${this._handleListboxSelect}"
         >
           <slot @slotchange=${this._handleSlotChange}></slot>
-        </md-listbox>
+        </md-list-box>
       </md-popup>
     `;
   }

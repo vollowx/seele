@@ -1,5 +1,5 @@
 import { List, ListItemFocusEvent } from './list.js';
-import type { ListItem } from './list-item.js';
+import type { ListItem } from './listitem.js';
 
 export interface ListboxSelectDetail {
   item: ListItem;

@@ -1,6 +1,6 @@
 import { LitElement, html, isServer } from 'lit';
 import { property, queryAssignedElements } from 'lit/decorators.js';
-import type { ListItem } from './list-item.js';
+import type { ListItem } from './listitem.js';
 import { focusVisible, setFocusVisible } from '../core/focus.js';
 import { internals, InternalsAttached } from './mixins/internals-attached.js';
 import { ListController } from './controllers/list-controller.js';
