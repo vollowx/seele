@@ -1,10 +1,14 @@
 import { isServer } from 'lit';
 
+/**
+ * This approach works fine for all the time, but I also consider making use of
+ * `:focus-visible` CSS in the future.
+ */
 export let focusVisible = false;
 
-export const setFocusVisible = (value: boolean) => {
+export function setFocusVisible(value: boolean) {
   focusVisible = value;
-};
+}
 
 if (!isServer) {
   window.addEventListener('keydown', () => (focusVisible = true), {
@@ -23,21 +27,22 @@ export const isFocusable = (element: Element): element is HTMLElement =>
     element.tabIndex >= 0 ||
     element.shadowRoot?.delegatesFocus === true);
 
-const isTabbable = (element: Element): element is HTMLElement =>
+export const isTabbable = (element: Element): element is HTMLElement =>
   isFocusable(element) && element.tabIndex >= 0;
 
 /**
  * Recursively walks the tree (walking through shadow DOM and resolving slots),
  * and invokes the callback on every element matching `cond`.
  *
- * @param callback - If callback returns true, stop walking.
+ * @param cond - Whether an element can be counted "found" or not.
+ * @param callback - Called when an element is found. If callback returns true, stop walking.
  * @returns Found or not
  */
-const walk = (
+function walk(
   root: Element | DocumentFragment,
   cond: (element: HTMLElement) => boolean,
   callback: (element: HTMLElement) => boolean
-): boolean => {
+): boolean {
   if (root.nodeName === 'SLOT') {
     const assigned = (root as HTMLSlotElement).assignedElements({
       flatten: true,
@@ -63,11 +68,11 @@ const walk = (
   }
 
   return false;
-};
+}
 
-export const getFirstTabbable = (
+export function getFirstTabbable(
   root: Element | DocumentFragment
-): HTMLElement | null => {
+): HTMLElement | null {
   let first: HTMLElement | null = null;
 
   walk(root, isTabbable, (element) => {
@@ -76,11 +81,11 @@ export const getFirstTabbable = (
   });
 
   return first;
-};
+}
 
-export const getAllTabbables = (
+export function getAllTabbables(
   root: Element | DocumentFragment
-): HTMLElement[] => {
+): HTMLElement[] {
   let tabbables: HTMLElement[] = [];
 
   walk(root, isTabbable, (element) => {
@@ -89,11 +94,11 @@ export const getAllTabbables = (
   });
 
   return tabbables;
-};
+}
 
-export const getFirstFocusable = (
+export function getFirstFocusable(
   root: Element | DocumentFragment
-): HTMLElement | null => {
+): HTMLElement | null {
   let first: HTMLElement | null = null;
 
   walk(root, isFocusable, (element) => {
@@ -102,11 +107,11 @@ export const getFirstFocusable = (
   });
 
   return first;
-};
+}
 
-export const getAllFocusables = (
+export function getAllFocusables(
   root: Element | DocumentFragment
-): HTMLElement[] => {
+): HTMLElement[] {
   let focusables: HTMLElement[] = [];
 
   walk(root, isFocusable, (element) => {
@@ -115,4 +120,4 @@ export const getAllFocusables = (
   });
 
   return focusables;
-};
+}
