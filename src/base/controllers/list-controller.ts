@@ -259,22 +259,22 @@ export class ListController<
   }
 }
 
-export const filterOptions = (
+export function filterOptions(
   options: string[] = [],
   filter: string,
   exclude: string[] = []
-) => {
+) {
   return options.filter((option) => {
     const matches = option.toLowerCase().indexOf(filter.toLowerCase()) === 0;
     return matches && exclude.indexOf(option) < 0;
   });
-};
+}
 
-export const getIndexByLetter = (
+export function getIndexByLetter(
   options: string[],
   filter: string,
   startIndex = 0
-) => {
+) {
   const orderedOptions = [
     ...options.slice(startIndex),
     ...options.slice(0, startIndex),
@@ -291,4 +291,4 @@ export const getIndexByLetter = (
   } else {
     return -1;
   }
-};
+}
