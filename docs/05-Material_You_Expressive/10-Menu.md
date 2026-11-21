@@ -76,6 +76,12 @@ webpage.
 A popup that wraps an `M3Menu` inside a [`Popup`](../04-Base/10-Popup.md). Use
 this for standalone menus anchored to a button or other control.
 
+### CSS Custom Properties
+
+| name | description |
+| --- | --- |
+| `--md-popup-animation` | `scale` or `fade`; defaults to `scale` for menus and `fade` for submenus |
+
 ### Properties
 
 | name      | description       |

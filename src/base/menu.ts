@@ -1,11 +1,14 @@
-import { LitElement, html, isServer } from 'lit';
+import { LitElement, PropertyValues, html, isServer } from 'lit';
 import { property, queryAssignedElements } from 'lit/decorators.js';
 
 import { focusVisible, setFocusVisible } from '../core/focus.js';
 import { internals, InternalsAttached } from './mixins/internals-attached.js';
 import { ListController } from './controllers/list-controller.js';
 
-import type { MenuItem } from './menu-item.js';
+import type { MenuItem } from './menuitem.js';
+
+// Same as Windows menu delay
+const MENU_SHOW_DELAY = 400;
 
 export interface MenuEventDetail {
   item: MenuItem;
@@ -37,7 +40,7 @@ export class Menu extends InternalsAttached(LitElement) {
 
   @queryAssignedElements({ flatten: true }) slotItems!: Array<MenuItem>;
   get $items() {
-    return this.listController.items || [];
+    return this.listController.items;
   }
 
   get currentIndex() {
@@ -50,42 +53,57 @@ export class Menu extends InternalsAttached(LitElement) {
     this.listController.focusLastItem();
   }
   focusItem(item: MenuItem) {
-    this.listController._focusItem(item);
+    this.listController.focusItem(item);
   }
 
   override render() {
-    return html`<slot part="items"></slot>`;
+    return html`<slot
+      part="items"
+      @slotchange=${this.#handleSlotChange}
+    ></slot>`;
+  }
+
+  protected override updated(changed: PropertyValues<this>) {
+    super.updated(changed);
+    if (changed.has('bare') && !this.bare) {
+      this.listController.requestReconcile();
+    }
+  }
+
+  protected override firstUpdated() {
+    this.#rearrangeTabIndices();
   }
 
   constructor() {
     super();
     this[internals].role = 'menu';
-    if (!this.hasAttribute('tabindex')) {
-      this.setAttribute('tabindex', '0');
-    }
     if (!isServer) {
       this.addEventListener('keydown', this.handleKeyDown.bind(this));
-      this.addEventListener('focusin', this.#handleFocusIn.bind(this));
-      this.addEventListener('focusout', this.#handleFocusOut.bind(this));
-      this.addEventListener('mouseover', this.#handleMouseOver.bind(this));
+      this.addEventListener('pointerover', this.#handlePointerOver.bind(this));
+      this.addEventListener('pointerout', this.#handlePointerOut.bind(this));
       this.addEventListener('click', this.#handleClick.bind(this));
       this.addEventListener('pointerdown', this.#handlePointerDown.bind(this));
       this.addEventListener('pointerup', this.#handlePointerUp.bind(this));
     }
   }
 
+  override disconnectedCallback() {
+    this.clearHoverTimers();
+    super.disconnectedCallback();
+  }
+
   private readonly listController = new ListController<MenuItem>(this, {
     isItem: (item: HTMLElement): item is MenuItem =>
-      item.getAttribute('seele-base') === 'option' &&
+      item.getAttribute('seele-base') === 'menuitem' &&
       !item.hasAttribute('disabled') &&
       !item.hidden,
     getPossibleItems: () => this.slotItems,
     blurItem: (item: MenuItem) => {
-      item.focused = false;
+      item.tabIndex = -1;
     },
     focusItem: (item: MenuItem) => {
-      item.focused = true;
-      if (!this.bare) this[internals].ariaActiveDescendantElement = item;
+      item.tabIndex = 0;
+      item.focus({ preventScroll: true });
       if (focusVisible) item.scrollIntoView({ block: 'nearest' });
       this.dispatchEvent(
         new CustomEvent('item-focus', {
@@ -96,22 +114,30 @@ export class Menu extends InternalsAttached(LitElement) {
       );
     },
     wrapNavigation: () => false,
+    isDisabled: () => this.bare,
+    onFocusin: () => this.#rearrangeTabIndices(),
   });
 
-  #handleFocusIn() {
-    if (this.bare) return;
-    // TODO: support focusing first selected
-    this.listController.focusFirstItem();
+  #handleSlotChange() {
+    this.listController.handleSlotChange();
+    this.#rearrangeTabIndices();
   }
 
-  #handleFocusOut() {
-    if (this.listController._focusedItem)
-      this.listController._blurItem(this.listController._focusedItem);
+  // Roving tabIndex: keep exactly one item tabbable so `Tab` enters the menu at
+  // a single item and arrow keys move focus between them.
+  #rearrangeTabIndices() {
+    const items = this.listController.items;
+    const focused = this.listController._focusedItem;
+    const active = focused && items.includes(focused) ? focused : items[0];
+    for (const item of items) {
+      item.tabIndex = item === active ? 0 : -1;
+    }
   }
 
   handleKeyDown(event: KeyboardEvent) {
-    if (event.defaultPrevented) return;
+    if (event.defaultPrevented || this.bare) return;
 
+    this.clearHoverTimers();
     const action = getActionFromKey(event);
     const items = this.$items;
     const currentIndex = this.listController.currentIndex;
@@ -140,7 +166,7 @@ export class Menu extends InternalsAttached(LitElement) {
 
         const nextIndex = atBoundary ? currentIndex + step : boundary;
 
-        this.listController._focusItem(
+        this.listController.focusItem(
           items[Math.max(0, Math.min(maxIndex, nextIndex))]
         );
         return;
@@ -156,13 +182,13 @@ export class Menu extends InternalsAttached(LitElement) {
       case MenuAction.CloseSelect:
         event.preventDefault();
         if (currentIndex >= 0) {
-          items[currentIndex].focused = false;
-          this.#dispatchAction({
-            item: items[currentIndex],
-            index: currentIndex,
-          });
-          if (this.keepOpenAction) return;
-          this.#dispatchHide();
+          this.#activateOrOpen(items[currentIndex], currentIndex);
+        }
+        return;
+      case MenuAction.Open:
+        event.preventDefault();
+        if (currentIndex >= 0) {
+          items[currentIndex].openSubmenu();
         }
         return;
       case MenuAction.Type:
@@ -171,11 +197,114 @@ export class Menu extends InternalsAttached(LitElement) {
     }
   }
 
-  #handleMouseOver(event: MouseEvent) {
+  #hoverItem: MenuItem | null = null;
+  #hoverTimer: number | null = null;
+
+  clearHoverTimers() {
+    if (this.#hoverTimer !== null) window.clearTimeout(this.#hoverTimer);
+    this.#hoverTimer = null;
+    this.#hoverItem = null;
+  }
+
+  #handlePointerOver(event: PointerEvent) {
+    if (this.bare) return;
+    if (event.pointerType === 'pen') {
+      const item = this.#getItemFromEvent(event);
+      if (item && this.currentIndex !== item.index) {
+        setFocusVisible(false);
+        this.listController.focusItem(item.item);
+      }
+      return;
+    }
+    if (event.pointerType !== 'mouse') return;
+    const item = this.#getPointerItem(event);
+    if (!item) {
+      if (
+        this.slotItems.some(
+          (entry) =>
+            entry.$submenu?.open &&
+            event.composedPath().includes(entry.$submenu)
+        )
+      ) {
+        this.clearHoverTimers();
+      }
+      return;
+    }
+    if (this.#hoverItem === item) return;
+    this.clearHoverTimers();
+    this.#hoverItem = item;
     setFocusVisible(false);
-    const item = this.#getItemFromEvent(event);
-    if (item && this.currentIndex !== item.index)
-      this.listController._focusItem(item.item);
+
+    const openSubmenus = this.slotItems
+      .filter((entry) => entry !== item && entry.$submenu?.open)
+      .map((entry) => entry.$submenu!);
+    const root = this.getRootNode();
+    const active = root instanceof ShadowRoot ? root.host.getRootNode() : root;
+
+    if (
+      openSubmenus.length === 0 &&
+      !item.disabled &&
+      !item.$submenu?.contains(
+        active instanceof Document || active instanceof ShadowRoot
+          ? active.activeElement
+          : null
+      )
+    ) {
+      this.listController.focusItem(item);
+    }
+
+    if (
+      openSubmenus.length ||
+      (item.hasSubmenu && !item.disabled && !item.$submenu?.open)
+    ) {
+      this.#hoverTimer = window.setTimeout(async () => {
+        this.#hoverTimer = null;
+        for (const submenu of openSubmenus) submenu.hide();
+        await Promise.all(
+          openSubmenus.map((submenu) => submenu.updateComplete)
+        );
+        if (this.#hoverItem !== item || !this.isConnected) return;
+        if (!item.disabled) {
+          this.listController.focusItem(item);
+          if (item.hasSubmenu) item.openSubmenu(false);
+        }
+      }, MENU_SHOW_DELAY);
+    }
+  }
+
+  #handlePointerOut(event: PointerEvent) {
+    if (this.bare || event.pointerType !== 'mouse') return;
+    const next = event.relatedTarget as Node | null;
+    if (this.#hoverItem && !this.#hoverItem.contains(next)) {
+      this.clearHoverTimers();
+    }
+
+    const shadowRoot = this.getRootNode();
+    let root: HTMLElement =
+      shadowRoot instanceof ShadowRoot &&
+      shadowRoot.host instanceof HTMLElement &&
+      shadowRoot.host.localName === 'md-menu-list'
+        ? shadowRoot.host
+        : this;
+    let parent = root.parentElement?.closest('md-menu-list');
+    while (parent) {
+      root = parent;
+      parent = root.parentElement?.closest('md-menu-list');
+    }
+    if (root.contains(next)) return;
+
+    const rootNode = root.getRootNode();
+    const active =
+      rootNode instanceof Document || rootNode instanceof ShadowRoot
+        ? rootNode.activeElement
+        : null;
+    if (!(active instanceof HTMLElement) || !root.contains(active)) return;
+    const menu = active.parentElement?.closest('md-menu-list')?.$menu ?? this;
+    const focused = menu.listController._focusedItem;
+    if (focused !== active) return;
+    menu.listController.blurItem(focused);
+    menu.tabIndex = -1;
+    menu.focus({ preventScroll: true });
   }
 
   #handleClick(event: MouseEvent) {
@@ -187,14 +316,21 @@ export class Menu extends InternalsAttached(LitElement) {
     const item = this.#getItemFromEvent(event);
     if (!item) return;
 
-    item.item.focused = false;
-    this.#dispatchAction({ ...item });
-    if (!this.keepOpenAction) this.#dispatchHide();
+    this.#activateOrOpen(item.item, item.index);
   }
 
   #suppressClick = false;
-  #handlePointerDown(_event: PointerEvent) {
+  #handlePointerDown(event: PointerEvent) {
     this.#suppressClick = false;
+    if (this.bare || event.pointerType !== 'mouse' || event.button !== 0)
+      return;
+    const item = this.#getItemFromEvent(event);
+    if (!item?.item.hasSubmenu) return;
+    this.clearHoverTimers();
+    for (const entry of this.slotItems) {
+      if (entry !== item.item) entry.$submenu?.hide();
+    }
+    item.item.openSubmenu(false);
   }
 
   #handlePointerUp(event: PointerEvent) {
@@ -206,17 +342,38 @@ export class Menu extends InternalsAttached(LitElement) {
 
     // Ignore the `click` that follows a mouse release on an item.
     this.#suppressClick = true;
-    item.item.focused = false;
-    this.#dispatchAction({ ...item });
-    if (!this.keepOpenAction) this.#dispatchHide();
+    window.setTimeout(() => (this.#suppressClick = false), 0);
+    if (event.pointerType === 'mouse' && item.item.hasSubmenu) return;
+    this.clearHoverTimers();
+    this.#activateOrOpen(item.item, item.index);
+  }
+
+  #getPointerItem(event: Event) {
+    const item = (event.target as HTMLElement).closest<MenuItem>(
+      '[seele-base=menuitem]'
+    );
+    if (!item || item.hidden || !this.slotItems.includes(item)) return null;
+    return item;
   }
 
   #getItemFromEvent(event: Event) {
     const item = (event.target as HTMLElement).closest<MenuItem>(
-      '[seele-base=option]'
+      '[seele-base=menuitem]'
     );
     if (!item || !this.$items.includes(item)) return null;
     return { item, index: this.$items.indexOf(item) };
+  }
+
+  // Submenu items open their submenu instead of activating, for every
+  // trigger (Enter, Space, ArrowRight, mouse click).
+  #activateOrOpen(item: MenuItem, index: number) {
+    if (item.hasSubmenu) {
+      item.openSubmenu();
+      return;
+    }
+    item.blur();
+    this.#dispatchAction({ item, index });
+    if (!this.keepOpenAction) this.#dispatchHide();
   }
 
   #dispatchAction(detail: MenuEventDetail) {
@@ -261,6 +418,8 @@ export function getActionFromKey(event: KeyboardEvent): MenuAction | null {
   if (key === 'End') return MenuAction.Last;
   if (key === 'PageUp') return MenuAction.PageUp;
   if (key === 'PageDown') return MenuAction.PageDown;
+
+  if (key === 'ArrowRight') return MenuAction.Open;
 
   if (key === 'ArrowUp' && altKey) return MenuAction.CloseSelect;
   if (key === 'ArrowDown' && !altKey) return MenuAction.Next;

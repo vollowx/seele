@@ -41,15 +41,6 @@ export class Button extends Base {
     );
   }
 
-  override updated(changed: Map<string, any>) {
-    if (changed.has('disabled')) this[updateInternals]();
-  }
-
-  override [updateInternals]() {
-    this.tabIndex = this.disabled ? -1 : 0;
-    this[internals].ariaDisabled = String(this.disabled);
-  }
-
   #handleKeyDown = (e: KeyboardEvent) => {
     if (e.key !== ' ' && e.key !== 'Enter') return;
     e.preventDefault();

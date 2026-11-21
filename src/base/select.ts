@@ -8,10 +8,10 @@ import { FormAssociated } from './mixins/form-associated.js';
 import type { Option } from './option.js';
 import type { Popup } from './popup.js';
 import type {
-  Menu,
-  MenuItemFocusEvent,
-  MenuActionEvent,
-} from './menu.js';
+  ListBox,
+  ListItemFocusEvent,
+  ListboxSelectEvent,
+} from './listbox.js';
 import { getActionFromKey, MenuAction } from './menu.js';
 
 const VALUE = Symbol('value');
@@ -21,7 +21,7 @@ const Base = FormAssociated(FocusDelegated(InternalsAttached(LitElement)));
 /**
  * @csspart field
  * @csspart popup
- * @csspart menu
+ * @csspart listbox
  *
  * @fires {Event} change - Fires when the value is changed.
  * @fires {Event} input - Fires when the value is changed.
@@ -51,7 +51,7 @@ export class Select extends Base {
   [VALUE] = '';
 
   get $options(): Option[] {
-    return (this.$menu?.$items as Option[]) || [];
+    return (this.$listbox?.$items as Option[]) || [];
   }
 
   @property({ type: Number, attribute: 'selected-index' })
@@ -74,7 +74,7 @@ export class Select extends Base {
 
   @query('[part=field]') $field!: any;
   @query('[part=popup]') $popup!: Popup;
-  @query('[part=menu]') $menu!: Menu;
+  @query('[part=listbox]') $listbox!: ListBox;
 
   private lastUserSetValue: string | null = null;
   private lastUserSetSelectedIndex: number | null = null;
@@ -82,7 +82,7 @@ export class Select extends Base {
   private lastSelectedOptionRecords: [Option, number][] = [];
 
   override render() {
-    return html`${this.renderField()}${this.renderMenu()}`;
+    return html`${this.renderField()}${this.renderListbox()}`;
   }
 
   /**
@@ -95,7 +95,7 @@ export class Select extends Base {
   /**
    * Check example content from the m3 implementation
    */
-  protected renderMenu() {
+  protected renderListbox() {
     return html``;
   }
 
@@ -168,18 +168,17 @@ export class Select extends Base {
       }
     }
 
-    if (this.open) this.$menu.handleKeyDown(event);
+    if (this.open) this.$listbox.handleKeyDown(event);
   }
 
-  protected _handleMenuAction(event: MenuActionEvent) {
+  protected _handleListboxSelect(event: ListboxSelectEvent) {
     if (this.selectItem(event.detail.item as Option)) {
       this.#dispatchChangeEvent();
       this.$field.focus();
-      // For Narrator, activating an option moves focus the document then
     }
   }
 
-  protected _handleMenuItemFocus(event: MenuItemFocusEvent) {
+  protected _handleListItemFocus(event: ListItemFocusEvent) {
     this.$field.ariaActiveDescendantElement = event.detail.item;
   }
 
@@ -276,13 +275,18 @@ export class Select extends Base {
   };
 
   #focusSelectedItemOrFirst() {
-    const selectedOptions = this.getSelectedOptions();
-    if (selectedOptions && selectedOptions.length > 0) {
-      const [item] = selectedOptions[0];
-      this.$menu.focusItem(item);
-    } else {
-      this.$menu.focusFirstItem();
-    }
+    // Defer until the popover is shown, otherwise focusing a hidden option is a
+    // no-op.
+    requestAnimationFrame(() => {
+      if (!this.open) return;
+      const selectedOptions = this.getSelectedOptions();
+      if (selectedOptions && selectedOptions.length > 0) {
+        const [item] = selectedOptions[0];
+        this.$listbox.focusItem(item);
+      } else {
+        this.$listbox.focusFirstItem();
+      }
+    });
   }
 
   formResetCallback() {

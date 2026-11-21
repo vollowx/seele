@@ -2,6 +2,13 @@
 
 - Mixes [`InternalsAttached`](./20-InternalsAttached.md)
 
+Mouse hover on a menu item that has a submenu opens the submenu after 400ms.
+Moving to a sibling closes the previous submenu after the same delay; entering
+that submenu first cancels the close. A mouse press opens the submenu
+immediately.
+
+The delay is kept the same as it is in Windows win32 programs.
+
 ## CSS Parts
 
 | name    | description        |

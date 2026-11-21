@@ -16,10 +16,11 @@ import './m3/focus-ring/focus-ring.js'
 import './m3/item/item.js';
 import './m3/list/list.js';
 import './m3/list/list-item.js';
+import './m3/listbox/list-box.js';
 import './m3/loading/loading.js';
 import './m3/menu/menu.js';
+import './m3/menu/menu-list.js';
 import './m3/menu/menu-item.js';
-import './m3/menu/composed-menu.js';
 import './m3/navigation/navigation-rail.js';
 import './m3/navigation/navigation-rail-item.js';
 import './m3/popup/popup.js';

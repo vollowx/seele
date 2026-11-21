@@ -20,9 +20,9 @@
 
 :host(:state(selected)) {
   --md-item-supporting-text-color: var(--md-sys-color-on-tertiary-container);
-  background-color: var(--md-sys-color-tertiary-container);
+  background-color: var(--_selected-item-background, var(--md-sys-color-tertiary-container));
   border-radius: 12px;
-  color: var(--md-sys-color-on-tertiary-container);
+  color: var(--_selected-item-color, var(--md-sys-color-on-tertiary-container));
 }
 
 :host(:disabled) {
@@ -41,9 +41,9 @@ md-ripple::before {
 }
 
 /* TODO: temporarilyh removed for consistency when dragging */
-md-ripple::part(ripple) {
-  display: none;
-}
+/* md-ripple::part(ripple) { */
+/*   display: none; */
+/* } */
 
 @media (forced-colors: active) {
   :host {
