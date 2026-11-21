@@ -3,6 +3,9 @@
 - Mixes [`InternalsAttached`](./20-InternalsAttached.md)
 - Mixes [`FocusDelegated`](./20-FocusDelegated.md)
 
+When the popup is open, Page Up and Page Down navigate the listbox. Home and
+End remain available for editing the input.
+
 ## Slots
 
 | name    | description       |

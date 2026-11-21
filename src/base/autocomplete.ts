@@ -33,16 +33,19 @@ export class Autocomplete extends Base {
     return this.$slottedInput[0] as Input | undefined;
   }
 
+  #boundInput: Input | null = null;
+  #awaitingMatch = false;
+  #inputListener = this.#handleInput.bind(this);
+  #keydownListener = this.#handleInputKeydown.bind(this);
+
   override render() {
     return html`
-      <slot name="input" @slotchange=${this.handleInputSlotChange}></slot>
+      <slot name="input" @slotchange=${this.#handleInputSlotChange}></slot>
       ${this.renderMenu()}
     `;
   }
 
-  /**
-   * Check example content from the m3 implementation
-   */
+  /** Override to render the popup and listbox. */
   renderMenu() {
     return html``;
   }
@@ -54,70 +57,44 @@ export class Autocomplete extends Base {
     }
   }
 
-  #handleFocusOut(event: FocusEvent) {
-    if (!this.open) return;
-
-    const target = event.relatedTarget as Node | null;
-
-    if (target && this.contains(target)) {
-      return;
-    }
-
-    if (target) {
-      this.$popup.hide();
-      return;
-    }
-
-    requestAnimationFrame(() => {
-      if (!document.hasFocus()) this.$popup.hide();
-    });
-  }
-
   override connectedCallback() {
     super.connectedCallback();
-    void this.handleInputSlotChange();
+    void this.#handleInputSlotChange();
   }
 
   override disconnectedCallback() {
-    this.#inputVersion++;
     this.#unbindInput();
     super.disconnectedCallback();
   }
 
-  #boundInput: Input | null = null;
-  #inputVersion = 0;
-  #awaitingMatch = false;
-  #inputListener = this.handleInput.bind(this);
-  #keydownListener = this.handleInputKeydown.bind(this);
-
-  #unbindInput() {
-    if (!this.#boundInput) return;
-    this.#boundInput.removeEventListener('input', this.#inputListener);
-    this.#boundInput.removeEventListener('keydown', this.#keydownListener);
-    this.$popup.hide();
-    this.open = false;
-    this.$popup.detach();
-    this.$popup.$ariaControl = null;
-    this.#boundInput = null;
-    this.#awaitingMatch = false;
+  protected override updated(changed: PropertyValues) {
+    if (changed.has('open') && this.#boundInput) {
+      const $input = this.#boundInput.$inputOrTextarea;
+      if ($input) {
+        $input.ariaExpanded = String(this.open);
+        if (!this.open) {
+          this.#awaitingMatch = false;
+          $input.ariaActiveDescendantElement = null;
+        }
+      }
+    }
   }
 
-  private async handleInputSlotChange() {
-    const version = ++this.#inputVersion;
+  async #handleInputSlotChange() {
     if (this.#boundInput && this.#boundInput !== this.$input) {
       this.#unbindInput();
     }
 
     await ensureReady(this);
-    if (!this.isConnected || version !== this.#inputVersion) return;
+    if (!this.isConnected) return;
     const input = this.$input;
     if (!input || input === this.#boundInput) return;
 
     await ensureSlottedReady(this, () => [input, this.$popup, this.$listbox]);
     if (
       !this.isConnected ||
-      version !== this.#inputVersion ||
-      input !== this.$input
+      input !== this.$input ||
+      input === this.#boundInput
     )
       return;
 
@@ -134,12 +111,25 @@ export class Autocomplete extends Base {
     this.$popup.$ariaControl = $realInput;
     this.$popup.attach(input);
     this.#boundInput = input;
-    this.handleItemsSlotChange();
+    // The initial slotchange may have happened before hydration or binding.
+    this._handleItemsSlotChange();
     $realInput.ariaExpanded = String(this.open);
   }
 
-  protected handleItemsSlotChange() {
-    if (this.#boundInput) this.filterOptions(this.#boundInput.value);
+  #unbindInput() {
+    if (!this.#boundInput) return;
+    this.#boundInput.removeEventListener('input', this.#inputListener);
+    this.#boundInput.removeEventListener('keydown', this.#keydownListener);
+    this.$popup.hide();
+    this.open = false;
+    this.$popup.detach();
+    this.$popup.$ariaControl = null;
+    this.#boundInput = null;
+    this.#awaitingMatch = false;
+  }
+
+  protected _handleItemsSlotChange() {
+    if (this.#boundInput) this.#filterOptions(this.#boundInput.value);
     for (const item of this.$slottedItems) {
       void this.#handleItemReady(item);
     }
@@ -164,29 +154,30 @@ export class Autocomplete extends Base {
     );
   }
 
-  private handleInput(event: InputEvent) {
+  #handleInput(event: InputEvent) {
     const inputEl = this.#boundInput!.$inputOrTextarea as HTMLInputElement;
     const currentValue = inputEl.value;
 
     this.open = true;
 
-    // Filter items based on current value
-    this.filterOptions(currentValue);
+    this.#filterOptions(currentValue);
     const firstMatch = this.#firstMatch(currentValue);
     this.#awaitingMatch = !!currentValue && !firstMatch;
     this.$listbox.clearFocus();
     if (firstMatch) this.$listbox.focusItem(firstMatch);
     else inputEl.ariaActiveDescendantElement = null;
 
-    // Inline completion logic (mode = both)
-    if (this.mode === 'both' && !event.inputType?.startsWith('delete')) {
-      if (firstMatch && currentValue.length > 0) {
-        this.applyInlineAutoComplete(inputEl, firstMatch, currentValue);
-      }
+    if (
+      this.mode === 'both' &&
+      !event.inputType?.startsWith('delete') &&
+      firstMatch &&
+      currentValue.length > 0
+    ) {
+      this.#applyInlineAutoComplete(inputEl, firstMatch, currentValue);
     }
   }
 
-  private applyInlineAutoComplete(
+  #applyInlineAutoComplete(
     inputEl: HTMLInputElement,
     item: HTMLElement,
     typedValue: string
@@ -200,7 +191,7 @@ export class Autocomplete extends Base {
     }
   }
 
-  private filterOptions(searchTerm: string) {
+  #filterOptions(searchTerm: string) {
     if (this.mode === 'none') return;
 
     const normalizedSearch = searchTerm.toLowerCase();
@@ -213,10 +204,19 @@ export class Autocomplete extends Base {
     });
   }
 
-  private handleInputKeydown(event: KeyboardEvent) {
+  #handleInputKeydown(event: KeyboardEvent) {
     if (this.#boundInput?.disabled) return;
 
-    if (['Enter', 'Escape', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
+    if (
+      [
+        'Enter',
+        'Escape',
+        'ArrowUp',
+        'ArrowDown',
+        'PageUp',
+        'PageDown',
+      ].includes(event.key)
+    ) {
       this.#awaitingMatch = false;
       if (!this.open && ['ArrowUp', 'ArrowDown'].includes(event.key)) {
         event.preventDefault();
@@ -229,12 +229,12 @@ export class Autocomplete extends Base {
     }
   }
 
-  protected handleListItemFocus(event: ListItemFocusEvent) {
+  protected _handleListItemFocus(event: ListItemFocusEvent) {
     const input = this.#boundInput?.$inputOrTextarea;
     if (input) input.ariaActiveDescendantElement = event.detail.item;
   }
 
-  protected async handleMenuAction(
+  protected async _handleMenuAction(
     event: MenuActionEvent | ListboxSelectEvent
   ) {
     const selectedItem = event.detail.item;
@@ -253,16 +253,22 @@ export class Autocomplete extends Base {
     }
   }
 
-  protected override updated(changed: PropertyValues) {
-    if (changed.has('open') && this.#boundInput) {
-      const $input = this.#boundInput.$inputOrTextarea;
-      if ($input) {
-        $input.ariaExpanded = String(this.open);
-        if (!this.open) {
-          this.#awaitingMatch = false;
-          $input.ariaActiveDescendantElement = null;
-        }
-      }
+  #handleFocusOut(event: FocusEvent) {
+    if (!this.open) return;
+
+    const target = event.relatedTarget as Node | null;
+
+    if (target && this.contains(target)) {
+      return;
     }
+
+    if (target) {
+      this.$popup.hide();
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      if (!document.hasFocus()) this.$popup.hide();
+    });
   }
 }

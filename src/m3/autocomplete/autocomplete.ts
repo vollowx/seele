@@ -26,10 +26,10 @@ export class M3Autocomplete extends Autocomplete {
           id="listbox"
           tabindex="-1"
           bare
-          @item-focus=${this.handleListItemFocus}
-          @select=${this.handleMenuAction}
+          @item-focus=${this._handleListItemFocus}
+          @select=${this._handleMenuAction}
         >
-          <slot @slotchange=${this.handleItemsSlotChange}></slot>
+          <slot @slotchange=${this._handleItemsSlotChange}></slot>
         </md-list-box>
       </md-popup>
     `;
