@@ -4,10 +4,10 @@
   --_default: var(--md-sys-motion-spatial-default-duration)
     var(--md-sys-motion-spatial-default);
 
-  background: var(--md-sys-color-surface-container);
+  background: var(--_background, var(--md-sys-color-surface-container));
   border-radius: 16px / 32px; /* roughly fixes border-radius being squished during transformation */
   box-shadow: var(--md-sys-elevation-shadow-2);
-  color: var(--md-sys-color-on-surface);
+  color: var(--_color, var(--md-sys-color-on-surface));
 
   opacity: 0;
   transform: scaleY(0.5);
@@ -28,14 +28,10 @@
 :host([vibrant]) {
   --md-divider-color: var(--md-sys-color-tertiary);
   --md-item-supporting-text-color: var(--md-sys-color-on-tertiary-container);
-  background-color: var(--md-sys-color-tertiary-container);
-  color: var(--md-sys-color-on-tertiary-container);
-
-  ::slotted([selected]) {
-    --md-item-supporting-text-color: var(--md-sys-color-on-tertiary);
-    background-color: var(--md-sys-color-tertiary);
-    color: var(--md-sys-color-on-tertiary);
-  }
+  --_background: var(--md-sys-color-tertiary-container);
+  --_color: var(--md-sys-color-on-tertiary-container);
+  --_selected-item-background: var(--md-sys-color-tertiary);
+  --_selected-item-color: var(--md-sys-color-on-tertiary);
 }
 
 slot {
@@ -69,5 +65,33 @@ slot {
     slot {
       opacity: 0;
     }
+  }
+}
+
+:host([data-popup-fade]),
+:host([data-popup-fade]:popover-open) {
+  border-radius: 16px;
+  transform: none;
+  transition:
+    opacity var(--md-sys-motion-effects-fast-duration)
+      var(--md-sys-motion-effects-fast),
+    display var(--md-sys-motion-effects-fast-duration) allow-discrete,
+    overlay var(--md-sys-motion-effects-fast-duration) allow-discrete;
+}
+
+:host([data-popup-fade]) slot,
+:host([data-popup-fade]:popover-open) slot {
+  opacity: 1;
+  transition: none;
+}
+
+@starting-style {
+  :host([data-popup-fade]:popover-open) {
+    border-radius: 16px;
+    transform: none;
+  }
+
+  :host([data-popup-fade]:popover-open) slot {
+    opacity: 1;
   }
 }

@@ -20,9 +20,9 @@
 
 :host(:state(selected)) {
   --md-item-supporting-text-color: var(--md-sys-color-on-tertiary-container);
-  background-color: var(--md-sys-color-tertiary-container);
+  background-color: var(--_selected-item-background, var(--md-sys-color-tertiary-container));
   border-radius: 12px;
-  color: var(--md-sys-color-on-tertiary-container);
+  color: var(--_selected-item-color, var(--md-sys-color-on-tertiary-container));
 }
 
 :host(:disabled) {

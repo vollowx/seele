@@ -74,9 +74,9 @@ export class M3ListItem extends M3ListItemLookalike(ListItem) {
     super.updated(changed);
     if (changed.has('focused')) {
       if (this.focused) {
-        this.$focusRing?.visualFocus();
+        this.$focusRing!.visualFocus();
       } else {
-        this.$focusRing?.visualBlur();
+        this.$focusRing!.visualBlur();
       }
     }
   }

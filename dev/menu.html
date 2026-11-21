@@ -4,6 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>menu or using menu</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./shared.css" />
     <script type="module" src="./shared.ts"></script>
   </head>
@@ -36,8 +40,24 @@
       <md-divider inset></md-divider>
       <md-menu-item id="item-open-file">Open File...</md-menu-item>
       <md-menu-item id="item-open-folder">Open Folder...</md-menu-item>
+      <md-menu-item id="item-open-recent">
+        Open Recent
+        <md-icon slot="end" aria-hidden="true">chevron_right</md-icon>
+        <md-menu-list slot="submenu">
+          <md-menu-item>file-1.txt</md-menu-item>
+          <md-menu-item>file-2.txt</md-menu-item>
+          <md-menu-item>
+            file-3.txt
+            <md-icon slot="end" aria-hidden="true">chevron_right</md-icon>
+            <md-menu-list slot="submenu">
+              <md-menu-item>nested-a.txt</md-menu-item>
+              <md-menu-item>nested-b.txt</md-menu-item>
+            </md-menu-list>
+          </md-menu-item>
+        </md-menu-list>
+      </md-menu-item>
       <md-divider inset></md-divider>
-      <md-menu-item id="item-save" selected>Save</md-menu-item>
+      <md-menu-item id="item-save">Save</md-menu-item>
       <md-menu-item id="item-save-as">Save As...</md-menu-item>
     </md-menu-list>
 

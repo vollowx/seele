@@ -158,6 +158,7 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
     if (!this.contains(active) && !this.noFocusControl) return;
 
     e.preventDefault();
+    e.stopPropagation();
     this.hide();
   };
 
@@ -190,14 +191,17 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
 
     // 1. When a press started inside the popup is released outside of it
     // 2. When a press started on the trigger is released inside the popup
-    if (
-      this.#pointerPath.includes(this) ||
-      this.#pointerPath.includes(this.$control!)
-    )
-      return;
+    if (this._isPointerDownInside()) return;
 
     this.hide();
   };
+
+  protected _isPointerDownInside(): boolean {
+    return (
+      this.#pointerPath.includes(this) ||
+      this.#pointerPath.includes(this.$control!)
+    );
+  }
 
   #handleGlobalPointerDown = (event: PointerEvent) => {
     this.#pointerPath = event.composedPath();

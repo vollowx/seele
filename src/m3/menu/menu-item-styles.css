@@ -1,0 +1,10 @@
+:host(:state(submenu-open)) { 
+  --md-item-supporting-text-color: var(--_selected-item-color);
+  background-color: var(--_selected-item-background);
+  color: var(--_selected-item-color);
+
+  md-focus-ring,
+  md-ripple {
+    display: none;
+  }
+}
