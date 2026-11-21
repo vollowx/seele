@@ -3,7 +3,7 @@ import { customElement } from 'lit/decorators.js';
 
 import { Autocomplete } from '../../base/autocomplete.js';
 import '../popup/popup.js';
-import '../listbox/list-box.js';
+import '../select/list-box.js';
 
 import { autocompleteStyles } from './autocomplete-styles.css.js';
 

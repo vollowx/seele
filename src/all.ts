@@ -16,7 +16,6 @@ import './m3/focus-ring/focus-ring.js'
 import './m3/item/item.js';
 import './m3/list/list.js';
 import './m3/list/list-item.js';
-import './m3/listbox/list-box.js';
 import './m3/loading/loading.js';
 import './m3/menu/menu.js';
 import './m3/menu/menu-list.js';
@@ -28,6 +27,7 @@ import './m3/progress/circular-progress.js';
 import './m3/progress/linear-progress.js';
 import './m3/radio/radio.js';
 import './m3/ripple/ripple.js';
+import './m3/select/list-box.js';
 import './m3/select/filled-select.js';
 import './m3/select/outlined-select.js';
 import './m3/select/option.js';

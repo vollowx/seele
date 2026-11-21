@@ -2,7 +2,7 @@ import { html } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 
 import '../popup/popup.js';
-import '../listbox/list-box.js';
+import './list-box.js';
 
 import { Select } from '../../base/select.js';
 import type { M3Field } from '../field/field.js';
