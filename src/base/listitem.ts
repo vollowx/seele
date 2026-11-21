@@ -41,8 +41,8 @@ export class ListItem extends FormAssociated(InternalsAttached(LitElement)) {
     super.updated(changed);
     if (
       changed.has('disabled') ||
-      changed.has('selected') ||
-      changed.has('focused')
+      changed.has('focused') ||
+      changed.has('selected')
     ) {
       this[updateInternals]();
     }
