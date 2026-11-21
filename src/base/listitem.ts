@@ -1,6 +1,7 @@
 import { LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 
+import { focusVisible } from '../core/focus.js';
 import {
   InternalsAttached,
   internals,
@@ -38,7 +39,11 @@ export class ListItem extends FormAssociated(InternalsAttached(LitElement)) {
 
   protected override updated(changed: Map<string, any>) {
     super.updated(changed);
-    if (changed.has('disabled') || changed.has('selected')) {
+    if (
+      changed.has('disabled') ||
+      changed.has('selected') ||
+      changed.has('focused')
+    ) {
       this[updateInternals]();
     }
   }
@@ -49,6 +54,9 @@ export class ListItem extends FormAssociated(InternalsAttached(LitElement)) {
     this.selected
       ? this[internals].states.add('selected')
       : this[internals].states.delete('selected');
+    this.focused && focusVisible
+      ? this[internals].states.add('focus-visible')
+      : this[internals].states.delete('focus-visible');
   }
 
   // Activedescendant items are never focusable — the list host owns focus, so
