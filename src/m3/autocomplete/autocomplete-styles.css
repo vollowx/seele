@@ -16,6 +16,6 @@
   width: inherit;
 }
 
-[part='menu'] {
+[part~='listbox'] {
   max-height: 400px;
 }

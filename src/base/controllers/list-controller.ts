@@ -247,8 +247,8 @@ export class ListController<
     this._focusedItem = nextItem;
     this.__lastKnownIndex = nextItem ? enabledItems.indexOf(nextItem) : -1;
 
+    if (nextItem !== prevItem && prevItem) this.__blurItem(prevItem);
     if (menuHadFocus && nextItem !== prevItem) {
-      if (prevItem) this.__blurItem(prevItem);
       if (nextItem) {
         this.__focusItem(nextItem);
       } else {

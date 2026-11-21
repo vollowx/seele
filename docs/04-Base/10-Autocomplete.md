@@ -17,10 +17,10 @@
 | `open`   |                                                                            |
 | `mode`   | String; `none`, `list` or `both`; controls filtering and inline completion |
 | `$popup` | The inner popup element                                                    |
-| `$menu`  | The inner menu element                                                     |
+| `$listbox` | The inner listbox element                                                |
 
 ## Methods
 
-| signature                        | description                                           |
-| ---                              | ---                                                   |
-| `renderMenu() -> TemplateResult` | Override to render a custom menu inside the component |
+| signature | description |
+| --- | --- |
+| `renderMenu() -> TemplateResult` | Override to render a popup and listbox inside the component |

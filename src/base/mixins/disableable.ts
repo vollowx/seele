@@ -5,7 +5,7 @@ import {
   InternalsAttachedInterface,
   replaceStates,
   updateInternals,
-} from './internals-attached';
+} from './internals-attached.js';
 
 export declare class DisableableInterface {
   disabled: boolean;

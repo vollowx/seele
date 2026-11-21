@@ -30,3 +30,4 @@
 | `focusFirstItem() -> void`          |             |
 | `focusLastItem() -> void`           |             |
 | `focusItem(item: ListItem) -> void` |             |
+| `clearFocus() -> void`              | Clears the focused item without moving DOM focus |

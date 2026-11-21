@@ -51,6 +51,11 @@ export class List extends InternalsAttached(LitElement) {
     this.listController.focusItem(item);
   }
 
+  clearFocus() {
+    const item = this.listController._focusedItem;
+    if (item) this.listController.blurItem(item);
+  }
+
   override render() {
     return html`<slot
       part="items"
@@ -115,9 +120,7 @@ export class List extends InternalsAttached(LitElement) {
   }
 
   #handleFocusOut() {
-    if (this.listController._focusedItem) {
-      this.listController.blurItem(this.listController._focusedItem);
-    }
+    this.clearFocus();
   }
 
   #handleSlotChange() {
