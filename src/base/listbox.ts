@@ -1,31 +1,33 @@
 import { PropertyValues, html, isServer } from 'lit';
 import { property, queryAssignedElements } from 'lit/decorators.js';
-import type { ListItem } from './listitem.js';
 import { focusVisible, setFocusVisible } from '../core/focus.js';
+
 import { internals } from './mixins/internals-attached.js';
+import { FormAssociated } from './mixins/form-associated.js';
+import { SelectAPIMixin } from './mixins/select-api-mixin.js';
 import { ListController } from './controllers/list-controller.js';
+
 import { List } from './list.js';
+import type { Option } from './option.js';
 import { MenuAction, getActionFromKey, getVisibleItems } from './menu.js';
 
-export interface ListItemDetail {
-  item: ListItem;
+export interface OptionDetail {
+  item: Option;
   index: number;
 }
 
-export type ListItemFocusEvent = CustomEvent<ListItemDetail>;
-export type ListboxSelectEvent = CustomEvent<ListItemDetail>;
-export type ListboxSelectDetail = ListItemDetail;
+export type ListboxItemFocusEvent = CustomEvent<OptionDetail>;
+export type ListboxSelectEvent = CustomEvent<OptionDetail>;
+export type ListboxSelectDetail = OptionDetail;
 
 /**
  * @csspart items
  * @fires {ListboxSelectEvent} select - Fires when an item is selected.
- * @fires {ListItemFocusEvent} item-focus - Fires when an item is focused.
+ * @fires {ListboxItemFocusEvent} item-focus - Fires when an item is focused.
  */
-export class ListBox extends List {
+export class ListBox extends SelectAPIMixin(FormAssociated(List)) {
   protected override _role = 'listbox';
   protected _itemRole = 'option';
-
-  @property({ type: Boolean, reflect: true }) multiple = false;
 
   /**
    * When true, the list does not own focus and doesn't update its
@@ -34,10 +36,56 @@ export class ListBox extends List {
    */
   @property({ type: Boolean, reflect: true }) bare = false;
 
-  @queryAssignedElements({ flatten: true }) slotItems!: Array<ListItem>;
+  @queryAssignedElements({ flatten: true }) $slotItems!: Array<HTMLElement>;
+
+  override get $allItems() {
+    return (this.$slotItems ?? []).filter((item) => this.#isItem(item));
+  }
 
   get $items() {
     return this.listController.items;
+  }
+
+  override _managesDefaultSelection() {
+    return !this.bare;
+  }
+
+  #savedTabIndex: string | null | undefined;
+
+  override _syncTabIndex() {
+    if (this._disabled) {
+      if (this.#savedTabIndex === undefined) {
+        this.#savedTabIndex = this.getAttribute('tabindex');
+      }
+      this.setAttribute('tabindex', '-1');
+    } else if (this.#savedTabIndex !== undefined) {
+      const previous = this.#savedTabIndex;
+      this.#savedTabIndex = undefined;
+      if (previous === null) this.removeAttribute('tabindex');
+      else this.setAttribute('tabindex', previous);
+    } else if (!this.bare) {
+      super._syncTabIndex();
+    }
+  }
+
+  override formDisabledCallback(disabled: boolean) {
+    super.formDisabledCallback(disabled);
+    this._syncTabIndex();
+  }
+
+  selectItem(item: Option | null) {
+    const items = this.$allItems;
+    if (item && !items.includes(item)) {
+      throw new RangeError('The item does not belong to this listbox.');
+    }
+    for (const option of items) {
+      const selected =
+        this.multiple && item
+          ? option.selected || option === item
+          : option === item;
+      if (option.selected !== selected) option.selected = selected;
+    }
+    this._selectionSet();
   }
 
   get currentIndex() {
@@ -52,7 +100,7 @@ export class ListBox extends List {
     this.listController.focusLastItem();
   }
 
-  focusItem(item: ListItem) {
+  focusItem(item: Option) {
     this.listController.focusItem(item);
   }
 
@@ -64,7 +112,7 @@ export class ListBox extends List {
   override render() {
     return html`<slot
       part="items"
-      @slotchange=${this.listController.handleSlotChange}
+      @slotchange=${this.#handleSlotChange}
     ></slot>`;
   }
 
@@ -88,6 +136,11 @@ export class ListBox extends List {
     }
   }
 
+  #handleSlotChange = () => {
+    this.listController.handleSlotChange();
+    this._reconcileSelection();
+  };
+
   protected override updated(changed: PropertyValues<this>) {
     super.updated(changed);
     if (changed.has('multiple')) {
@@ -95,17 +148,18 @@ export class ListBox extends List {
     }
   }
 
-  private readonly listController = new ListController<ListItem>(this, {
-    isItem: (item: HTMLElement): item is ListItem =>
-      item.getAttribute('seele-base') === this._itemRole &&
-      !item.hasAttribute('disabled') &&
-      !item.hidden,
-    getPossibleItems: () => this.slotItems,
-    blurItem: (item: ListItem) => {
+  private readonly listController = new ListController<Option>(this, {
+    isItem: (item: HTMLElement): item is Option =>
+      this.#isItem(item) && !item.hasAttribute('disabled') && !item.hidden,
+    getPossibleItems: () => this.$slotItems,
+    blurItem: (item: Option) => {
       item.focused = false;
     },
-    focusItem: (item: ListItem) => {
+    focusItem: (item: Option) => {
+      const alreadyFocused = item.focused;
       item.focused = true;
+      // The same item can regain focus with a different input modality.
+      if (alreadyFocused) item.requestUpdate('focused', false);
       if (!this.bare) {
         this[internals].ariaActiveDescendantElement = item;
       }
@@ -128,6 +182,10 @@ export class ListBox extends List {
     },
   });
 
+  #isItem(item: HTMLElement): item is Option {
+    return item.getAttribute('seele-base') === this._itemRole;
+  }
+
   #handleFocusIn() {
     if (this.bare) return;
     if (this.currentIndex === -1) {
@@ -142,6 +200,7 @@ export class ListBox extends List {
   }
 
   handleKeyDown(event: KeyboardEvent) {
+    if (this._disabled) return;
     if (event.defaultPrevented) return;
     const action = getActionFromKey(event);
     const items = this.$items;
@@ -201,10 +260,13 @@ export class ListBox extends List {
   }
 
   #handleMouseOver(event: MouseEvent) {
+    const wasFocusVisible = focusVisible;
     setFocusVisible(false);
     const item = this.#getItemFromEvent(event);
     if (item && this.currentIndex !== item.index) {
       this.listController.focusItem(item.item);
+    } else if (wasFocusVisible && this.listController.focusedItem) {
+      this.listController.focusItem(this.listController.focusedItem);
     }
   }
 
@@ -239,21 +301,28 @@ export class ListBox extends List {
   }
 
   #getItemFromEvent(event: Event) {
-    const item = (event.target as HTMLElement).closest<ListItem>(
+    if (this._disabled) return null;
+    const item = (event.target as HTMLElement).closest<Option>(
       `[seele-base=${this._itemRole}]`
     );
     if (!item || !this.$items.includes(item)) return null;
     return { item, index: this.$items.indexOf(item) };
   }
 
-  protected _activate(item: ListItem, index: number) {
+  protected _activate(item: Option, index: number) {
     if (!this.bare) {
+      const previous = item.selected;
       if (this.multiple) {
         item.selected = !item.selected;
+        this._selectionSet();
       } else {
-        for (const option of this.$items) {
-          option.selected = option === item;
-        }
+        this.selectItem(item);
+      }
+      if (previous !== item.selected) {
+        this.dispatchEvent(
+          new Event('input', { bubbles: true, composed: true })
+        );
+        this.dispatchEvent(new Event('change', { bubbles: true }));
       }
     }
     this.dispatchEvent(
@@ -263,8 +332,10 @@ export class ListBox extends List {
         composed: true,
       })
     );
-    this.dispatchEvent(
-      new Event('request-popup-hide', { bubbles: true, composed: true })
-    );
+    if (!this.multiple) {
+      this.dispatchEvent(
+        new Event('request-popup-hide', { bubbles: true, composed: true })
+      );
+    }
   }
 }

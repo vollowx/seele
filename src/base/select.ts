@@ -4,19 +4,20 @@ import { property, query } from 'lit/decorators.js';
 import { InternalsAttached } from './mixins/internals-attached.js';
 import { FocusDelegated } from './mixins/focus-delegated.js';
 import { FormAssociated } from './mixins/form-associated.js';
+import { SelectAPIMixin } from './mixins/select-api-mixin.js';
 
 import type { Option } from './option.js';
 import type { Popup } from './popup.js';
 import type {
   ListBox,
-  ListItemFocusEvent,
+  ListboxItemFocusEvent,
   ListboxSelectEvent,
 } from './listbox.js';
 import { getActionFromKey, MenuAction } from './menu.js';
 
-const VALUE = Symbol('value');
-
-const Base = FormAssociated(FocusDelegated(InternalsAttached(LitElement)));
+const Base = SelectAPIMixin(
+  FormAssociated(FocusDelegated(InternalsAttached(LitElement)))
+);
 
 /**
  * @csspart field
@@ -25,61 +26,60 @@ const Base = FormAssociated(FocusDelegated(InternalsAttached(LitElement)));
  *
  * @fires {Event} change - Fires when the value is changed.
  * @fires {Event} input - Fires when the value is changed.
- *
- * TODO: Render multiple values
  */
 export class Select extends Base {
-  @property({ type: Boolean, reflect: true }) required = false;
   @property({ type: Boolean }) error = false;
   @property({ type: Boolean }) open = false;
+  @property({ type: Boolean, reflect: true }) bare = false;
 
   /**
    * Text to display in the field. Only set for SSR.
    */
   @property({ attribute: 'display-text' }) displayText = '';
 
-  @property()
-  get value(): string {
-    return this[VALUE];
-  }
-  set value(value: string) {
-    if (isServer) return;
-    this.lastUserSetValue = value;
-    this.select(value);
-  }
-
-  [VALUE] = '';
-
-  get $options(): Option[] {
-    return (this.$listbox?.$items as Option[]) || [];
-  }
-
-  @property({ type: Number, attribute: 'selected-index' })
-  get selectedIndex(): number {
-    const selectedOptions = this.getSelectedOptions() ?? [];
-    if (selectedOptions.length > 0) {
-      return selectedOptions[0][1];
-    }
-    return -1;
-  }
-
-  set selectedIndex(index: number) {
-    this.lastUserSetSelectedIndex = index;
-    this.selectIndex(index);
-  }
-
-  get selectedOptions() {
-    return (this.getSelectedOptions() ?? []).map(([option]) => option);
+  override get $allItems() {
+    return this.$listbox?.$allItems ?? [];
   }
 
   @query('[part=field]') $field!: any;
   @query('[part=popup]') $popup!: Popup;
   @query('[part=listbox]') $listbox!: ListBox;
 
-  private lastUserSetValue: string | null = null;
-  private lastUserSetSelectedIndex: number | null = null;
-  private lastSelectedOption: Option | null = null;
-  private lastSelectedOptionRecords: [Option, number][] = [];
+  get $items() {
+    return this.$listbox?.$items ?? [];
+  }
+  get $slotItems() {
+    return this.$listbox?.$slotItems ?? [];
+  }
+  get currentIndex() {
+    return this.$listbox?.currentIndex ?? -1;
+  }
+  override _managesDefaultSelection() {
+    return !this.bare;
+  }
+
+  focusFirstItem() {
+    this.$listbox?.focusFirstItem();
+  }
+  focusLastItem() {
+    this.$listbox?.focusLastItem();
+  }
+  focusItem(item: Option) {
+    this.$listbox?.focusItem(item);
+  }
+  clearFocus() {
+    this.$listbox?.clearFocus();
+  }
+  handleKeyDown(event: KeyboardEvent) {
+    this.$listbox?.handleKeyDown(event);
+  }
+
+  selectItem(item: Option | null) {
+    if (!this.$listbox) throw new Error('The listbox is not ready.');
+    this.$listbox.multiple = this.multiple;
+    this.$listbox.selectItem(item);
+    this._selectionSet();
+  }
 
   override render() {
     return html`${this.renderField()}${this.renderListbox()}`;
@@ -110,35 +110,6 @@ export class Select extends Base {
     }
   }
 
-  protected override async firstUpdated(changed: PropertyValues<Select>) {
-    // If this has been handled on update already due to SSR, try again.
-    if (!this.lastSelectedOptionRecords.length) {
-      this.initUserSelection();
-    }
-
-    // Case for when the DOM is streaming, there are no children, and a child
-    // has [selected] set on it, we need to wait for DOM to render something.
-    if (
-      !this.lastSelectedOptionRecords.length &&
-      !isServer &&
-      !this.$options.length
-    ) {
-      setTimeout(() => {
-        this.updateValueAndDisplayText();
-      }, 0);
-    }
-
-    super.firstUpdated(changed);
-  }
-
-  protected override update(changed: PropertyValues<Select>) {
-    if (!this.hasUpdated) {
-      this.initUserSelection();
-    }
-
-    super.update(changed);
-  }
-
   protected override updated(changed: PropertyValues) {
     super.updated(changed);
 
@@ -152,7 +123,7 @@ export class Select extends Base {
   }
 
   protected _handleFieldKeydown(event: KeyboardEvent) {
-    if (this.disabled) return;
+    if (this._disabled || this.bare) return;
 
     if (!this.open) {
       if (['Enter', ' ', 'ArrowDown', 'ArrowUp'].includes(event.key)) {
@@ -172,14 +143,25 @@ export class Select extends Base {
   }
 
   protected _handleListboxSelect(event: ListboxSelectEvent) {
-    if (this.selectItem(event.detail.item as Option)) {
+    if (this._disabled) return;
+    if (this.bare) return;
+    this.$listbox.multiple = this.multiple;
+    const item = event.detail.item;
+    const previous = item.selected;
+    if (this.multiple) {
+      item.selected = !item.selected;
+      this._selectionSet();
+    } else {
+      this.selectItem(item);
+    }
+    if (previous !== item.selected) {
       this.#dispatchChangeEvent();
       this.$field.focus();
     }
   }
 
-  protected _handleListItemFocus(event: ListItemFocusEvent) {
-    this.$field.ariaActiveDescendantElement = event.detail.item;
+  protected _handleListItemFocus(event: ListboxItemFocusEvent) {
+    if (!this.bare) this.$field.ariaActiveDescendantElement = event.detail.item;
   }
 
   #handleFocusOut(event: FocusEvent) {
@@ -201,72 +183,20 @@ export class Select extends Base {
     });
   }
 
-  protected _handleSlotChange() {
-    // When slots change, check for initially selected items if value is not set
-    if (!this.value) {
-      this.updateValueAndDisplayText();
-    }
+  protected async _handleSlotChange() {
+    await this.$listbox?.updateComplete;
+    if (this.isConnected) this._reconcileSelection();
   }
 
-  private selectItem(item: Option) {
-    const selectedOptions = this.getSelectedOptions() ?? [];
-    selectedOptions.forEach(([option]) => {
-      if (item !== option) {
-        option.selected = false;
-      }
-    });
-    item.selected = true;
-
-    return this.updateValueAndDisplayText();
-  }
-
-  private initUserSelection() {
-    if (this.lastUserSetValue && !this.lastSelectedOptionRecords.length) {
-      this.select(this.lastUserSetValue);
-    } else if (
-      this.lastUserSetSelectedIndex !== null &&
-      !this.lastSelectedOptionRecords.length
-    ) {
-      this.selectIndex(this.lastUserSetSelectedIndex);
-    } else {
-      this.updateValueAndDisplayText();
-    }
-  }
-
-  private updateValueAndDisplayText() {
-    const selectedOptions = this.getSelectedOptions() ?? [];
-    let changed = false;
-
-    if (selectedOptions.length) {
-      const [firstSelectedOption] = selectedOptions[0];
-      changed = this.lastSelectedOption !== firstSelectedOption;
-      this.lastSelectedOption = firstSelectedOption;
-      this[VALUE] = firstSelectedOption.value;
-      this.displayText = firstSelectedOption.displayText;
-    } else {
-      changed = this.lastSelectedOption !== null;
-      this.lastSelectedOption = null;
-      this[VALUE] = '';
-      // Keep displayText if it was set (e.g., from SSR) and options aren't available yet.
-      if (this.$options.length === 0 && this.displayText) {
-        return changed;
-      }
+  override _selectionChanged() {
+    const selected = this.$selectedItems;
+    if (selected.length) {
+      this.displayText = selected
+        .map((option) => option.displayText)
+        .join(', ');
+    } else if (this.$allItems.length || !this.displayText) {
       this.displayText = '';
     }
-
-    return changed;
-  }
-
-  private getSelectedOptions(): [Option, number][] | null {
-    const items = this.$options;
-    const records: [Option, number][] = [];
-    items.forEach((item, index) => {
-      if (item.selected) {
-        records.push([item, index]);
-      }
-    });
-    this.lastSelectedOptionRecords = records;
-    return records.length ? records : null;
   }
 
   #dispatchChangeEvent = () => {
@@ -279,9 +209,8 @@ export class Select extends Base {
     // no-op.
     requestAnimationFrame(() => {
       if (!this.open) return;
-      const selectedOptions = this.getSelectedOptions();
-      if (selectedOptions && selectedOptions.length > 0) {
-        const [item] = selectedOptions[0];
+      const item = this.$selectedItems[0];
+      if (item && this.$listbox.$items.includes(item)) {
         this.$listbox.focusItem(item);
       } else {
         this.$listbox.focusFirstItem();
@@ -289,37 +218,13 @@ export class Select extends Base {
     });
   }
 
-  formResetCallback() {
-    this.reset();
-  }
-
-  formStateRestoreCallback(state: string) {
-    this.value = state;
-  }
-
-  select(value: string) {
-    const item = this.$options.find((option) => option.value === value);
-    if (item) {
-      this.selectItem(item);
-    }
-  }
-
-  selectIndex(index: number) {
-    const item = this.$options[index];
-    if (item) {
-      this.selectItem(item);
-    }
-  }
-
-  reset() {
-    for (const option of this.$options) {
-      option.selected = option.hasAttribute('selected');
-    }
-    this.updateValueAndDisplayText();
+  override formDisabledCallback(disabled: boolean) {
+    super.formDisabledCallback(disabled);
+    if (disabled) this.open = false;
   }
 
   toggle() {
-    if (this.disabled) return;
+    if (this._disabled) return;
     this.open = !this.open;
   }
 }

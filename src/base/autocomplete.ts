@@ -10,7 +10,7 @@ import type { Popup } from './popup.js';
 import type { MenuActionEvent } from './menu.js';
 import type {
   ListBox,
-  ListItemFocusEvent,
+  ListboxItemFocusEvent,
   ListboxSelectEvent,
 } from './listbox.js';
 
@@ -229,7 +229,7 @@ export class Autocomplete extends Base {
     }
   }
 
-  protected _handleListItemFocus(event: ListItemFocusEvent) {
+  protected _handleListItemFocus(event: ListboxItemFocusEvent) {
     const input = this.#boundInput?.$inputOrTextarea;
     if (input) input.ariaActiveDescendantElement = event.detail.item;
   }

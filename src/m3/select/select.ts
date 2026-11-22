@@ -30,6 +30,8 @@ export abstract class M3Select extends Select {
           part="listbox"
           tabindex="-1"
           bare
+          .multiple=${this.multiple}
+          .disabled=${this._disabled}
           @item-focus="${this._handleListItemFocus}"
           @select="${this._handleListboxSelect}"
         >

@@ -10,6 +10,10 @@
       href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400;0,17..18,700;1,17..18,400;1,17..18,700&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./shared.css" />
     <script type="module" src="./shared.ts"></script>
   </head>
@@ -18,14 +22,22 @@
 
     <h1>list</h1>
 
-    <md-list style="width: 250px">
-      <md-list-item>Item 1</md-list-item>
-      <md-list-item>Item 2</md-list-item>
-      <md-list-item selected>Item 3</md-list-item>
-      <md-list-item disabled>Item 4</md-list-item>
+    <md-list style="--md-sys-spacing-density: -2">
+      <md-list-item>
+        Helium
+        <md-icon slot="start" style="font-size: 32px;">wand_stars</md-icon>
+      </md-list-item>
+      <md-list-item>
+        Updating Helium (23%)
+        <span slot="supporting-text">Version 0.22.1.1 (Official build) (64-bit)</span>
+        <md-circular-progress slot="start" indeterminate style="--md-circular-progress-size: 32px;"></md-circular-progress>
+        <md-button slot="end" variant="outlined">Cancel</md-button>
+      </md-list-item>
+      <md-list-item>Copyright 2026 The Helium Authors. All rights reserved.</md-list-item>
+      <md-list-item>This is just a mimic of the Helium update process, the copyright notice is not real.</md-list-item>
     </md-list>
 
-    <md-list-box id="listb1">
+    <md-list-box id="listb1" style="width: 250px; --md-sys-spacing-density: -2">
       <md-option value="blank" aria-label="blank"></md-option>
       <md-option value="apple">Apple</md-option>
       <md-option value="banana">Banana</md-option>

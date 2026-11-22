@@ -7,6 +7,5 @@
 
 name           | description
 ---            | ---
-`selected`     | Reflected boolean
 `focused`      | Reflected boolean; set internally during keyboard/pointer navigation
 `displayText`  | Read-only string; trimmed `innerText` of the element
