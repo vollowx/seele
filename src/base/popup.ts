@@ -67,7 +67,6 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
   constructor() {
     super();
     this.setAttribute('notransition', '');
-    if (!this.hasAttribute('popover')) this.setAttribute('popover', 'manual');
     if (!isServer) {
       this.addEventListener('request-popup-hide', this.#handleRequestHide);
       this.addEventListener('focusout', this.#handleFocusOut);
@@ -77,6 +76,7 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
 
   override connectedCallback() {
     super.connectedCallback();
+    if (!this.hasAttribute('popover')) this.setAttribute('popover', 'manual');
     document.addEventListener('click', this.#handleGlobalClick, true);
     window.addEventListener('pointerdown', this.#handleGlobalPointerDown);
     requestAnimationFrame(() =>
@@ -289,7 +289,6 @@ export class Popup extends Attachable(InternalsAttached(LitElement)) {
       middleware: [
         offset(this.offset),
         flip({ padding: this.windowPadding }),
-        shift({ padding: this.windowPadding, crossAxis: true }),
         arrow({ element: this.#dummyArrow! }),
       ],
     }).then(({ x, y, placement, middlewareData }) => {
