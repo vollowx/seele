@@ -3,70 +3,59 @@ import { ReactiveController, ReactiveControllerHost, isServer } from 'lit';
 export interface ListControllerConfig<Item extends HTMLElement> {
   getPossibleItems: () => HTMLElement[];
   isItem: (item: HTMLElement) => item is Item;
-  isDisabled?: () => boolean;
   blurItem?: (item: Item) => void;
   focusItem: (item: Item) => void;
-  isActivatable?: (item: Item) => boolean;
   wrapNavigation?: () => boolean;
-  onFocusin?: () => void;
+  /** Opt in to tracking DOM focus inside the host. */
+  focusTracking?: {
+    enabled?: () => boolean;
+    handleFocusIn?: () => void;
+  };
+  /** Called after the item collection or its current item is reconciled. */
+  handleReconcile?: (prev: Item | null, next: Item | null) => void;
 }
 
 export class ListController<
   Item extends HTMLElement,
 > implements ReactiveController {
   host: ReactiveControllerHost & HTMLElement;
-
-  private readonly __getPossibleItems: () => HTMLElement[];
-  private readonly __isItem: (item: HTMLElement) => item is Item;
-  private readonly __isDisabled: () => boolean;
-  private readonly __blurItem: (item: Item) => void;
-  private readonly __focusItem: (item: Item) => void;
-  private readonly __wrapNavigation: () => boolean;
-  private readonly __onFocusin: () => void;
+  private readonly __config: ListControllerConfig<Item>;
 
   private __observer: MutationObserver | null = null;
   private __reconcilePending = false;
+  // Removing a focused item may not fire focusout, so we track if focus is
+  // within manually.
   private __hasFocusWithin = false;
   private __lastKnownIndex = -1;
 
   get items(): Item[] {
-    return this.__getPossibleItems().filter(this.__isItem);
+    return this.__config.getPossibleItems().filter(this.__config.isItem);
   }
   get currentIndex(): number {
-    if (!this._focusedItem) return -1;
-    return this.items.indexOf(this._focusedItem);
+    return this.focusedItem ? this.items.indexOf(this.focusedItem) : -1;
   }
-  _focusedItem: Item | null = null;
+  get hasFocusWithin(): boolean {
+    return (
+      !isServer &&
+      (this.__hasFocusWithin || this.host.contains(document.activeElement))
+    );
+  }
+  focusedItem: Item | null = null;
 
   constructor(
     host: ReactiveControllerHost & HTMLElement,
     config: ListControllerConfig<Item>
   ) {
-    const {
-      getPossibleItems,
-      isItem,
-      isDisabled,
-      blurItem,
-      focusItem,
-      wrapNavigation,
-      onFocusin,
-    } = config;
-
+    this.__config = { ...config };
     (this.host = host).addController(this);
-
-    this.__getPossibleItems = getPossibleItems;
-    this.__isItem = isItem;
-    this.__isDisabled = isDisabled ?? (() => false);
-    this.__blurItem = blurItem ?? (() => {});
-    this.__focusItem = focusItem;
-    this.__wrapNavigation = wrapNavigation ?? (() => false);
-    this.__onFocusin = onFocusin ?? (() => {});
   }
 
   hostConnected(): void {
     if (isServer) return;
-    this.host.addEventListener('focusin', this.#handleFocusIn);
-    this.host.addEventListener('focusout', this.#handleFocusOut);
+    if (this.__config.focusTracking) {
+      this.host.addEventListener('focusin', this.#handleFocusIn);
+      this.host.addEventListener('focusout', this.#handleFocusOut);
+    }
     if (typeof MutationObserver !== 'undefined') {
       this.__observer = new MutationObserver(() => this.requestReconcile());
     }
@@ -75,34 +64,41 @@ export class ListController<
 
   hostDisconnected(): void {
     if (isServer) return;
-    this.host.removeEventListener('focusin', this.#handleFocusIn);
-    this.host.removeEventListener('focusout', this.#handleFocusOut);
+    if (this.__config.focusTracking) {
+      this.host.removeEventListener('focusin', this.#handleFocusIn);
+      this.host.removeEventListener('focusout', this.#handleFocusOut);
+      this.__hasFocusWithin = false;
+    }
     this.__observer?.disconnect();
     this.__observer = null;
   }
 
   #handleFocusIn = (event: FocusEvent) => {
-    if (this.__isDisabled()) return;
+    if (this.__config.focusTracking?.enabled?.() === false) return;
     this.__hasFocusWithin = true;
-    const target = event.target as HTMLElement;
-    if (this.__isItem(target) && this._focusedItem !== target) {
-      if (this._focusedItem) this.__blurItem(this._focusedItem);
-      this._focusedItem = target;
-      this.__lastKnownIndex = this.items.indexOf(target);
+    const target = event.target;
+    if (
+      target instanceof HTMLElement &&
+      this.__config.isItem(target) &&
+      this.focusedItem !== target
+    ) {
+      this.trackItem(target);
     }
-    this.__onFocusin();
+    this.__config.focusTracking?.handleFocusIn?.();
   };
 
   #handleFocusOut = (event: FocusEvent) => {
-    const next = event.relatedTarget as Node | null;
-    if (!next || !this.host.contains(next)) {
+    const next = event.relatedTarget;
+    if (!(next instanceof Node) || !this.host.contains(next)) {
       this.__hasFocusWithin = false;
     }
   };
 
-  handleSlotChange() {
-    this.reconcile();
+  resetFocusTracking() {
+    this.__hasFocusWithin = false;
   }
+
+  handleSlotChange = () => this.reconcile();
 
   private searchString = '';
   private searchTimeout: number | null = null;
@@ -120,11 +116,9 @@ export class ListController<
     if (searchIndex >= 0) {
       this.focusItem(items[searchIndex]);
       return true;
-    } else {
-      if (this.searchTimeout) window.clearTimeout(this.searchTimeout);
-      this.searchString = '';
-      return false;
     }
+    this.clearSearch();
+    return false;
   }
 
   private getSearchString(char: string) {
@@ -146,21 +140,23 @@ export class ListController<
     }
   }
 
-  focusItem(item: Item) {
-    if (!item || this.__isDisabled()) return;
-    if (this._focusedItem && this._focusedItem !== item) {
-      this.__blurItem(this._focusedItem);
+  trackItem(item: Item) {
+    if (this.focusedItem && this.focusedItem !== item) {
+      this.__config.blurItem?.(this.focusedItem);
     }
-    this._focusedItem = item;
+    this.focusedItem = item;
     this.__lastKnownIndex = this.items.indexOf(item);
-    this.__focusItem(item);
+  }
+
+  focusItem(item: Item) {
+    if (!item) return;
+    this.trackItem(item);
+    this.__config.focusItem(item);
   }
 
   blurItem(item: Item) {
-    this.__blurItem(item);
-    if (this._focusedItem === item) {
-      this._focusedItem = null;
-    }
+    this.__config.blurItem?.(item);
+    if (this.focusedItem === item) this.focusedItem = null;
   }
 
   focusFirstItem() {
@@ -181,7 +177,7 @@ export class ListController<
 
     let nextIndex = this.currentIndex + 1;
     if (nextIndex >= count) {
-      nextIndex = this.__wrapNavigation() ? 0 : count - 1;
+      nextIndex = this.__config.wrapNavigation?.() ? 0 : count - 1;
     }
 
     this.focusItem(items[nextIndex]);
@@ -194,7 +190,7 @@ export class ListController<
 
     let prevIndex = this.currentIndex - 1;
     if (prevIndex < 0) {
-      prevIndex = this.__wrapNavigation() ? count - 1 : 0;
+      prevIndex = this.__config.wrapNavigation?.() ? count - 1 : 0;
     }
 
     this.focusItem(items[prevIndex]);
@@ -212,10 +208,8 @@ export class ListController<
   }
 
   reconcile() {
-    if (this.__isDisabled()) return;
-
-    const possibleItems = this.__getPossibleItems();
-    const enabledItems = possibleItems.filter(this.__isItem);
+    const possibleItems = this.__config.getPossibleItems();
+    const enabledItems = possibleItems.filter(this.__config.isItem);
 
     if (this.__observer) {
       this.__observer.disconnect();
@@ -227,36 +221,51 @@ export class ListController<
       }
     }
 
-    // `__hasFocusWithin` stays true even when the focused item is removed from
-    // the DOM (document.activeElement then falls back to `body` without firing
-    // `focusout`), so focus can still be restored to a neighbour.
-    const menuHadFocus =
-      this.__hasFocusWithin || this.host.contains(document.activeElement);
-
-    const prevItem = this._focusedItem;
-    let nextItem: Item | null = null;
-    if (this._focusedItem && enabledItems.includes(this._focusedItem)) {
-      nextItem = this._focusedItem;
-    } else if (enabledItems.length > 0) {
-      const fallbackIndex = Math.min(
-        Math.max(this.__lastKnownIndex, 0),
-        enabledItems.length - 1
-      );
-      nextItem = enabledItems[fallbackIndex];
-    }
-    this._focusedItem = nextItem;
+    const prevItem = this.focusedItem;
+    const fallbackIndex = Math.min(
+      Math.max(this.__lastKnownIndex, 0),
+      enabledItems.length - 1
+    );
+    const nextItem =
+      prevItem && enabledItems.includes(prevItem)
+        ? prevItem
+        : (enabledItems[fallbackIndex] ?? null);
+    this.focusedItem = nextItem;
     this.__lastKnownIndex = nextItem ? enabledItems.indexOf(nextItem) : -1;
 
-    if (nextItem !== prevItem && prevItem) this.__blurItem(prevItem);
-    if (menuHadFocus && nextItem !== prevItem) {
-      if (nextItem) {
-        this.__focusItem(nextItem);
-      } else {
-        this.host.tabIndex = -1;
-        this.host.focus();
-      }
-    }
+    if (nextItem !== prevItem && prevItem) this.__config.blurItem?.(prevItem);
+    this.__config.handleReconcile?.(prevItem, nextItem);
   }
+}
+
+export function rovingFocusPreset<Item extends HTMLElement>(
+  getController: () => ListController<Item>,
+  enabled?: () => boolean
+) {
+  const rearrange = () => {
+    if (enabled?.() === false) return;
+    const { items, focusedItem } = getController();
+    const active =
+      focusedItem && items.includes(focusedItem) ? focusedItem : items[0];
+    for (const item of items) item.tabIndex = item === active ? 0 : -1;
+  };
+
+  return {
+    rearrange,
+    focusTracking: { enabled, handleFocusIn: rearrange },
+    handleReconcile: (prev: Item | null, next: Item | null) => {
+      if (enabled?.() === false) return;
+      const controller = getController();
+      if (prev !== next && controller.hasFocusWithin) {
+        if (next) controller.focusItem(next);
+        else {
+          controller.host.tabIndex = -1;
+          controller.host.focus();
+        }
+      }
+      rearrange();
+    },
+  };
 }
 
 export function filterOptions(

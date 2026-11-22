@@ -28,7 +28,7 @@ The delay is kept the same as it is in Windows win32 programs.
 | name             | description                                                                             |
 | ---              | ---                                                                                     |
 | `keepOpenAction` | Boolean; keep the menu from requesting popup hide on action; `keep-open-action` as attr |
-| `bare`           | Reflected boolean; strip default menu styling                                           |
+| `bare`           | Reflected boolean; disables default menu focus management and keyboard navigation       |
 | `$items`         | Array of currently active `MenuItem`s                                                   |
 | `currentIndex`   | Number; index of the focused item; `-1` if none                                         |
 

@@ -5,7 +5,10 @@ import {
   internals,
   InternalsAttached,
 } from '../../base/mixins/internals-attached.js';
-import { ListController } from '../../base/controllers/list-controller.js';
+import {
+  ListController,
+  rovingFocusPreset,
+} from '../../base/controllers/list-controller.js';
 import { getAllFocusables, isFocusable } from '../../core/focus.js';
 
 import { toolbarStyles } from './toolbar-styles.css.js';
@@ -31,7 +34,7 @@ export class M3Toolbar extends InternalsAttached(LitElement) {
   override render() {
     return html`
       <div part="container">
-        <slot @slotchange=${this.#handleSlotChange}></slot>
+        <slot @slotchange=${this.listController.handleSlotChange}></slot>
       </div>
       <div part="fab-slot">
         <slot name="fab"></slot>
@@ -48,6 +51,9 @@ export class M3Toolbar extends InternalsAttached(LitElement) {
     }
   }
 
+  readonly #rovingFocusPreset = rovingFocusPreset<HTMLElement>(
+    () => this.listController
+  );
   private readonly listController = new ListController<HTMLElement>(this, {
     isItem: isFocusable,
     getPossibleItems: () => getAllFocusables(this.renderRoot),
@@ -59,24 +65,8 @@ export class M3Toolbar extends InternalsAttached(LitElement) {
       item.focus({ preventScroll: true });
     },
     wrapNavigation: () => true,
-    onFocusin: () => this.#rearrangeTabIndices(),
+    ...this.#rovingFocusPreset,
   });
-
-  #handleSlotChange() {
-    this.listController.handleSlotChange();
-    this.#rearrangeTabIndices();
-  }
-
-  // Roving tabIndex: keep exactly one item tabbable (the active one, or the
-  // first on init), so `Tab` enters the toolbar at a single item.
-  #rearrangeTabIndices() {
-    const items = this.listController.items;
-    const focused = this.listController._focusedItem;
-    const active = focused && items.includes(focused) ? focused : items[0];
-    for (const item of items) {
-      item.tabIndex = item === active ? 0 : -1;
-    }
-  }
 
   #handleKeyDown(event: KeyboardEvent) {
     if (event.defaultPrevented) return;
@@ -101,7 +91,7 @@ export class M3Toolbar extends InternalsAttached(LitElement) {
   }
 
   protected override firstUpdated() {
-    this.#rearrangeTabIndices();
+    this.#rovingFocusPreset.rearrange();
   }
 
   protected override updated(changed: Map<string, unknown>) {

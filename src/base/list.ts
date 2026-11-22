@@ -52,14 +52,14 @@ export class List extends InternalsAttached(LitElement) {
   }
 
   clearFocus() {
-    const item = this.listController._focusedItem;
+    const item = this.listController.focusedItem;
     if (item) this.listController.blurItem(item);
   }
 
   override render() {
     return html`<slot
       part="items"
-      @slotchange=${this.#handleSlotChange}
+      @slotchange=${this.listController.handleSlotChange}
     ></slot>`;
   }
 
@@ -107,7 +107,14 @@ export class List extends InternalsAttached(LitElement) {
         })
       );
     },
-    wrapNavigation: () => false,
+    focusTracking: {},
+    handleReconcile: (prev, next) => {
+      if (!next && !this.bare) {
+        this[internals].ariaActiveDescendantElement = null;
+      } else if (prev !== next && next && this.listController.hasFocusWithin) {
+        this.listController.focusItem(next);
+      }
+    },
   });
 
   #handleFocusIn() {
@@ -121,10 +128,6 @@ export class List extends InternalsAttached(LitElement) {
 
   #handleFocusOut() {
     this.clearFocus();
-  }
-
-  #handleSlotChange() {
-    this.listController.handleSlotChange();
   }
 
   handleKeyDown(event: KeyboardEvent) {

@@ -3,7 +3,10 @@ import { property, queryAssignedElements } from 'lit/decorators.js';
 
 import { focusVisible, setFocusVisible } from '../core/focus.js';
 import { internals, InternalsAttached } from './mixins/internals-attached.js';
-import { ListController } from './controllers/list-controller.js';
+import {
+  ListController,
+  rovingFocusPreset,
+} from './controllers/list-controller.js';
 
 import type { MenuItem } from './menuitem.js';
 
@@ -32,8 +35,7 @@ export class Menu extends InternalsAttached(LitElement) {
   keepOpenAction = false;
 
   /**
-   * When true, removes the default focus management and `aria-activedescendant`
-   * on the host.
+   * When true, disables the menu's default focus management.
    */
   @property({ type: Boolean, reflect: true })
   bare = false;
@@ -47,31 +49,43 @@ export class Menu extends InternalsAttached(LitElement) {
     return this.listController?.currentIndex;
   }
   focusFirstItem() {
-    this.listController.focusFirstItem();
+    if (!this.bare) this.listController.focusFirstItem();
   }
   focusLastItem() {
-    this.listController.focusLastItem();
+    if (!this.bare) this.listController.focusLastItem();
   }
   focusItem(item: MenuItem) {
-    this.listController.focusItem(item);
+    if (!this.bare) this.listController.focusItem(item);
   }
 
   override render() {
     return html`<slot
       part="items"
-      @slotchange=${this.#handleSlotChange}
+      @slotchange=${this.listController.handleSlotChange}
     ></slot>`;
   }
 
   protected override updated(changed: PropertyValues<this>) {
     super.updated(changed);
-    if (changed.has('bare') && !this.bare) {
-      this.listController.requestReconcile();
+    if (changed.has('bare') && !isServer) {
+      if (this.bare) {
+        this.clearHoverTimers();
+        this.listController.resetFocusTracking();
+      } else {
+        const root = this.getRootNode();
+        const active =
+          root instanceof Document || root instanceof ShadowRoot
+            ? root.activeElement
+            : null;
+        const item = this.$items.find((entry) => entry === active);
+        if (item) this.listController.trackItem(item);
+        this.listController.requestReconcile();
+      }
     }
   }
 
   protected override firstUpdated() {
-    this.#rearrangeTabIndices();
+    this.#rovingFocusPreset.rearrange();
   }
 
   constructor() {
@@ -92,6 +106,10 @@ export class Menu extends InternalsAttached(LitElement) {
     super.disconnectedCallback();
   }
 
+  readonly #rovingFocusPreset = rovingFocusPreset<MenuItem>(
+    () => this.listController,
+    () => !this.bare
+  );
   private readonly listController = new ListController<MenuItem>(this, {
     isItem: (item: HTMLElement): item is MenuItem =>
       item.getAttribute('seele-base') === 'menuitem' &&
@@ -99,7 +117,7 @@ export class Menu extends InternalsAttached(LitElement) {
       !item.hidden,
     getPossibleItems: () => this.slotItems,
     blurItem: (item: MenuItem) => {
-      item.tabIndex = -1;
+      if (!this.bare) item.tabIndex = -1;
     },
     focusItem: (item: MenuItem) => {
       item.tabIndex = 0;
@@ -113,26 +131,9 @@ export class Menu extends InternalsAttached(LitElement) {
         })
       );
     },
-    wrapNavigation: () => false,
-    isDisabled: () => this.bare,
-    onFocusin: () => this.#rearrangeTabIndices(),
+    wrapNavigation: () => true,
+    ...this.#rovingFocusPreset,
   });
-
-  #handleSlotChange() {
-    this.listController.handleSlotChange();
-    this.#rearrangeTabIndices();
-  }
-
-  // Roving tabIndex: keep exactly one item tabbable so `Tab` enters the menu at
-  // a single item and arrow keys move focus between them.
-  #rearrangeTabIndices() {
-    const items = this.listController.items;
-    const focused = this.listController._focusedItem;
-    const active = focused && items.includes(focused) ? focused : items[0];
-    for (const item of items) {
-      item.tabIndex = item === active ? 0 : -1;
-    }
-  }
 
   handleKeyDown(event: KeyboardEvent) {
     if (event.defaultPrevented || this.bare) return;
@@ -259,11 +260,12 @@ export class Menu extends InternalsAttached(LitElement) {
     ) {
       this.#hoverTimer = window.setTimeout(async () => {
         this.#hoverTimer = null;
+        if (this.bare || !this.isConnected) return;
         for (const submenu of openSubmenus) submenu.hide();
         await Promise.all(
           openSubmenus.map((submenu) => submenu.updateComplete)
         );
-        if (this.#hoverItem !== item || !this.isConnected) return;
+        if (this.#hoverItem !== item || !this.isConnected || this.bare) return;
         if (!item.disabled) {
           this.listController.focusItem(item);
           if (item.hasSubmenu) item.openSubmenu(false);
@@ -300,7 +302,7 @@ export class Menu extends InternalsAttached(LitElement) {
         : null;
     if (!(active instanceof HTMLElement) || !root.contains(active)) return;
     const menu = active.parentElement?.closest('md-menu-list')?.$menu ?? this;
-    const focused = menu.listController._focusedItem;
+    const focused = menu.listController.focusedItem;
     if (focused !== active) return;
     menu.listController.blurItem(focused);
     menu.tabIndex = -1;
