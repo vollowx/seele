@@ -1,7 +1,7 @@
 import { LitElement, html, isServer } from 'lit';
 import { property, queryAssignedElements } from 'lit/decorators.js';
 import { customElement } from '../../core/decorators.js';
-import { ensureSlottedReady } from '../../core/ensure-ready.js';
+import { whenReady } from '../../core/when-ready.js';
 import { getSpring } from '../styles/motion.js';
 import { standardButtonGroupStyles } from './standard-button-group-styles.css.js';
 
@@ -61,8 +61,9 @@ export class M3StandardButtonGroup extends LitElement {
     });
   }
   override async firstUpdated() {
-    await ensureSlottedReady(this, () => this.$buttons, true);
-    this.#handleSlotChange();
+    await whenReady(...this.$buttons);
+    await new Promise(requestAnimationFrame);
+    if (this.isConnected) this.#handleSlotChange();
   }
   override disconnectedCallback() {
     this.#abortController.abort();

@@ -45,13 +45,11 @@ before regular CSS properties.
 
 ### Problems caused by the order of elements upgrading
 
-`slotchange` will not be triggered on SSR'd elements, call the handler manually
-in `firstUpdated` with a `ensureSlottedReady` before it. If you want to access a
-custom element in such events that might not be registered yet, use
-`ensureReady(thatElement)`, and don't use the other one in this case to avoid
-unnecessary calls.
-
-_* Check out `src/core/ensure-ready.ts`._
+`slotchange` will not be triggered on SSR'd elements; call the handler manually
+in `firstUpdated` after `await this.updateComplete` (avoiding `change-in-update`
+warnings if the handler updates reactive properties). If you need to access
+slotted or child custom elements that might not be registered or updated yet,
+await `whenReady(...)` from `src/core/when-ready.ts` first.
 
 Transitions on the host like `border-radius` will be shown at first-paint, use
 `notransition` attribute to block that and use nested `requestAnimationFrame`

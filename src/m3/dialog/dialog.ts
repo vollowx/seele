@@ -1,7 +1,6 @@
 import { html } from 'lit';
 import { query, state, customElement } from 'lit/decorators.js';
 
-import { ensureSlottedReady } from '../../core/ensure-ready.js';
 import { Dialog } from '../../base/dialog.js';
 
 import { getSpring } from '../styles/motion.js';
@@ -191,8 +190,8 @@ export class M3Dialog extends Dialog {
   }
 
   override async firstUpdated() {
-    await ensureSlottedReady(this);
-    this.#handleIconSlotChange();
+    await this.updateComplete;
+    if (this.isConnected) this.#handleIconSlotChange();
   }
 
   #activeAnimations: Animation[] = [];

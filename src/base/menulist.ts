@@ -1,7 +1,7 @@
 import { html, PropertyValues } from 'lit';
 import { query } from 'lit/decorators.js';
 
-import { ensureReady } from '../core/ensure-ready.js';
+import { whenReady } from '../core/when-ready.js';
 import { internals } from './mixins/internals-attached.js';
 import { handleControlChange } from './mixins/attachable.js';
 import { Popup } from './popup.js';
@@ -41,7 +41,7 @@ export class MenuList extends Popup {
       next.ariaHasPopup = 'menu';
       this.updateComplete.then(() => {
         const menu = this.$menu!;
-        ensureReady(menu).then(() => {
+        whenReady(menu).then(() => {
           next.ariaControlsElements = [menu];
           menu[internals].ariaLabelledByElements = [next];
         });
@@ -91,7 +91,9 @@ export class MenuList extends Popup {
     return (
       super._isPointerDownInside() ||
       (this.$control instanceof MenuItem &&
-        (this.$control.closest<MenuList>('md-menu-list')?._isPointerDownInside() ??
+        (this.$control
+          .closest<MenuList>('md-menu-list')
+          ?._isPointerDownInside() ??
           false))
     );
   }

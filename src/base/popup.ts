@@ -8,7 +8,6 @@ import {
   offset,
   Placement,
   Strategy,
-  shift,
 } from '@floating-ui/dom';
 
 import { getFirstTabbable } from '../core/focus.js';

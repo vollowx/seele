@@ -1,7 +1,7 @@
 import { LitElement, html, PropertyValues, isServer } from 'lit';
 import { property, query, queryAssignedElements } from 'lit/decorators.js';
 
-import { ensureReady, ensureSlottedReady } from '../core/ensure-ready.js';
+import { whenReady } from '../core/when-ready.js';
 import { InternalsAttached } from './mixins/internals-attached.js';
 import { FocusDelegated } from './mixins/focus-delegated.js';
 
@@ -85,12 +85,12 @@ export class Autocomplete extends Base {
       this.#unbindInput();
     }
 
-    await ensureReady(this);
+    await this.updateComplete;
     if (!this.isConnected) return;
     const input = this.$input;
     if (!input || input === this.#boundInput) return;
 
-    await ensureSlottedReady(this, () => [input, this.$popup, this.$listbox]);
+    await whenReady(input, this.$popup, this.$listbox);
     if (
       !this.isConnected ||
       input !== this.$input ||
@@ -136,7 +136,7 @@ export class Autocomplete extends Base {
   }
 
   async #handleItemReady(item: HTMLElement) {
-    await ensureReady(item);
+    await whenReady(item);
     if (!this.isConnected || !this.$slottedItems.includes(item)) return;
     if (!this.#boundInput || !this.#awaitingMatch || !this.open) return;
     const inputEl = this.#boundInput.$inputOrTextarea;

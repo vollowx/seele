@@ -1,5 +1,5 @@
 import { html, LitElement, PropertyValues, TemplateResult } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { property, query, state } from 'lit/decorators.js';
 
 import { fieldStyles } from './field-styles.css.js';
 
@@ -17,6 +17,9 @@ export abstract class M3Field extends LitElement {
 
   @state() hasStart = false;
   @state() hasEnd = false;
+
+  @query('slot[name=start]') $start!: HTMLSlotElement | null;
+  @query('slot[name=end]') $end!: HTMLSlotElement | null;
 
   static override styles = [fieldStyles];
 
@@ -65,8 +68,19 @@ export abstract class M3Field extends LitElement {
     super.update(changedProperties);
   }
 
+  override async firstUpdated() {
+    await this.updateComplete;
+    if (!this.isConnected) return;
+    this.#updateSlotStatus(this.$start);
+    this.#updateSlotStatus(this.$end);
+  }
+
   #handleSlotChange(e: Event) {
-    const slot = e.target as HTMLSlotElement;
+    this.#updateSlotStatus(e.target as HTMLSlotElement);
+  }
+
+  #updateSlotStatus(slot: HTMLSlotElement | null) {
+    if (!slot) return;
     const hasContent = slot.assignedNodes({ flatten: true }).length > 0;
     if (slot.name === 'start') this.hasStart = hasContent;
     if (slot.name === 'end') this.hasEnd = hasContent;
