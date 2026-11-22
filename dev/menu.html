@@ -4,6 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>menu or using menu</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./shared.css" />
     <script type="module" src="./shared.ts"></script>
   </head>
@@ -22,7 +26,7 @@
     </md-menu>
 
     <md-button id="bn1">Vibrant menu</md-button>
-    <md-composed-menu for="bn1" vibrant>
+    <md-menu-list for="bn1" vibrant>
       <md-menu-item id="item-new-text-file">New Text File</md-menu-item>
       <md-menu-item id="item-new-file">
         New File...
@@ -36,21 +40,37 @@
       <md-divider inset></md-divider>
       <md-menu-item id="item-open-file">Open File...</md-menu-item>
       <md-menu-item id="item-open-folder">Open Folder...</md-menu-item>
+      <md-menu-item id="item-open-recent">
+        Open Recent
+        <md-icon slot="end" aria-hidden="true">chevron_right</md-icon>
+        <md-menu-list slot="submenu">
+          <md-menu-item>file-1.txt</md-menu-item>
+          <md-menu-item>file-2.txt</md-menu-item>
+          <md-menu-item>
+            file-3.txt
+            <md-icon slot="end" aria-hidden="true">chevron_right</md-icon>
+            <md-menu-list slot="submenu">
+              <md-menu-item>nested-a.txt</md-menu-item>
+              <md-menu-item>nested-b.txt</md-menu-item>
+            </md-menu-list>
+          </md-menu-item>
+        </md-menu-list>
+      </md-menu-item>
       <md-divider inset></md-divider>
-      <md-menu-item id="item-save" selected>Save</md-menu-item>
+      <md-menu-item id="item-save">Save</md-menu-item>
       <md-menu-item id="item-save-as">Save As...</md-menu-item>
-    </md-composed-menu>
+    </md-menu-list>
 
     <md-button variant="tonal" id="bn2">strategy=fixed</md-button>
-    <md-composed-menu for="bn2" strategy="fixed">
+    <md-menu-list for="bn2" strategy="fixed">
       <md-menu-item>Menu Item 1</md-menu-item>
       <md-menu-item>Menu Item 2</md-menu-item>
       <md-menu-item selected>Menu Item 3</md-menu-item>
       <md-menu-item disabled>Menu Item 4</md-menu-item>
-    </md-composed-menu>
+    </md-menu-list>
 
     <button id="bn3" popovertarget="menu3">Native popover</button>
-    <md-composed-menu
+    <md-menu-list
       style="
         position-area: block-end span-inline-end;
         position-try-fallbacks: block-end span-inline-start;
@@ -62,7 +82,7 @@
       <md-menu-item>Menu Item 2</md-menu-item>
       <md-menu-item selected>Menu Item 3</md-menu-item>
       <md-menu-item disabled>Menu Item 4</md-menu-item>
-    </md-composed-menu>
+    </md-menu-list>
 
     <h2>select</h2>
 

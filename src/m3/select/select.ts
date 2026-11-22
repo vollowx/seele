@@ -2,7 +2,7 @@ import { html } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 
 import '../popup/popup.js';
-import '../menu/menu.js';
+import './list-box.js';
 
 import { Select } from '../../base/select.js';
 import type { M3Field } from '../field/field.js';
@@ -15,7 +15,7 @@ export abstract class M3Select extends Select {
 
   @query('md-filled-field, md-outlined-field') protected field!: M3Field;
 
-  protected override renderMenu() {
+  protected override renderListbox() {
     return html`
       <md-popup
         part="popup"
@@ -25,17 +25,18 @@ export abstract class M3Select extends Select {
         .open="${this.open}"
         @toggle=${(e: ToggleEvent) => (this.open = e.newState === 'open')}
       >
-        <md-menu
-          id="menu"
-          part="menu"
-          role="listbox"
+        <md-list-box
+          id="listbox"
+          part="listbox"
           tabindex="-1"
           bare
-          @item-focus="${this._handleMenuItemFocus}"
-          @action="${this._handleMenuAction}"
+          .multiple=${this.multiple}
+          .disabled=${this._disabled}
+          @item-focus="${this._handleListItemFocus}"
+          @select="${this._handleListboxSelect}"
         >
           <slot @slotchange=${this._handleSlotChange}></slot>
-        </md-menu>
+        </md-list-box>
       </md-popup>
     `;
   }

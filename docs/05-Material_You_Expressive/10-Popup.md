@@ -25,6 +25,12 @@ import '@vollowx/seele/m3/popup/popup.js';
 
 - Inherits [`Popup`](../04-Base/10-Popup.md)
 
+### CSS Custom Properties
+
+| name | description |
+| --- | --- |
+| `--md-popup-animation` | `scale` or `fade`; defaults to `scale` |
+
 ### Properties
 
 | name      | description                                                |

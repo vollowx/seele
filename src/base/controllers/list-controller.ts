@@ -1,53 +1,104 @@
-import { ReactiveController, ReactiveControllerHost } from 'lit';
+import { ReactiveController, ReactiveControllerHost, isServer } from 'lit';
 
-import type { ListItem } from '../list-item.js';
-
-export interface ListControllerConfig<Item extends ListItem> {
-  isItem: (item: HTMLElement) => item is Item;
+export interface ListControllerConfig<Item extends HTMLElement> {
   getPossibleItems: () => HTMLElement[];
-  blurItem: (item: Item) => void;
+  isItem: (item: HTMLElement) => item is Item;
+  blurItem?: (item: Item) => void;
   focusItem: (item: Item) => void;
-  isActivatable?: (item: Item) => boolean;
   wrapNavigation?: () => boolean;
+  /** Opt in to tracking DOM focus inside the host. */
+  focusTracking?: {
+    enabled?: () => boolean;
+    handleFocusIn?: () => void;
+  };
+  /** Called after the item collection or its current item is reconciled. */
+  handleReconcile?: (prev: Item | null, next: Item | null) => void;
 }
 
 export class ListController<
-  Item extends ListItem,
+  Item extends HTMLElement,
 > implements ReactiveController {
-  host: ReactiveControllerHost;
+  host: ReactiveControllerHost & HTMLElement;
+  private readonly __config: ListControllerConfig<Item>;
 
-  isItem: (item: HTMLElement) => item is Item;
-  private readonly getPossibleItems: () => HTMLElement[];
-  private readonly blurItem: (item: Item) => void;
-  private readonly focusItem: (item: Item) => void;
-  private readonly wrapNavigation: () => boolean;
-
-  constructor(
-    host: ReactiveControllerHost,
-    config: ListControllerConfig<Item>
-  ) {
-    const { isItem, getPossibleItems, blurItem, focusItem, wrapNavigation } =
-      config;
-
-    (this.host = host).addController(this);
-
-    this.isItem = isItem;
-    this.getPossibleItems = getPossibleItems;
-    this.blurItem = blurItem;
-    this.focusItem = focusItem;
-    this.wrapNavigation = wrapNavigation ?? (() => false);
-  }
-  hostConnected(): void {}
-  hostDisconnected(): void {}
+  private __observer: MutationObserver | null = null;
+  private __reconcilePending = false;
+  // Removing a focused item may not fire focusout, so we track if focus is
+  // within manually.
+  private __hasFocusWithin = false;
+  private __lastKnownIndex = -1;
 
   get items(): Item[] {
-    return this.getPossibleItems().filter(this.isItem);
+    return this.__config.getPossibleItems().filter(this.__config.isItem);
   }
   get currentIndex(): number {
-    if (!this._focusedItem) return -1;
-    return this.items.indexOf(this._focusedItem);
+    return this.focusedItem ? this.items.indexOf(this.focusedItem) : -1;
   }
-  _focusedItem: Item | null = null;
+  get hasFocusWithin(): boolean {
+    return (
+      !isServer &&
+      (this.__hasFocusWithin || this.host.contains(document.activeElement))
+    );
+  }
+  focusedItem: Item | null = null;
+
+  constructor(
+    host: ReactiveControllerHost & HTMLElement,
+    config: ListControllerConfig<Item>
+  ) {
+    this.__config = { ...config };
+    (this.host = host).addController(this);
+  }
+
+  hostConnected(): void {
+    if (isServer) return;
+    if (this.__config.focusTracking) {
+      this.host.addEventListener('focusin', this.#handleFocusIn);
+      this.host.addEventListener('focusout', this.#handleFocusOut);
+    }
+    if (typeof MutationObserver !== 'undefined') {
+      this.__observer = new MutationObserver(() => this.requestReconcile());
+    }
+    this.requestReconcile();
+  }
+
+  hostDisconnected(): void {
+    if (isServer) return;
+    if (this.__config.focusTracking) {
+      this.host.removeEventListener('focusin', this.#handleFocusIn);
+      this.host.removeEventListener('focusout', this.#handleFocusOut);
+      this.__hasFocusWithin = false;
+    }
+    this.__observer?.disconnect();
+    this.__observer = null;
+  }
+
+  #handleFocusIn = (event: FocusEvent) => {
+    if (this.__config.focusTracking?.enabled?.() === false) return;
+    this.__hasFocusWithin = true;
+    const target = event.target;
+    if (
+      target instanceof HTMLElement &&
+      this.__config.isItem(target) &&
+      this.focusedItem !== target
+    ) {
+      this.trackItem(target);
+    }
+    this.__config.focusTracking?.handleFocusIn?.();
+  };
+
+  #handleFocusOut = (event: FocusEvent) => {
+    const next = event.relatedTarget;
+    if (!(next instanceof Node) || !this.host.contains(next)) {
+      this.__hasFocusWithin = false;
+    }
+  };
+
+  resetFocusTracking() {
+    this.__hasFocusWithin = false;
+  }
+
+  handleSlotChange = () => this.reconcile();
 
   private searchString = '';
   private searchTimeout: number | null = null;
@@ -63,13 +114,11 @@ export class ListController<
     );
 
     if (searchIndex >= 0) {
-      this._focusItem(items[searchIndex]);
+      this.focusItem(items[searchIndex]);
       return true;
-    } else {
-      if (this.searchTimeout) window.clearTimeout(this.searchTimeout);
-      this.searchString = '';
-      return false;
     }
+    this.clearSearch();
+    return false;
   }
 
   private getSearchString(char: string) {
@@ -91,23 +140,34 @@ export class ListController<
     }
   }
 
-  _focusItem(item: Item) {
-    if (this._focusedItem !== null) this._blurItem(this._focusedItem);
-    this.focusItem(item);
-    this._focusedItem = item;
+  trackItem(item: Item) {
+    if (this.focusedItem && this.focusedItem !== item) {
+      this.__config.blurItem?.(this.focusedItem);
+    }
+    this.focusedItem = item;
+    this.__lastKnownIndex = this.items.indexOf(item);
   }
 
-  _blurItem(item: Item) {
-    this.blurItem(item);
-    this._focusedItem = null;
+  focusItem(item: Item) {
+    if (!item) return;
+    this.trackItem(item);
+    this.__config.focusItem(item);
+  }
+
+  blurItem(item: Item) {
+    this.__config.blurItem?.(item);
+    if (this.focusedItem === item) this.focusedItem = null;
   }
 
   focusFirstItem() {
-    this._focusItem(this.items[0]);
+    const first = this.items[0];
+    if (first) this.focusItem(first);
   }
 
   focusLastItem() {
-    this._focusItem(this.items[this.items.length - 1]);
+    const items = this.items;
+    const last = items[items.length - 1];
+    if (last) this.focusItem(last);
   }
 
   focusNextItem() {
@@ -117,10 +177,10 @@ export class ListController<
 
     let nextIndex = this.currentIndex + 1;
     if (nextIndex >= count) {
-      nextIndex = this.wrapNavigation() ? 0 : count - 1;
+      nextIndex = this.__config.wrapNavigation?.() ? 0 : count - 1;
     }
 
-    this._focusItem(items[nextIndex]);
+    this.focusItem(items[nextIndex]);
   }
 
   focusPreviousItem() {
@@ -130,17 +190,82 @@ export class ListController<
 
     let prevIndex = this.currentIndex - 1;
     if (prevIndex < 0) {
-      prevIndex = this.wrapNavigation() ? count - 1 : 0;
+      prevIndex = this.__config.wrapNavigation?.() ? count - 1 : 0;
     }
 
-    this._focusItem(items[prevIndex]);
+    this.focusItem(items[prevIndex]);
   }
 
-  handleSlotChange() {
-    const items = this.items;
-    const index = this.currentIndex;
-    this._focusedItem = index >= 0 ? items[index] : null;
+  requestReconcile() {
+    if (this.__reconcilePending) return;
+    this.__reconcilePending = true;
+    queueMicrotask(() => {
+      this.__reconcilePending = false;
+      if (this.host.isConnected) {
+        this.reconcile();
+      }
+    });
   }
+
+  reconcile() {
+    const possibleItems = this.__config.getPossibleItems();
+    const enabledItems = possibleItems.filter(this.__config.isItem);
+
+    if (this.__observer) {
+      this.__observer.disconnect();
+      for (const el of possibleItems) {
+        this.__observer.observe(el, {
+          attributes: true,
+          attributeFilter: ['disabled', 'hidden', 'seele-base'],
+        });
+      }
+    }
+
+    const prevItem = this.focusedItem;
+    const fallbackIndex = Math.min(
+      Math.max(this.__lastKnownIndex, 0),
+      enabledItems.length - 1
+    );
+    const nextItem =
+      prevItem && enabledItems.includes(prevItem)
+        ? prevItem
+        : (enabledItems[fallbackIndex] ?? null);
+    this.focusedItem = nextItem;
+    this.__lastKnownIndex = nextItem ? enabledItems.indexOf(nextItem) : -1;
+
+    if (nextItem !== prevItem && prevItem) this.__config.blurItem?.(prevItem);
+    this.__config.handleReconcile?.(prevItem, nextItem);
+  }
+}
+
+export function rovingFocusPreset<Item extends HTMLElement>(
+  getController: () => ListController<Item>,
+  enabled?: () => boolean
+) {
+  const rearrange = () => {
+    if (enabled?.() === false) return;
+    const { items, focusedItem } = getController();
+    const active =
+      focusedItem && items.includes(focusedItem) ? focusedItem : items[0];
+    for (const item of items) item.tabIndex = item === active ? 0 : -1;
+  };
+
+  return {
+    rearrange,
+    focusTracking: { enabled, handleFocusIn: rearrange },
+    handleReconcile: (prev: Item | null, next: Item | null) => {
+      if (enabled?.() === false) return;
+      const controller = getController();
+      if (prev !== next && controller.hasFocusWithin) {
+        if (next) controller.focusItem(next);
+        else {
+          controller.host.tabIndex = -1;
+          controller.host.focus();
+        }
+      }
+      rearrange();
+    },
+  };
 }
 
 export function filterOptions(

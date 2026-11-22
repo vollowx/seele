@@ -1,7 +1,7 @@
 ---
 title: Menu component - seele/m3
 components:
-  - m3/menu/composed-menu
+  - m3/menu/menu-list
   - m3/menu/menu-item
 ---
 
@@ -10,7 +10,8 @@ components:
 - [Material Design](overview)
 
 ```typescript
-import '@vollowx/seele/m3/menu/composed-menu.js';
+import '@vollowx/seele/m3/divider/divider.js';
+import '@vollowx/seele/m3/menu/menu-list.js';
 import '@vollowx/seele/m3/menu/menu-item.js';
 ```
 
@@ -18,7 +19,7 @@ import '@vollowx/seele/m3/menu/menu-item.js';
 
 ```html
 <md-button id="someButton">File</md-button>
-<md-composed-menu for="someButton" vibrant>
+<md-menu-list for="someButton" vibrant>
   <md-menu-item>New Text File</md-menu-item>
   <md-menu-item>
     New File...
@@ -30,16 +31,25 @@ import '@vollowx/seele/m3/menu/menu-item.js';
     <iconify-icon slot="end" icon="material-symbols:window"></iconify-icon>
   </md-menu-item>
   <md-divider inset></md-divider>
-  <md-menu-item>Open File...</md-menu-item>
+  <md-menu-item>
+    Open File...
+    <iconify-icon slot="end" icon="material-symbols:arrow-right"></iconify-icon>
+    <md-menu-list slot="submenu">
+      <md-menu-item>10-Menu.md</md-menu-item>
+      <md-menu-item>dialog.ts</md-menu-item>
+      <md-menu-item>menulist.ts</md-menu-item>
+      <md-menu-item>README.md</md-menu-item>
+    </md-menu-list>
+  </md-menu-item>
   <md-menu-item>Open Folder...</md-menu-item>
   <md-divider inset></md-divider>
-  <md-menu-item selected>Save</md-menu-item>
+  <md-menu-item>Save</md-menu-item>
   <md-menu-item>Save As...</md-menu-item>
-</md-composed-menu>
+</md-menu-list>
 ```
 
 You can have more precise control on the menu element by not using
-`md-composed-menu`, like this:
+`md-menu-list`, like this:
 
 ```html
 <md-button
@@ -69,12 +79,18 @@ You can have more precise control on the menu element by not using
 You should set the `aria-roledescription` according to the language of your
 webpage.
 
-## `M3ComposedMenu`
+## `M3MenuList`
 
-- Inherits [`ComposedMenu`](../04-Base/10-ComposedMenu.md)
+- Inherits [`MenuList`](../04-Base/10-MenuList.md)
 
 A popup that wraps an `M3Menu` inside a [`Popup`](../04-Base/10-Popup.md). Use
 this for standalone menus anchored to a button or other control.
+
+### CSS Custom Properties
+
+| name | description |
+| --- | --- |
+| `--md-popup-animation` | `scale` or `fade`; defaults to `scale` for menus and `fade` for submenus |
 
 ### Properties
 
@@ -85,13 +101,13 @@ this for standalone menus anchored to a button or other control.
 
 ## `M3Menu`
 
-A bare menu without popup or positioning. Used inside `M3ComposedMenu` and
-`M3Select`.
+A menu without popup or positioning, used inside `M3MenuList`.
 
 - Inherits [`Menu`](../04-Base/10-Menu.md)
 
 ## `M3MenuItem`
 
-- Inherits [`M3ListItem`](./10-List.md#m3listitem)
+- Inherits [`MenuItem`](../04-Base/10-MenuItem.md)
+- Mixes `M3ListItemLookalike`
 
 [overview]: https://m3.material.io/components/menus/overview

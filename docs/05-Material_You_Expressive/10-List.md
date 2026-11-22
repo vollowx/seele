@@ -9,6 +9,9 @@ components:
 
 - [Material Design](overview)
 
+`md-list` and `md-list-item` are static. Use
+[`md-list-box`](../04-Base/10-ListBox.md) and `md-option` for selectable items.
+
 ```typescript
 import '@vollowx/seele/m3/list/list-item.js';
 import '@vollowx/seele/m3/list/list.js';
@@ -20,8 +23,7 @@ import '@vollowx/seele/m3/list/list.js';
 <md-list style="max-width: 300px">
   <md-list-item>List item 1</md-list-item>
   <md-list-item>List item 2</md-list-item>
-  <md-list-item selected>List item 3</md-list-item>
-  <md-list-item disabled>List item 4</md-list-item>
+  <md-list-item>List item 3</md-list-item>
 </md-list>
 ```
 
@@ -59,9 +61,9 @@ import '@vollowx/seele/m3/list/list.js';
 
 ### Properties
 
-| name         | description |
-| ---          | ---         |
-| `$ripple`    |             |
-| `$focusRing` |             |
+| name         | description                  |
+| ---          | ---                          |
+| `$ripple`    | `null` for static list items |
+| `$focusRing` | `null` for static list items |
 
 [overview]: https://m3.material.io/components/lists/overview

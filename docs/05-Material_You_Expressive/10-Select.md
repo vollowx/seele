@@ -32,6 +32,9 @@ import '@vollowx/seele/m3/select/outlined-select.js';
 </md-filled-select>
 ```
 
+Add `multiple` to allow multiple selections. The popup stays open while
+options are toggled, and selected labels are shown separated by commas.
+
 ## `M3FilledSelect` and `M3OutlinedSelect`
 
 - Inherits [`Select`](../04-Base/10-Select.md) (via `M3Select`)

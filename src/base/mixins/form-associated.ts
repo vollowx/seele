@@ -1,13 +1,16 @@
 import { LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 
-import { InternalsAttachedInterface, internals } from './internals-attached.js';
+import {
+  InternalsAttachedInterface,
+  internals,
+} from './internals-attached.js';
+import { Disableable, DisableableInterface } from './disableable.js';
 
-export declare class FormAssociatedInterface {
+export declare class FormAssociatedInterface extends DisableableInterface {
   form: HTMLFormElement | null;
   labels: NodeList;
   name: string | null;
-  disabled: boolean;
   validity: ValidityState;
   validationMessage: string;
   willValidate: boolean;
@@ -17,12 +20,17 @@ export declare class FormAssociatedInterface {
   reportValidity(): boolean;
 }
 
+
+/**
+  * Note that form-associated elements can be `:disabled` and `:enabled`, by the
+  * browser, yet `:state(disabled)` from `Disableable` is kept.
+  */
 export const FormAssociated = <
   T extends Constructor<LitElement & InternalsAttachedInterface>,
 >(
   superClass: T
 ) => {
-  class FormAssociatedElement extends superClass {
+  class FormAssociatedElement extends Disableable(superClass) {
     static formAssociated = true;
 
     get form() {
@@ -48,27 +56,6 @@ export const FormAssociated = <
       this.setAttribute('name', name);
       // We don't need to call `requestUpdate()` since it's called synchronously
       // in `attributeChangedCallback()`.
-    }
-
-    @property({ type: Boolean, noAccessor: true })
-    get disabled() {
-      return this.hasAttribute('disabled');
-    }
-    set disabled(disabled: boolean) {
-      this.toggleAttribute('disabled', disabled);
-      // We don't need to call `requestUpdate()` since it's called synchronously
-      // in `attributeChangedCallback()`.
-    }
-
-    override attributeChangedCallback(
-      name: string,
-      old: string | null,
-      value: string | null
-    ) {
-      if (name === 'disabled') {
-        this.requestUpdate('disabled', old !== null);
-      }
-      super.attributeChangedCallback(name, old, value);
     }
 
     get validity() {
