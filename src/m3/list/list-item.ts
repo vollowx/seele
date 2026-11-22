@@ -1,4 +1,4 @@
-import { html, LitElement, TemplateResult } from 'lit';
+import { html, LitElement, nothing, TemplateResult } from 'lit';
 import { customElement, query } from 'lit/decorators.js';
 
 import { ListItem } from '../../base/listitem.js';
@@ -12,9 +12,9 @@ import type { M3FocusRing } from '../focus-ring/focus-ring.js';
 import { listItemStyles } from './list-item-styles.css.js';
 
 export declare class LookalikeInterface {
-  $ripple: M3Ripple;
-  $focusRing: M3FocusRing;
-  renderM3ListItem(): TemplateResult;
+  $ripple: M3Ripple | null;
+  $focusRing: M3FocusRing | null;
+  renderM3ListItem(nonInteractive?: boolean): TemplateResult;
 }
 
 export const M3ListItemLookalike = <T extends Constructor<LitElement>>(
@@ -26,13 +26,17 @@ export const M3ListItemLookalike = <T extends Constructor<LitElement>>(
 
     // @ts-ignore
     static override styles = [...super.styles, listItemStyles];
-    renderM3ListItem() {
+    renderM3ListItem(nonInteractive = false) {
       return html`
         <md-item>
-          <div slot="container">
-            <md-focus-ring inward></md-focus-ring>
-            <md-ripple></md-ripple>
-          </div>
+          ${
+            nonInteractive
+              ? nothing
+              : html`<div slot="container">
+                  <md-focus-ring inward></md-focus-ring>
+                  <md-ripple></md-ripple>
+                </div>`
+          }
           <slot slot="start" name="start"></slot>
           <slot slot="overline" name="overline"></slot>
           <slot></slot>
@@ -48,10 +52,10 @@ export const M3ListItemLookalike = <T extends Constructor<LitElement>>(
     }
 
     constructor(...args: any[]) {
-      super();
+      super(...args);
       this.updateComplete.then(() => {
-        this.$ripple!.attach(this);
-        this.$focusRing!.attach(this);
+        this.$ripple?.attach(this);
+        this.$focusRing?.attach(this);
       });
     }
   }
@@ -67,18 +71,7 @@ export const M3ListItemLookalike = <T extends Constructor<LitElement>>(
 @customElement('md-list-item')
 export class M3ListItem extends M3ListItemLookalike(ListItem) {
   override render() {
-    return this.renderM3ListItem();
-  }
-
-  protected override updated(changed: Map<string, any>) {
-    super.updated(changed);
-    if (changed.has('focused')) {
-      if (this.focused) {
-        this.$focusRing!.visualFocus();
-      } else {
-        this.$focusRing!.visualBlur();
-      }
-    }
+    return this.renderM3ListItem(true);
   }
 }
 

@@ -1,4 +1,4 @@
-# `ComposedMenu`
+# `MenuList`
 
 - Inherits [`Popup`](./10-Popup.md)
 

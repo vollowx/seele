@@ -9,7 +9,7 @@ import './menu.js';
 import { popupStyles } from '../popup/popup-styles.css.js';
 
 /**
- * @tag md-composed-menu
+ * @tag md-menu-list
  */
 @customElement('md-menu-list')
 export class M3MenuList extends MenuList {
