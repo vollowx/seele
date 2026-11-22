@@ -1,4 +1,8 @@
 :host {
+  --md-item-horizontal-gap: 12px;
+  /* FIXME: Temporary fix to implement the different gaps for menu items and
+     list items, should remove Item and implement the slots separately.
+     defined in item-styles.css */
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

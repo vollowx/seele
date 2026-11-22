@@ -11,10 +11,15 @@ import type { M3FocusRing } from '../focus-ring/focus-ring.js';
 
 import { listItemStyles } from './list-item-styles.css.js';
 
+type ListItemRenderOptions = {
+  nonInteractive?: boolean;
+  start?: TemplateResult;
+};
+
 export declare class LookalikeInterface {
   $ripple: M3Ripple | null;
   $focusRing: M3FocusRing | null;
-  renderM3ListItem(nonInteractive?: boolean): TemplateResult;
+  renderM3ListItem(options?: ListItemRenderOptions): TemplateResult;
 }
 
 export const M3ListItemLookalike = <T extends Constructor<LitElement>>(
@@ -26,7 +31,9 @@ export const M3ListItemLookalike = <T extends Constructor<LitElement>>(
 
     // @ts-ignore
     static override styles = [...super.styles, listItemStyles];
-    renderM3ListItem(nonInteractive = false) {
+    renderM3ListItem(
+      { nonInteractive = false, start = html`` }: ListItemRenderOptions = {}
+    ) {
       return html`
         <md-item>
           ${
@@ -37,7 +44,7 @@ export const M3ListItemLookalike = <T extends Constructor<LitElement>>(
                   <md-ripple></md-ripple>
                 </div>`
           }
-          <slot slot="start" name="start"></slot>
+          <slot slot="start" name="start">${start}</slot>
           <slot slot="overline" name="overline"></slot>
           <slot></slot>
           <slot slot="headline" name="headline"></slot>
@@ -71,7 +78,7 @@ export const M3ListItemLookalike = <T extends Constructor<LitElement>>(
 @customElement('md-list-item')
 export class M3ListItem extends M3ListItemLookalike(ListItem) {
   override render() {
-    return this.renderM3ListItem(true);
+    return this.renderM3ListItem({ nonInteractive: true });
   }
 }
 

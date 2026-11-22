@@ -5,7 +5,7 @@
   display: flex;
   flex: 1;
   font: var(--md-sys-typography-body-large);
-  gap: 16px;
+  gap: var(--md-item-horizontal-gap, 8px);
   min-height: calc(48px + 4px * var(--md-sys-spacing-density, 0));
   padding: calc(12px + 2px * var(--md-sys-spacing-density, 0)) 12px;
   position: relative;

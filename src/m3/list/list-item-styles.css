@@ -40,6 +40,41 @@ md-ripple::before {
   transition: none;
 }
 
+.checkmark-container {
+  display: flex;
+  flex: none;
+  height: 20px;
+  margin-inline-end: -8px;
+  opacity: 0;
+  overflow: hidden;
+  width: 0;
+  transition:
+    opacity var(--md-sys-motion-effects-fast-duration, 150ms)
+      var(--md-sys-motion-effects-fast, ease),
+    width var(--md-sys-motion-effects-fast-duration, 150ms)
+      var(--md-sys-motion-effects-fast, ease),
+    margin-inline-end var(--md-sys-motion-effects-fast-duration, 150ms)
+      var(--md-sys-motion-effects-fast, ease);
+}
+
+.checkmark-container .checkmark {
+  flex: none;
+  height: 20px;
+  width: 20px;
+}
+
+:host(:state(selected)) .checkmark-container {
+  opacity: 1;
+  width: 20px;
+  margin-inline-end: 0;
+}
+
+@media (prefers-reduced-motion) {
+  .checkmark-container {
+    transition: none;
+  }
+}
+
 /* TODO: temporarilyh removed for consistency when dragging */
 /* md-ripple::part(ripple) { */
 /*   display: none; */
