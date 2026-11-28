@@ -149,9 +149,10 @@ export class ListController<
   }
 
   focusItem(item: Item) {
-    if (!item) return;
+    if (!item) return null;
     this.trackItem(item);
     this.__config.focusItem(item);
+    return item;
   }
 
   blurItem(item: Item) {
@@ -159,41 +160,38 @@ export class ListController<
     if (this.focusedItem === item) this.focusedItem = null;
   }
 
-  focusFirstItem() {
-    const first = this.items[0];
-    if (first) this.focusItem(first);
+  focusFirstItem(items = this.items) {
+    const next = items[0];
+    if (!next) return null;
+    return this.focusItem(next);
   }
 
-  focusLastItem() {
-    const items = this.items;
-    const last = items[items.length - 1];
-    if (last) this.focusItem(last);
+  focusLastItem(items = this.items) {
+    const next = items[items.length - 1];
+    if (!next) return null;
+    return this.focusItem(next);
   }
 
-  focusNextItem() {
-    const items = this.items;
+  focusSiblingItem(direction: -1 | 1, items = this.items) {
+    const wrap = this.__config.wrapNavigation?.();
     const count = items.length;
-    if (count === 0) return;
+    if (count === 0) return null;
 
-    let nextIndex = this.currentIndex + 1;
-    if (nextIndex >= count) {
-      nextIndex = this.__config.wrapNavigation?.() ? 0 : count - 1;
-    }
+    let nextIndex = this.currentIndex + direction;
+    if (nextIndex < 0)
+      nextIndex = wrap ? count - 1 : 0;
+    else if (nextIndex >= count)
+      nextIndex = wrap ? 0 : count - 1;
 
-    this.focusItem(items[nextIndex]);
+    return this.focusItem(items[nextIndex]);
   }
 
-  focusPreviousItem() {
-    const items = this.items;
-    const count = items.length;
-    if (count === 0) return;
+  focusNextItem(items = this.items) {
+    return this.focusSiblingItem(1, items);
+  }
 
-    let prevIndex = this.currentIndex - 1;
-    if (prevIndex < 0) {
-      prevIndex = this.__config.wrapNavigation?.() ? count - 1 : 0;
-    }
-
-    this.focusItem(items[prevIndex]);
+  focusPreviousItem(items = this.items) {
+    return this.focusSiblingItem(-1, items);
   }
 
   requestReconcile() {
@@ -235,6 +233,30 @@ export class ListController<
 
     if (nextItem !== prevItem && prevItem) this.__config.blurItem?.(prevItem);
     this.__config.handleReconcile?.(prevItem, nextItem);
+  }
+
+  /**
+   * @param [items=this.items] Set if this function is part a bigger `handleKeydown()`, to prevent multiple DOM queries
+   * @returns Whether the keystroke is handled or not
+   */
+  handleKeydown(event: KeyboardEvent, items: Item[] = this.items): boolean {
+    const key = event.key;
+    let nextItem: any | null = null;
+
+    switch (key) {
+      case 'Home':
+        nextItem = this.focusFirstItem(items);
+        break;
+      case 'End':
+        nextItem = this.focusLastItem(items);
+        break;
+      case 'ArrowUp':
+      case 'ArrowDown':
+        nextItem = this.focusSiblingItem(key === 'ArrowUp' ? -1 : 1, items);
+        break;
+    }
+
+    return nextItem !== null;
   }
 }
 

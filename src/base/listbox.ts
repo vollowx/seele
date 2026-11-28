@@ -6,10 +6,11 @@ import { internals } from './mixins/internals-attached.js';
 import { FormAssociated } from './mixins/form-associated.js';
 import { SelectAPIMixin } from './mixins/select-api-mixin.js';
 import { ListController } from './controllers/list-controller.js';
+import { PagedListController } from './controllers/paged-list-controller.js';
 
 import { List } from './list.js';
 import type { Option } from './option.js';
-import { MenuAction, getActionFromKey, getVisibleItems } from './menu.js';
+import { MenuAction, getActionFromKey } from './menu.js';
 
 export interface OptionDetail {
   item: Option;
@@ -119,7 +120,7 @@ export class ListBox extends SelectAPIMixin(FormAssociated(List)) {
   constructor() {
     super();
     if (!isServer) {
-      this.addEventListener('keydown', this.handleKeyDown.bind(this));
+      this.addEventListener('keydown', this.handleKeydown.bind(this));
       this.addEventListener('focusin', this.#handleFocusIn.bind(this));
       this.addEventListener('focusout', this.#handleFocusOut.bind(this));
       this.addEventListener('mouseover', this.#handleMouseOver.bind(this));
@@ -181,6 +182,7 @@ export class ListBox extends SelectAPIMixin(FormAssociated(List)) {
       }
     },
   });
+  private readonly pagedListController = new PagedListController<Option>(this);
 
   #isItem(item: HTMLElement): item is Option {
     return item.getAttribute('seele-base') === this._itemRole;
@@ -199,48 +201,19 @@ export class ListBox extends SelectAPIMixin(FormAssociated(List)) {
     this.clearFocus();
   }
 
-  handleKeyDown(event: KeyboardEvent) {
+  handleKeydown(event: KeyboardEvent) {
     if (this._disabled) return;
     if (event.defaultPrevented) return;
     const action = getActionFromKey(event);
     const items = this.$items;
-    const currentIndex = this.listController.currentIndex;
-    const maxIndex = items.length - 1;
+    const currentItem = this.listController.focusedItem;
+    const currentIndex = currentItem ? items.indexOf(currentItem) : -1;
+    event.preventDefault();
+
+    if (this.listController.handleKeydown(event, items)) return;
+    if (this.pagedListController.handleKeydown(event, items)) return;
 
     switch (action) {
-      case MenuAction.First:
-        event.preventDefault();
-        this.listController.focusFirstItem();
-        return;
-      case MenuAction.Last:
-        event.preventDefault();
-        this.listController.focusLastItem();
-        return;
-      case MenuAction.PageUp:
-      case MenuAction.PageDown: {
-        event.preventDefault();
-        const { first, last, pageSize } = getVisibleItems(this, items);
-
-        const isDown = action === MenuAction.PageDown;
-        const boundary = isDown ? last : first;
-        const atBoundary = isDown
-          ? currentIndex >= last
-          : currentIndex <= first;
-        const step = isDown ? pageSize : -pageSize;
-        const nextIndex = atBoundary ? currentIndex + step : boundary;
-        this.listController.focusItem(
-          items[Math.max(0, Math.min(maxIndex, nextIndex))]
-        );
-        return;
-      }
-      case MenuAction.Next:
-        event.preventDefault();
-        this.listController.focusNextItem();
-        return;
-      case MenuAction.Previous:
-        event.preventDefault();
-        this.listController.focusPreviousItem();
-        return;
       case MenuAction.Close:
         event.preventDefault();
         this.dispatchEvent(

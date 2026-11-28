@@ -70,8 +70,8 @@ export class Select extends Base {
   clearFocus() {
     this.$listbox?.clearFocus();
   }
-  handleKeyDown(event: KeyboardEvent) {
-    this.$listbox?.handleKeyDown(event);
+  handleKeydown(event: KeyboardEvent) {
+    this.$listbox?.handleKeydown(event);
   }
 
   selectItem(item: Option | null) {
@@ -139,7 +139,7 @@ export class Select extends Base {
       }
     }
 
-    if (this.open) this.$listbox.handleKeyDown(event);
+    if (this.open) this.$listbox.handleKeydown(event);
   }
 
   protected _handleListboxSelect(event: ListboxSelectEvent) {
