@@ -6,16 +6,20 @@
 [https://tideover.cc/seele/](https://tideover.cc/seele/)
 [docs/](https://tideover.cc/seele/docs/)
 
-seele (**S**tandard **E**xtensible **Ele**ments) is a extensible
-[Web Components][web-comps] library with a focus on accessibility and
-keyboard-control.
+seele is a generic and extensible [Web Components][web-comps] library with a
+focus on accessibility and keyboard-control.
 
-It also provides styled components in the following design guideline(s):
+It provides not only basic classes, mixins and controllers for authoring
+components in the design you want, but also styled components in the following
+design guideline(s):
 
 - [Material You Expressive](https://m3.material.io/)
 - Windows 98, most styles are from [98.css](https://jdan.github.io/98.css/)
 
 ![seele components screenshot](./preview.png)
+
+seele is an abbrev for "Standard Extensible Elements". Though having nothing to
+do with "souls", seele is pronounced /ˈzeːlə/, as it is in German.
 
 ## Features
 
