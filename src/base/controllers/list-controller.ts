@@ -15,6 +15,8 @@ export interface ListControllerConfig<Item extends HTMLElement> {
   handleReconcile?: (prev: Item | null, next: Item | null) => void;
 }
 
+let counter = 0;
+
 export class ListController<
   Item extends HTMLElement,
 > implements ReactiveController {
@@ -29,6 +31,7 @@ export class ListController<
   private __lastKnownIndex = -1;
 
   get items(): Item[] {
+    console.log('called ', ++counter, 'times');
     return this.__config.getPossibleItems().filter(this.__config.isItem);
   }
   get currentIndex(): number {
@@ -172,10 +175,10 @@ export class ListController<
     return this.focusItem(next);
   }
 
-  focusSiblingItem(direction: -1|1, items = this.items) {
+  focusSiblingItem(direction: -1 | 1, items = this.items) {
     const wrap = this.__config.wrapNavigation?.();
     const count = items.length;
-    if (count === 0) return;
+    if (count === 0) return null;
 
     let nextIndex = this.currentIndex + direction;
     if (nextIndex < 0)
@@ -235,21 +238,29 @@ export class ListController<
     this.__config.handleReconcile?.(prevItem, nextItem);
   }
 
-  // handleKeydown(event: ) {
-  //   const key = event.key;
-  //   if (event.defaultPrevented) return;
-  //
-  //   const items = this.$items;
-  //
-  //   switch (key) {
-  //     case 'Home':
-  //       nextItem = this.focusFirstItem();
-  //       break;
-  //     case 'End':
-  //       nextItem = activateLastItem();
-  //       break;
-  //   }
-  // }
+  /**
+   * @param [items=this.items] Set if this function is part a bigger `handleKeydown()`, to prevent multiple DOM queries
+   * @returns Whether the keystroke is handled or not
+   */
+  handleKeydown(event: KeyboardEvent, items: Item[] = this.items): boolean {
+    const key = event.key;
+    let nextItem: any | null = null;
+
+    switch (key) {
+      case 'Home':
+        nextItem = this.focusFirstItem(items);
+        break;
+      case 'End':
+        nextItem = this.focusLastItem(items);
+        break;
+      case 'ArrowUp':
+      case 'ArrowDown':
+        nextItem = this.focusSiblingItem(key === 'ArrowUp' ? -1 : 1, items);
+        break;
+    }
+
+    return nextItem !== null;
+  }
 }
 
 export function rovingFocusPreset<Item extends HTMLElement>(

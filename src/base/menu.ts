@@ -9,6 +9,7 @@ import {
 } from './controllers/list-controller.js';
 
 import type { MenuItem } from './menuitem.js';
+import { PagedListController } from './controllers/paged-list-controller.js';
 
 // Same as Windows menu delay
 const MENU_SHOW_DELAY = 400;
@@ -92,7 +93,7 @@ export class Menu extends InternalsAttached(LitElement) {
     super();
     this[internals].role = 'menu';
     if (!isServer) {
-      this.addEventListener('keydown', this.handleKeyDown.bind(this));
+      this.addEventListener('keydown', this.handleKeydown.bind(this));
       this.addEventListener('pointerover', this.#handlePointerOver.bind(this));
       this.addEventListener('pointerout', this.#handlePointerOut.bind(this));
       this.addEventListener('click', this.#handleClick.bind(this));
@@ -134,52 +135,22 @@ export class Menu extends InternalsAttached(LitElement) {
     wrapNavigation: () => true,
     ...this.#rovingFocusPreset,
   });
+  private readonly pagedListController = new PagedListController<MenuItem>(this);
 
-  handleKeyDown(event: KeyboardEvent) {
+  handleKeydown(event: KeyboardEvent) {
     if (event.defaultPrevented || this.bare) return;
 
     this.clearHoverTimers();
     const action = getActionFromKey(event);
     const items = this.$items;
-    const currentIndex = this.listController.currentIndex;
-    const maxIndex = items.length - 1;
+    const currentItem = this.listController.focusedItem;
+    const currentIndex = currentItem ? items.indexOf(currentItem) : -1;
+    event.preventDefault();
+
+    if (this.listController.handleKeydown(event, items)) return;
+    if (this.pagedListController.handleKeydown(event, items)) return;
 
     switch (action) {
-      case MenuAction.First:
-        event.preventDefault();
-        this.listController.focusFirstItem();
-        return;
-      case MenuAction.Last:
-        event.preventDefault();
-        this.listController.focusLastItem();
-        return;
-      case MenuAction.PageUp:
-      case MenuAction.PageDown: {
-        event.preventDefault();
-        const { first, last, pageSize } = getVisibleItems(this, items);
-        const isDown = action === MenuAction.PageDown;
-
-        const boundary = isDown ? last : first;
-        const atBoundary = isDown
-          ? currentIndex >= last
-          : currentIndex <= first;
-        const step = isDown ? pageSize : -pageSize;
-
-        const nextIndex = atBoundary ? currentIndex + step : boundary;
-
-        this.listController.focusItem(
-          items[Math.max(0, Math.min(maxIndex, nextIndex))]
-        );
-        return;
-      }
-      case MenuAction.Next:
-        event.preventDefault();
-        this.listController.focusNextItem();
-        return;
-      case MenuAction.Previous:
-        event.preventDefault();
-        this.listController.focusPreviousItem();
-        return;
       case MenuAction.CloseSelect:
         event.preventDefault();
         if (currentIndex >= 0) {
@@ -436,37 +407,4 @@ export function getActionFromKey(event: KeyboardEvent): MenuAction | null {
   }
 
   return null;
-}
-
-export function getVisibleItems(container: HTMLElement, items: HTMLElement[]) {
-  if (!items.length) return { first: 0, last: 0, pageSize: 1 };
-
-  const containerRect = container.getBoundingClientRect();
-  const style = window.getComputedStyle(container);
-
-  const paddingTop = parseFloat(style.scrollPaddingTop) || 0;
-  const paddingBottom = parseFloat(style.scrollPaddingBottom) || 0;
-  const top = containerRect.top + container.clientTop + paddingTop;
-  const bottom = top + container.clientHeight - paddingTop - paddingBottom;
-
-  let first = -1;
-  let last = -1;
-
-  for (let i = 0; i < items.length; i++) {
-    const itemRect = items[i].getBoundingClientRect();
-
-    if (itemRect.top < bottom && itemRect.bottom > top) {
-      if (first === -1) first = i;
-      last = i;
-    } else if (first !== -1) {
-      break;
-    }
-  }
-
-  if (first === -1) {
-    return { first: 0, last: 0, pageSize: 1 };
-  }
-
-  // pageSize is the span of visible items
-  return { first, last, pageSize: Math.max(1, last - first + 1) };
 }
