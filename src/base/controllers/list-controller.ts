@@ -15,8 +15,6 @@ export interface ListControllerConfig<Item extends HTMLElement> {
   handleReconcile?: (prev: Item | null, next: Item | null) => void;
 }
 
-let counter = 0;
-
 export class ListController<
   Item extends HTMLElement,
 > implements ReactiveController {
@@ -31,7 +29,6 @@ export class ListController<
   private __lastKnownIndex = -1;
 
   get items(): Item[] {
-    console.log('called ', ++counter, 'times');
     return this.__config.getPossibleItems().filter(this.__config.isItem);
   }
   get currentIndex(): number {
