@@ -387,11 +387,6 @@ export function getActionFromKey(event: KeyboardEvent): MenuAction | null {
   if (key === 'Escape') return MenuAction.Close;
   if (key === 'Enter' || key === ' ') return MenuAction.CloseSelect;
 
-  if (key === 'Home') return MenuAction.First;
-  if (key === 'End') return MenuAction.Last;
-  if (key === 'PageUp') return MenuAction.PageUp;
-  if (key === 'PageDown') return MenuAction.PageDown;
-
   if (key === 'ArrowRight') return MenuAction.Open;
 
   if (key === 'ArrowUp' && altKey) return MenuAction.CloseSelect;

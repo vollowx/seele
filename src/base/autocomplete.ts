@@ -224,7 +224,7 @@ export class Autocomplete extends Base {
         return;
       }
       if (this.open) {
-        this.$listbox.handleKeyDown(event);
+        this.$listbox.handleKeydown(event);
       }
     }
   }
